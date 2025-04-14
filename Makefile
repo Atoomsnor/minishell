@@ -1,6 +1,6 @@
 NAME = minishell
 
-SRC = main.c string_split.c
+SRC = main.c string_split.c pipex.c pathfinding.c
 SRC_DIR = source
 
 SRC_COPE	= $(SRC:%=$(SRC_DIR)/%)
@@ -12,18 +12,14 @@ CFLAGS = -Wall -Wextra -Werror -Iinclude -pthread
 
 LIBFT_DIR = libft
 LIBFT_LIB = $(LIBFT_DIR)/libft.a
-PIPEX_LIB = pipex/pipex.a
 
 all: $(NAME)
 
-$(NAME): $(PIPEX_LIB) $(LIBFT_LIB) $(OBJ)
-	$(CC) $(OBJ) -L. $(PIPEX_LIB) $(LIBFT_LIB) -lreadline $(CFLAGS) -o $(NAME)
+$(NAME): $(LIBFT_LIB) $(OBJ)
+	$(CC) $(OBJ) -L. $(LIBFT_LIB) -lreadline $(CFLAGS) -o $(NAME)
 
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
-
-$(PIPEX_LIB):
-	$(MAKE) -C pipex
 
 $(LIBFT_LIB):
 	$(MAKE) -C $(LIBFT_DIR)
@@ -33,12 +29,10 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 
 clean:
 	rm -rf $(OBJ_DIR)
-	$(MAKE) -C pipex clean
 	$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
 	rm -f $(NAME)
-	$(MAKE) -C pipex fclean
 	$(MAKE) -C $(LIBFT_DIR) fclean
 	
 re: fclean all

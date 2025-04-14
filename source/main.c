@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/14 18:13:47 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/14 20:41:17 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,6 @@ int main (int argc, char **argv, char **envp)
 		ft_printf("%s\n", in);
 		input = ft_string_split(in, ' ');
 		count = mat_count(input);
-		pipex(count, input, envp); // TO DO FIX input[0] == input file
+		pipex(count, input, envp);
 	}
 }
