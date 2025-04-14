@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:49:11 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/04/14 17:00:24 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/14 18:03:32 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,15 +74,13 @@ static char	**ft_bigsplit(char const *s, char c, char **n_str)
 			i++;
 		else if (s[i] == 34)
 		{
-			printf("here\n");
+			i++;
 			w_len = ft_len(&s[i], 34);
-			printf("%i\n", w_len);
 			n_str[j] = ft_substr(s, i, w_len);
 			if (!n_str[j])
 				return (ft_free(n_str));
-			i += w_len;
+			i += w_len + 1;
 			j++;
-			printf("heb\n");
 		}
 		else
 		{

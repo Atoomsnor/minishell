@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/14 16:55:01 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/14 18:13:47 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,7 @@ int main (int argc, char **argv, char **envp)
 		in = readline("gimme: ");
 		ft_printf("%s\n", in);
 		input = ft_string_split(in, ' ');
-		for (int i = 0; input[i]; i++)
-			ft_printf("%s\n", input[i]);
 		count = mat_count(input);
-		pipex(count + 1, input, envp);
+		pipex(count, input, envp); // TO DO FIX input[0] == input file
 	}
 }
