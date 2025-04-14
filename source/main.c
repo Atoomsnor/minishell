@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/14 21:35:54 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/14 23:14:24 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,13 @@
 
 static int g_signalreceived = 0;
 
+// function called when signals are received
 void sighandler(int signal)
 {
 	g_signalreceived = signal;
 }
 
+// create signals that need to be handled
 void init_signals(void)
 {
 	signal(SIGUSR1, sighandler);

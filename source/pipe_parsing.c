@@ -13,6 +13,7 @@
 #include "../include/minishell.h"
 #include <stdlib.h>
 
+// count matrix (2D Char Array)
 int mat_count(char **mat)
 {
 	int i;
@@ -23,6 +24,7 @@ int mat_count(char **mat)
 	return (i);
 }
 
+// move items in list 1 left when from starting point
 void move_list(char **input, int count)
 {
 	int i;
@@ -36,6 +38,7 @@ void move_list(char **input, int count)
 	}
 }
 
+//parse through the pipe-based inputs & convert to pipexable
 void	pipe_parser(char *in, char **envp)
 {
 	int count;

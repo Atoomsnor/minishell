@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:49:11 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/04/14 21:36:24 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/14 23:15:00 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ static char	**ft_bigsplit(char const *s, char c, char **n_str)
 	return (n_str);
 }
 
+// version of ft_split that preserves anything in quotes
 char	**ft_string_split(char const *s, char c)
 {
 	char	**n_str;
