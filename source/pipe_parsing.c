@@ -48,8 +48,73 @@ void move_list(char **input, int count)
 	}
 }
 
+// checks for multipe input- & output-files for regular piping
+void check_io(char **input, int *count)
+{
+	int i;
+
+	i = 1;
+	while (input[i])
+	{
+		if (input[i][0] == '<')
+		{
+			while (i-- > 0)
+			{
+				move_list(&input[i], *count - i);
+				(*count)--;
+			}
+			i = 0;
+		}
+		else if (input[i][0] == '>' && i != *count - 2)
+		{
+			move_list(&input[i], *count - i);
+			(*count)--;
+			move_list(&input[i], *count - i);
+			(*count)--;
+			i = 0;
+		}
+		i++;
+	}
+}
+
+// checks for multiple input- & output-files for heredocing
+void check_io_hd(char **input, int *count)
+{
+	int i;
+
+	i = 1;
+	while (input[i])
+	{
+		if (!(ft_strncmp(input[i], "<<", 3)) || input[i][0] == '<')
+		{
+			while (i-- > 0)
+			{
+				move_list(&input[i], *count - i);
+				(*count)--;
+			}
+			i = 0;
+		}
+		else if ((!(ft_strncmp(input[i], ">>", 3)) || input[i][0] == '>') && i != *count - 2)
+		{
+			move_list(&input[i], *count - i);
+			(*count)--;
+			move_list(&input[i], *count - i);
+			(*count)--;
+			i = 0;
+		}
+		i++;
+	}
+}
+
+void print_matrix(char **input)
+{
+	for (int i = 0; input[i]; i++)
+		ft_printf("%s\n", input[i]);
+	ft_printf("endl\n");
+}
+
 // parse through the pipe-based inputs & convert to pipexable
-void	pipe_parser(char *in, char **envp) // to do fix multiple infiles & outfiles
+void	pipe_parser(char *in, char **envp)
 {
 	int count;
 	char **input;
@@ -57,6 +122,13 @@ void	pipe_parser(char *in, char **envp) // to do fix multiple infiles & outfiles
 
 	input = ft_string_split(in, ' ');
 	count = mat_count(input);
+	if (ft_strncmp(input[0], "<<", 3) == 0)
+	{
+		check_io_hd(input, &count);
+		input[0] = "here_doc";
+	}
+	else
+		check_io(input, &count);
 	i = 0;
 	if (input[3][0] != '|')
 	{
@@ -86,6 +158,6 @@ void	pipe_parser(char *in, char **envp) // to do fix multiple infiles & outfiles
 		}
 		i++;
 	}
-	i = 0;
+	print_matrix(input);
 	pipex(count, input, envp);
-} // to do fix multiple infiles & outfiles
+}
