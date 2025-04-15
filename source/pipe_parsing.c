@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 21:26:14 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/04/15 12:59:52 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/15 14:46:11 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void move_list(char **input, int count)
 	}
 }
 
-//parse through the pipe-based inputs & convert to pipexable
-void	pipe_parser(char *in, char **envp)
+// parse through the pipe-based inputs & convert to pipexable
+void	pipe_parser(char *in, char **envp) // to do fix multiple infiles & outfiles
 {
 	int count;
 	char **input;
@@ -88,4 +88,4 @@ void	pipe_parser(char *in, char **envp)
 	}
 	i = 0;
 	pipex(count, input, envp);
-}
+} // to do fix multiple infiles & outfiles
