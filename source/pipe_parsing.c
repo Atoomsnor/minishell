@@ -6,12 +6,13 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 21:26:14 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/04/14 21:26:14 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/15 12:59:52 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include <stdlib.h>
+#include <string.h>
 
 // count matrix (2D Char Array)
 int mat_count(char **mat)
@@ -28,13 +29,22 @@ int mat_count(char **mat)
 void move_list(char **input, int count)
 {
 	int i;
+	int len;
 
 	i = 0;
+	len = 0;
 	while (i < count)
 	{
+		len = ft_strlen(input[i + 1]);
 		ft_bzero(input[i], ft_strlen(input[i]));
-		ft_memmove(input[i], input[i + 1], ft_strlen(input[i + 1]));
+		ft_memmove(input[i], input[i + 1], len);
+		input[i][len] = '\0';
 		i++;
+	}
+	if (input[i])
+	{
+		free(input[i]);
+		input[i] = NULL;
 	}
 }
 
@@ -48,9 +58,25 @@ void	pipe_parser(char *in, char **envp)
 	input = ft_string_split(in, ' ');
 	count = mat_count(input);
 	i = 0;
-	for (int y = 0; input[y]; y++)
-		ft_printf("%s\n", input[y]);
-	ft_printf("\n\n");
+	if (input[3][0] != '|')
+	{
+		input[2] = ft_strjoin(input[2], " ");
+		input[2] = ft_strjoin(input[2], input[3]);
+		move_list(&input[3], count - 3);
+		count--;
+	}
+	while (input[i])
+	{
+		if (input[i][0] == '|' && input[i + 2][0] != '|' && input[i + 2][0] != '>')
+		{
+			input[i + 1] = ft_strjoin(input[i + 1], " ");
+			input[i + 1] = ft_strjoin(input[i + 1], input[i + 2]);
+			move_list(&input[i + 2], count - i - 2);
+			count--;
+		}
+		i++;
+	}
+	i = 0;
 	while (input[i])
 	{
 		if (input[i][0] == '<' || input[i][0] == '|' || input[i][0] == '>')
@@ -61,24 +87,5 @@ void	pipe_parser(char *in, char **envp)
 		i++;
 	}
 	i = 0;
-	//for (int y = 0; y < count; y++)
-	//	ft_printf("%s\n", input[y]);
-	//while (i < count)
-	//{
-	//	if (input[i] == NULL)
-	//	{
-	//		ft_printf("yo\n");
-			
-	//		ft_printf("yo\n");
-			
-	//	}
-	//	else
-	//		i++;
-	//	ft_printf("yo\n");
-	//}
-	ft_printf("bababoei\n");
-	for (int y = 0; input[y]; y++)
-		ft_printf("%s\n", input[y]);
-	//input = ft_string_split(input[count], '>');
 	pipex(count, input, envp);
 }
