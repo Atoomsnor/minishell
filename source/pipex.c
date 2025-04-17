@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:38:15 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/15 23:24:16 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/17 12:04:04 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,38 +42,11 @@ void	child(t_px *px, t_fd *fd)
 	die(px, fd, "execve error", 126);
 }
 
-void	parent(t_px *px, t_fd *fd)
+void	parent(t_px *px, t_fd *fd, int start)
 {
 	pid_t	pid;
 
-	px->i = 1;
-	while (px->i < px->argc - 1)
-	{
-		if (pipe(fd->pipe) == -1)
-			die(px, fd, "pipe error", 1);
-		pid = fork();
-		if (pid == -1)
-			die(px, fd, "fork error", 1);
-		if (pid == 0)
-		{
-			close(fd->pipe[0]);
-			if (px->i < px->argc - 2)
-				fd->out = fd->pipe[1];
-			child(px, fd);
-		}
-		close(fd->pipe[1]);
-		if (px->i != 2)
-			close(fd->in);
-		fd->in = fd->pipe[0];
-		waitpid(pid, NULL, 0);
-		px->i++;
-	}
-}
-
-void here_doc_parent(t_px *px, t_fd *fd)
-{
-	int pid;
-
+	px->i = start;
 	while (px->i < px->argc - 1)
 	{
 		if (pipe(fd->pipe) == -1)
@@ -103,7 +76,7 @@ void	here_doc(t_px *px, t_fd *fd)
 	char	*line;
 
 	printf("here_doc\n");
-	px->i = 3;	
+	px->i = 2;	
 	if (pipe(fd->pipe) == -1)
 			die(px, fd, "pipe error", 1);
 	hid = fork();
@@ -128,7 +101,7 @@ void	here_doc(t_px *px, t_fd *fd)
 	close(fd->pipe[1]);
 	fd->in = fd->pipe[0];
 	waitpid(hid, NULL, 0);
-	here_doc_parent(px, fd);
+	parent(px, fd, 2);
 }
 
 void	build_structs(t_px *px, t_fd *fd, int argc, char **argv)
@@ -159,7 +132,7 @@ int	pipex(int argc, char **argv, char **envp)
 	if (ft_strncmp(argv[0], "here_doc", 9) == 0)
 	 	here_doc(&px, &fd);
 	else
-		parent(&px, &fd);
+		parent(&px, &fd, 1);
 	//close?
 	free_array(px.paths);
 	return (0);
