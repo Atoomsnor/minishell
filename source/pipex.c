@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:38:15 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/17 12:04:04 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/17 12:45:53 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <fcntl.h>
 #include <sys/wait.h>
 #include <readline/readline.h>
 #include <errno.h>
@@ -70,33 +69,38 @@ void	parent(t_px *px, t_fd *fd, int start)
 	}
 }
 
+void	here_child(t_px *px, t_fd *fd)
+{
+	char	*line;
+
+	while (1)
+	{
+		line = readline("> ");
+		if (!line)
+			exit(EXIT_SUCCESS);
+		if (ft_strncmp(line, px->argv[1], ft_strlen(px->argv[1])) == 0)
+		{
+			free(line);
+			exit(EXIT_SUCCESS);
+		}
+		ft_putendl_fd(line, fd->pipe[1]);
+		free(line);
+	}
+}
+
 void	here_doc(t_px *px, t_fd *fd)
 {
 	int		hid;
-	char	*line;
 
-	printf("here_doc\n");
-	px->i = 2;	
 	if (pipe(fd->pipe) == -1)
-			die(px, fd, "pipe error", 1);
+		die(px, fd, "pipe error", 1);
 	hid = fork();
 	if (hid == -1)
 		die(px, fd, "fork error", 1);
 	if (hid == 0)
 	{
 		close(fd->pipe[0]);
-		line = readline("> ");
-		while (line)
-		{
-			if (ft_strncmp(line, px->argv[1], ft_strlen(px->argv[1])) == 0)
-				exit(EXIT_SUCCESS);
-			write(fd->pipe[1], line, ft_strlen(line));
-			write(fd->pipe[1], "\n", 1);
-		free(line);
-		line = readline("> ");
-		}
-		close(fd->pipe[1]);
-		exit(EXIT_SUCCESS);
+		here_child(px, fd);
 	}
 	close(fd->pipe[1]);
 	fd->in = fd->pipe[0];
@@ -104,36 +108,26 @@ void	here_doc(t_px *px, t_fd *fd)
 	parent(px, fd, 2);
 }
 
-void	build_structs(t_px *px, t_fd *fd, int argc, char **argv)
-{
-	px->argc = argc;
-	px->argv = argv;
-	px->paths = split_paths(px->envp);
-	if (!px->paths)
-		die(px, NULL, "path error", 1);
-	fd->in = open("./minishell", O_RDONLY);
-	if (fd->in == -1)
-		die(px, fd, "infile error", 1);
-	fd->out = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd->out == -1)
-		die(px, fd, "outfile error", 1);
-}
-
 int	pipex(int argc, char **argv, char **envp)
 {
 	t_px		px;
 	t_fd		fd;
 
-	if (argc < 4 || (!ft_strncmp(argv[0], "here_doc", 9) && argc < 5))
+	if (argc < 4)
 		return (perror("input error"), 1);
-	//print_matrix(argv);
 	px.envp = envp;
 	build_structs(&px, &fd, argc, argv);
 	if (ft_strncmp(argv[0], "here_doc", 9) == 0)
-	 	here_doc(&px, &fd);
+	{
+		if (argc < 5)
+		{
+			free_array(px.paths);
+			return (perror("input error"), 1);
+		}
+		here_doc(&px, &fd);
+	}
 	else
 		parent(&px, &fd, 1);
-	//close?
 	free_array(px.paths);
 	return (0);
 }

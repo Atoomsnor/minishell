@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pathfinding.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:38:04 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/15 21:05:19 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/17 12:43:08 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 void	die(t_px *px, t_fd *fd, const char *msg, int exit_code)
 {
@@ -27,6 +28,21 @@ void	die(t_px *px, t_fd *fd, const char *msg, int exit_code)
 	free_array(px->paths);
 	perror(msg);
 	exit(exit_code);
+}
+
+void	build_structs(t_px *px, t_fd *fd, int argc, char **argv)
+{
+	px->argc = argc;
+	px->argv = argv;
+	px->paths = split_paths(px->envp);
+	if (!px->paths)
+		die(px, NULL, "path error", 1);
+	fd->in = open("./minishell", O_RDONLY);
+	if (fd->in == -1)
+		die(px, fd, "infile error", 1);
+	fd->out = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd->out == -1)
+		die(px, fd, "outfile error", 1);
 }
 
 void	free_array(char **array)

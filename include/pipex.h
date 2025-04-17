@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:28:58 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/17 12:04:15 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/17 12:44:57 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	die(t_px *px, t_fd *fd, const char *msg, int exit_code);
 
 /* Process Management */
 void	here_doc(t_px *px, t_fd *fd);
+void	here_child(t_px *px, t_fd *fd);
 void	parent(t_px *px, t_fd *fd, int start);
 void	child(t_px *px, t_fd *fd);
 
