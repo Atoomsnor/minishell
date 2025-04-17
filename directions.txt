@@ -5,6 +5,11 @@
 - handle the stuff before parsing to pipex, when theres only 1 cmd, multiple in/outfile etc
 - at the end change this shit #include "../include/minishell.h" 
 
+#rowan#
+- Run simple commands with absolute, relative path (e.g. /bin/ls, ../bin/ls)
+- Run simple commands without a path (e.g. ls, cat, grep, etc…)
+
+
 
 #external functions#
 
