@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/15 23:10:25 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/17 16:20:27 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,3 +15,8 @@
 
 char	**ft_string_split(char const *s, char c);
 void	pipe_parser(char *in, char **envp);
+
+void check_io(char **input, int *count);
+void check_io_hd(char **input, int *count);
+
+void	singlecmd(int argc, char **argv, char **envp);

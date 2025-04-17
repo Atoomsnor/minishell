@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_parsing.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 21:26:14 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/04/15 14:46:11 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/17 16:24:00 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void check_io(char **input, int *count)
 			{
 				move_list(&input[i], *count - i);
 				(*count)--;
-			}
+			}	
 			i = 0;
 		}
 		else if (input[i][0] == '>' && i != *count - 2)
@@ -120,7 +120,9 @@ void	pipe_parser(char *in, char **envp)
 	char **input;
 	int i;
 
+	ft_printf("%s\n", in);
 	input = ft_string_split(in, ' ');
+	print_matrix(input);
 	count = mat_count(input);
 	if (ft_strncmp(input[0], "<<", 3) == 0)
 	{
