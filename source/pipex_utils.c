@@ -37,7 +37,10 @@ void	build_structs(t_px *px, t_fd *fd, int argc, char **argv)
 	px->paths = split_paths(px->envp);
 	if (!px->paths)
 		die(px, NULL, "path error", 1);
-	fd->in = open("./minishell", O_RDONLY);
+	if (!ft_strncmp("here_doc", argv[0], 9))
+		fd->in = open("./minishell", O_RDONLY);
+	else
+		fd->in = open(argv[0], O_RDONLY);
 	if (fd->in == -1)
 		die(px, fd, "infile error", 1);
 	fd->out = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
