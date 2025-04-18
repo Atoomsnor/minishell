@@ -42,8 +42,9 @@ int main (int argc, char **argv, char **envp)
 	while (1)
 	{
 		in = readline("megashell>$ ");
-		//singlecmd(argc, argv, envp);
 		if (in[0] == '<')
 			pipe_parser(in, envp);
+		else
+			singlecmd(argc, argv, envp);
 	}
 }
