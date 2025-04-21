@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:38:15 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/21 11:05:06 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/21 12:17:53 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,16 @@ void	child(t_px *px, t_fd *fd)
 		free_array(px->cmd);
 		die(px, fd, "path error", 127);
 	}
-	dup2(fd->in, STDIN_FILENO);
-	close(fd->in);
-	dup2(fd->out, STDOUT_FILENO);
-	close(fd->out);
+	if (fd->in != STDIN_FILENO)
+	{
+		dup2(fd->in, STDIN_FILENO);
+		close(fd->in);
+	}
+	if (fd->out != STDOUT_FILENO)
+	{
+		dup2(fd->out, STDOUT_FILENO);
+		close(fd->out);
+	}
 	execve(full_path, px->cmd, px->envp);
 	free(full_path);
 	free_array(px->cmd);
@@ -106,24 +112,6 @@ void	here_doc(t_px *px, t_fd *fd)
 	fd->in = fd->pipe[0];
 	waitpid(hid, NULL, 0);
 	parent(px, fd, 2);
-}
-
-void	singleparent(t_px *px, t_fd *fd, int start)
-{
-	pid_t	pid;
-
-	px->i = start;
-	pid = fork();
-	if (pid == -1)
-		die(px, fd, "fork error", 1);
-	if (pid == 0)
-		child(px, fd);
-	else
-	{
-		close(fd->in);
-		close(fd->out);
-		waitpid(pid, NULL, 0);
-	}
 }
 
 int	pipex(int argc, char **argv, char **envp)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:38:04 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/21 11:06:32 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/21 12:27:03 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ void	die(t_px *px, t_fd *fd, const char *msg, int exit_code)
 	}
 	free_array(px->paths);
 	perror(msg);
-	printf("%i\n", exit_code);
-	kill(getpid(), SIGUSR1);
-	// exit(exit_code);
+	// printf("%i\n", exit_code);
+	// kill(getpid(), SIGUSR1);
+	exit(exit_code);
 }
 
 void	build_structs(t_px *px, t_fd *fd, int argc, char **argv)
