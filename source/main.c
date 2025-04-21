@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/17 16:20:03 by roversch         ###   ########.fr       */
+/*   Updated: 2025/04/21 10:54:52 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,5 @@ int main (int argc, char **argv, char **envp)
 		in = readline("megashell>$ ");
 		if (in[0] == '<')
 			pipe_parser(in, envp);
-		else
-			singlecmd(argc, argv, envp);
 	}
 }

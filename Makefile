@@ -1,6 +1,6 @@
 NAME = minishell
 
-SRC = main.c string_split.c pipex.c pipex_utils.c pipe_parsing.c singlecmd.c
+SRC = main.c string_split.c pipex.c pipex_utils.c pipe_parsing.c
 SRC_DIR = source
 
 SRC_COPE	= $(SRC:%=$(SRC_DIR)/%)

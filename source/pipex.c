@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:38:15 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/17 12:45:53 by roversch         ###   ########.fr       */
+/*   Updated: 2025/04/21 10:54:16 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,15 +108,35 @@ void	here_doc(t_px *px, t_fd *fd)
 	parent(px, fd, 2);
 }
 
+void	singleparent(t_px *px, t_fd *fd, int start)
+{
+	pid_t	pid;
+
+	px->i = start;
+	pid = fork();
+	if (pid == -1)
+		die(px, fd, "fork error", 1);
+	if (pid == 0)
+		child(px, fd);
+	else
+	{
+		close(fd->in);
+		close(fd->out);
+		waitpid(pid, NULL, 0);
+	}
+}
+
 int	pipex(int argc, char **argv, char **envp)
 {
 	t_px		px;
 	t_fd		fd;
 
-	if (argc < 4)
+	if (argc < 3)
 		return (perror("input error"), 1);
 	px.envp = envp;
 	build_structs(&px, &fd, argc, argv);
+	if (argc == 3)
+		singleparent(&px, &fd, 1);
 	if (ft_strncmp(argv[0], "here_doc", 9) == 0)
 	{
 		if (argc < 5)
