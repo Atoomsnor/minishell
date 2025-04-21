@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 21:26:14 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/04/21 11:44:48 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/21 14:15:29 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,16 +119,19 @@ void	pipe_parser(char *in, char **envp)
 	int count;
 	char **input;
 	int i;
+	int append;
 
-	ft_printf("%s\n", in);
+	append = 0;
 	input = ft_string_split(in, ' ');
-	print_matrix(input);
 	count = mat_count(input);
 	check_io_hd(input, &count);
 	if (ft_strncmp(input[0], "<<", 3) == 0)
 		input[0] = "here_doc";
-	if (ft_strncmp(input[count - 1], "<<", 3) == 0)
-		input[count - 1]  = "append";
+	// print_matrix(input);
+	ft_printf("%s\n", input[count - 2]);
+	ft_printf("%i\n", ft_strncmp(input[count - 1], ">>", 3));
+	if (ft_strncmp(input[count - 2], ">>", 3) == 0)
+		append = 1, ft_printf("here\n");
 	i = 0;
 	if (input[3][0] != '|' && input[3][0] != '>')
 	{
@@ -159,5 +162,6 @@ void	pipe_parser(char *in, char **envp)
 		i++;
 	}
 	print_matrix(input);
-	pipex(count, input, envp);
+	ft_printf("%i\n", append);
+	pipex(count, input, envp, append);
 }

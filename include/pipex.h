@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:28:58 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/21 11:11:35 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/21 14:08:16 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef struct s_fd
 typedef struct s_px
 {
 	int		i;
+	int		append;
 	int		argc;
 	char	**argv;
 	char	**paths;
@@ -49,7 +50,7 @@ void	free_array(char **array);
 
 /* Main Function */
 void	build_structs(t_px *px, t_fd *fd, int argc, char **argv);
-int		pipex(int argc, char **argv, char **envp);
+int		pipex(int argc, char **argv, char **envp, int append);
 void	print_matrix(char **input);
 
 #endif

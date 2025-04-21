@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:38:04 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/21 12:27:03 by roversch         ###   ########.fr       */
+/*   Updated: 2025/04/21 14:04:57 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,10 @@ void	build_structs(t_px *px, t_fd *fd, int argc, char **argv)
 		fd->in = open(argv[0], O_RDONLY);
 	if (fd->in == -1)
 		die(px, fd, "infile error", 1);
-	fd->out = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (px->append)
+		fd->out = open(argv[argc - 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
+	else
+		fd->out = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd->out == -1)
 		die(px, fd, "outfile error", 1);
 }
