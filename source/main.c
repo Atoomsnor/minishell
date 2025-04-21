@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/21 10:54:52 by roversch         ###   ########.fr       */
+/*   Updated: 2025/04/21 11:41:28 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,14 @@ int main (int argc, char **argv, char **envp)
 	while (1)
 	{
 		in = readline("megashell>$ ");
-		if (in[0] == '<')
-			pipe_parser(in, envp);
+		if (in && in[0] != '\0')
+		{
+			if (in[0] == '<')
+				pipe_parser(in, envp);
+			else
+				singlecmd(in, envp);
+			if (g_signalreceived == SIGUSR1)
+				g_signalreceived = 0;
+		}
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:28:58 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/17 12:44:57 by roversch         ###   ########.fr       */
+/*   Updated: 2025/04/21 11:11:35 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	here_doc(t_px *px, t_fd *fd);
 void	here_child(t_px *px, t_fd *fd);
 void	parent(t_px *px, t_fd *fd, int start);
 void	child(t_px *px, t_fd *fd);
+void	singleparent(t_px *px, t_fd *fd, int start);
 
 /* Path Handling */
 char	**split_paths(char **envp);

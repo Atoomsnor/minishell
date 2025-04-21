@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_parsing.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 21:26:14 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/04/17 16:24:00 by roversch         ###   ########.fr       */
+/*   Updated: 2025/04/21 11:44:48 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,15 +124,13 @@ void	pipe_parser(char *in, char **envp)
 	input = ft_string_split(in, ' ');
 	print_matrix(input);
 	count = mat_count(input);
+	check_io_hd(input, &count);
 	if (ft_strncmp(input[0], "<<", 3) == 0)
-	{
-		check_io_hd(input, &count);
 		input[0] = "here_doc";
-	}
-	else
-		check_io(input, &count);
+	if (ft_strncmp(input[count - 1], "<<", 3) == 0)
+		input[count - 1]  = "append";
 	i = 0;
-	if (input[3][0] != '|')
+	if (input[3][0] != '|' && input[3][0] != '>')
 	{
 		input[2] = ft_strjoin(input[2], " ");
 		input[2] = ft_strjoin(input[2], input[3]);

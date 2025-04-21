@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:38:15 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/21 10:54:16 by roversch         ###   ########.fr       */
+/*   Updated: 2025/04/21 11:05:06 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ int	pipex(int argc, char **argv, char **envp)
 	build_structs(&px, &fd, argc, argv);
 	if (argc == 3)
 		singleparent(&px, &fd, 1);
-	if (ft_strncmp(argv[0], "here_doc", 9) == 0)
+	else if (ft_strncmp(argv[0], "here_doc", 9) == 0)
 	{
 		if (argc < 5)
 		{

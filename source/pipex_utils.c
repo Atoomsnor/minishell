@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pathfinding.c                                      :+:      :+:    :+:   */
+/*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:38:04 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/17 12:43:08 by roversch         ###   ########.fr       */
+/*   Updated: 2025/04/21 11:06:32 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <signal.h>
 
 void	die(t_px *px, t_fd *fd, const char *msg, int exit_code)
 {
@@ -27,7 +28,9 @@ void	die(t_px *px, t_fd *fd, const char *msg, int exit_code)
 	}
 	free_array(px->paths);
 	perror(msg);
-	exit(exit_code);
+	printf("%i\n", exit_code);
+	kill(getpid(), SIGUSR1);
+	// exit(exit_code);
 }
 
 void	build_structs(t_px *px, t_fd *fd, int argc, char **argv)
