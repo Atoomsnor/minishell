@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_parsing.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 21:26:14 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/04/21 14:15:29 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/22 12:19:40 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 #include <string.h>
 
 // count matrix (2D Char Array)
-int mat_count(char **mat)
+int	mat_count(char **mat)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (mat[i])
@@ -26,10 +26,10 @@ int mat_count(char **mat)
 }
 
 // move items in list 1 left when from starting point
-void move_list(char **input, int count)
+void	move_list(char **input, int count)
 {
-	int i;
-	int len;
+	int	i;
+	int	len;
 
 	i = 0;
 	len = 0;
@@ -49,9 +49,9 @@ void move_list(char **input, int count)
 }
 
 // checks for multipe input- & output-files for regular piping
-void check_io(char **input, int *count)
+void	check_io(char **input, int *count)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	while (input[i])
@@ -62,7 +62,7 @@ void check_io(char **input, int *count)
 			{
 				move_list(&input[i], *count - i);
 				(*count)--;
-			}	
+			}
 			i = 0;
 		}
 		else if (input[i][0] == '>' && i != *count - 2)
@@ -78,9 +78,9 @@ void check_io(char **input, int *count)
 }
 
 // checks for multiple input- & output-files for heredocing
-void check_io_hd(char **input, int *count)
+void	check_io_hd(char **input, int *count)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	while (input[i])
@@ -106,7 +106,7 @@ void check_io_hd(char **input, int *count)
 	}
 }
 
-void print_matrix(char **input)
+void	print_matrix(char **input)
 {
 	for (int i = 0; input[i]; i++)
 		ft_printf("%s\n", input[i]);
@@ -116,10 +116,10 @@ void print_matrix(char **input)
 // parse through the pipe-based inputs & convert to pipexable
 void	pipe_parser(char *in, char **envp)
 {
-	int count;
-	char **input;
-	int i;
-	int append;
+	int		count;
+	char	**input;
+	int		i;
+	int		append;
 
 	append = 0;
 	input = ft_string_split(in, ' ');

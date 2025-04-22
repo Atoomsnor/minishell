@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/21 11:41:28 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/22 12:20:58 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,24 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-static int g_signalreceived = 0;
+static int	g_signalreceived = 0;
 
 // function called when signals are received
-void sighandler(int signal)
+void	sighandler(int signal)
 {
 	g_signalreceived = signal;
 }
 
 // create signals that need to be handled
-void init_signals(void)
+void	init_signals(void)
 {
 	signal(SIGUSR1, sighandler);
 	signal(SIGUSR2, sighandler);
 }
 
-int main (int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
-	char *in;
+	char	*in;
 
 	(void)argc;
 	(void)argv;

@@ -1,15 +1,14 @@
 #to do#
-- change pipex to pipex bonus so we can copy-paste it
 - make a bunch of error handeling when inpropper stuff is parsed
 - when multiple infiles or outfiles are given only use the first and last 
 - handle the stuff before parsing to pipex, when theres only 1 cmd, multiple in/outfile etc
 - at the end change this shit #include "../include/minishell.h" 
 
 #rowan#
-- Run simple commands with absolute, relative path (e.g. /bin/ls, ../bin/ls)
-- Run simple commands without a path (e.g. ls, cat, grep, etc…)
 
 
+#nils#
+- history shit
 
 #external functions#
 
