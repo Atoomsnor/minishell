@@ -46,8 +46,8 @@ void		remove_path(t_px *px);
 void		singlecmd(char *cmd, char **envp);
 
 /* string_split */
-static int	ft_count(char const *s, char c);
-static int	ft_len(char const *s, char c);
-static char	**ft_free(char **split_str);
-static char	**ft_bigsplit(char const *s, char c, char **n_str);
+//static int	ft_count(char const *s, char c);
+//static int	ft_len(char const *s, char c);
+//static char	**ft_free(char **split_str);
+//static char	**ft_bigsplit(char const *s, char c, char **n_str);
 char		**ft_string_split(char const *s, char c);

@@ -12,6 +12,7 @@
 
 #include "../include/minishell.h"
 #include <readline/readline.h>
+#include <readline/history.h>
 #include <signal.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -44,6 +45,7 @@ int	main(int argc, char **argv, char **envp)
 		in = readline("megashell>$ ");
 		if (in && in[0] != '\0')
 		{
+			add_history(in);
 			if (in[0] == '<')
 				pipe_parser(in, envp);
 			else

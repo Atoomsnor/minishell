@@ -9,6 +9,7 @@ OBJ_DIR		= obj
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -Iinclude -pthread
+MSFLAGS = -lreadline -lhistory
 
 LIBFT_DIR = libft
 LIBFT_LIB = $(LIBFT_DIR)/libft.a
@@ -16,7 +17,7 @@ LIBFT_LIB = $(LIBFT_DIR)/libft.a
 all: $(NAME)
 
 $(NAME): $(LIBFT_LIB) $(OBJ)
-	$(CC) $(OBJ) -L. $(LIBFT_LIB) -lreadline $(CFLAGS) -o $(NAME)
+	$(CC) $(OBJ) -L. $(LIBFT_LIB) $(MSFLAGS) $(CFLAGS) -o $(NAME)
 
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
