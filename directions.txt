@@ -3,6 +3,9 @@
 - when multiple infiles or outfiles are given only use the first and last 
 - handle the stuff before parsing to pipex, when theres only 1 cmd, multiple in/outfile etc
 - at the end change this shit #include "../include/minishell.h" 
+- exit/export/unset/cd with no options
+
+
 
 #rowan#
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/23 11:08:49 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/23 11:32:34 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,48 +32,30 @@ void	init_signals(void)
 	signal(SIGUSR2, sighandler);
 }
 
-void	redo_hist(char **hist, char *in)
-{
-	int i;
-
-	i = 1;
-	rl_clear_history();
-	while (hist[i])
-	{
-		add_history(hist[i]);
-		i++;
-	}
-	i = 0;
-	while (i < 29)
-	{
-		hist[i] = hist[i + 1];
-		i++;
-	}
-	printf("i: %i\n", i);
-	if (i == 29)
-	{
-		hist[i] = in;
-		add_history(in);
-	}
-}
-
 void	history(char *in)
 {
-	static int hist_count = 0;
-	static char *hist[31];
+	static int	hist_count = 0;
+	static char	*hist[HISTORY_SIZE];
+	int	i;
 
-	hist[30] = "\0";
-	if (hist_count < 30)
+	i = 1;
+	if (hist_count < HISTORY_SIZE)
 	{
-		add_history(in);
 		hist[hist_count] = in;
+		add_history(in);
 		hist_count++;
 	}
-	printf("hc: %i\n", hist_count);
-	while (hist_count > 29)
+	else
 	{
-		redo_hist(hist, in);
-		hist_count--;
+		rl_clear_history();
+		while (i < HISTORY_SIZE)
+		{
+			hist[i - 1] = hist[i];
+			add_history(hist[i - 1]);
+			i++;
+		}
+		hist[HISTORY_SIZE - 1] = in;
+		add_history(in);
 	}
 }
 
