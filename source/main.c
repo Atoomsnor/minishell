@@ -62,9 +62,12 @@ void	history(char *in)
 int	main(int argc, char **argv, char **envp)
 {
 	char	*in;
+	char	**parsed;
+
 	(void)argc;
 	(void)argv;
 	in = NULL;
+	parsed = NULL;
 	init_signals();
 	while (1)
 	{
@@ -75,7 +78,15 @@ int	main(int argc, char **argv, char **envp)
 			if (in[0] == '<')
 				pipe_parser(in, envp);
 			else
-				singlecmd(in, envp);
+			{
+				parsed = parser(in);
+				while (parsed)
+				{
+					printf("%s\n", *parsed);
+					singlecmd(*parsed, envp);
+					parsed++;
+				}
+			}
 			if (g_signalreceived == SIGUSR1)
 				g_signalreceived = 0;
 		}
