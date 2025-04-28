@@ -6,7 +6,11 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/04/28 14:21:33 by roversch         ###   ########.fr       */
+=======
+/*   Updated: 2025/04/28 14:17:01 by nhendrik         ###   ########.fr       */
+>>>>>>> e256b0b (message)
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +61,9 @@ t_input	*parse_list(t_input *input)
 	cpy = input;
 	while (cpy)
 	{
+		printf("%s\n", cpy->txt);
 		cpy->type = find_type(cpy->txt);
+		printf("%u\n", cpy->type);
 		cpy = cpy->next;
 	}
 	// if (ret[1][0] != '|' && ret[1][0] != '>')
