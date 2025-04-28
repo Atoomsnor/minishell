@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/04/28 14:13:19 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/28 14:21:33 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include <stdio.h>
 
-t_type find_type(char *in)
+t_type	find_type(char *in)
 {
 	if (!ft_strncmp(in, "<", 2))
 		return (t_left);
@@ -31,7 +31,7 @@ t_type find_type(char *in)
 		return (t_txt);
 }
 
-t_input *mat_to_list(char **mat)
+t_input	*mat_to_list(char **mat)
 {
 	t_input	*input;
 	int		i;
@@ -40,7 +40,7 @@ t_input *mat_to_list(char **mat)
 	if (!input)
 		return (NULL);
 	i = 1;
-	while(mat[i])
+	while (mat[i])
 	{
 		ft_lstadd_back(&input, ft_lstnew(mat[i]));
 		i++;
@@ -50,7 +50,7 @@ t_input *mat_to_list(char **mat)
 
 t_input	*parse_list(t_input *input)
 {
-	t_input *cpy;
+	t_input	*cpy;
 	int		i;
 
 	i = 0;
@@ -85,9 +85,9 @@ t_input	*parse_list(t_input *input)
 	return (input);
 }
 
-t_input *init_list(char *in)
+t_input	*init_list(char *in)
 {
-	t_input *input;
+	t_input	*input;
 	char	**ret;
 
 	ret = ft_string_split(in, ' ');

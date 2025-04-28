@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/28 14:13:23 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/28 14:20:06 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	history(char *in)
 {
 	static int	hist_count = 0;
 	static char	*hist[HISTORY_SIZE];
-	int	i;
+	int			i;
 
 	i = 1;
 	if (hist_count < HISTORY_SIZE)

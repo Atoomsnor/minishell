@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   linked_list.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 12:08:29 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/04/28 14:13:41 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/28 14:19:44 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int	ft_lstsize(t_input *lst)
 {
-	int count;
+	int	count;
 
 	count = 0;
 	while (lst)

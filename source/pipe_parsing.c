@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_parsing.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 21:26:14 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/04/23 11:04:25 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/28 14:19:33 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,8 @@ void	check_io_hd(char **input, int *count)
 			}
 			i = 0;
 		}
-		else if ((!(ft_strncmp(input[i], ">>", 3)) || input[i][0] == '>') && i != *count - 2)
+		else if ((!(ft_strncmp(input[i], ">>", 3))
+			|| input[i][0] == '>') && i != *count - 2)
 		{
 			move_list(&input[i], *count - i);
 			(*count)--;
