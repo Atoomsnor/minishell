@@ -1,4 +1,6 @@
 #to do#
+- change pipex/pipex related stuff where it accepts the new token system
+
 - make a bunch of error handeling when inpropper stuff is parsed
 - when multiple infiles or outfiles are given only use the first and last 
 - handle the stuff before parsing to pipex, when theres only 1 cmd, multiple in/outfile etc
@@ -8,10 +10,14 @@
 
 
 #rowan#
-
+- clean up new code (norm)
+- keep asking nils on what to do
+- help with pipex/pipex related stuff changes
+- once stuff works, bother people about what we're missing
 
 #nils#
-- history shit
+- change pipex/pipex related stuff where it accepts the new token system
+- make the thing actually work in the current and inbetween states
 
 #external functions#
 
