@@ -6,11 +6,12 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/04/28 13:51:43 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/28 14:13:19 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <stdio.h>
 
 t_type find_type(char *in)
 {
@@ -35,10 +36,10 @@ t_input *mat_to_list(char **mat)
 	t_input	*input;
 	int		i;
 
-	i = 0;
 	input = ft_lstnew(mat[0]);
 	if (!input)
 		return (NULL);
+	i = 1;
 	while(mat[i])
 	{
 		ft_lstadd_back(&input, ft_lstnew(mat[i]));
@@ -50,7 +51,6 @@ t_input *mat_to_list(char **mat)
 t_input	*parse_list(t_input *input)
 {
 	t_input *cpy;
-	int		count;
 	int		i;
 
 	i = 0;
@@ -89,9 +89,9 @@ t_input *init_list(char *in)
 {
 	t_input *input;
 	char	**ret;
-	int count;
 
 	ret = ft_string_split(in, ' ');
-	mat_to_list(ret);
-	
+	input = mat_to_list(ret);
+	parse_list(input);
+	return (input);
 }

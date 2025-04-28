@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/23 11:32:34 by roversch         ###   ########.fr       */
+/*   Updated: 2025/04/28 14:13:23 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	history(char *in)
 int	main(int argc, char **argv, char **envp)
 {
 	char	*in;
-	char	**parsed;
+	t_input	*parsed;
 
 	(void)argc;
 	(void)argv;
@@ -79,13 +79,13 @@ int	main(int argc, char **argv, char **envp)
 				pipe_parser(in, envp);
 			else
 			{
-				parsed = parser(in);
-				while (parsed)
-				{
-					printf("%s\n", *parsed);
-					singlecmd(*parsed, envp);
-					parsed++;
-				}
+				parsed = init_list(in);
+				// while (parsed)
+				// {
+				// 	printf("%s\n", *parsed);
+				// 	singlecmd(*parsed, envp);
+				// 	parsed++;
+				// }
 			}
 			if (g_signalreceived == SIGUSR1)
 				g_signalreceived = 0;
