@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/23 11:25:08 by roversch         ###   ########.fr       */
+/*   Updated: 2025/04/28 13:28:00 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 
 #define HISTORY_SIZE 5
 
-typedef enum e_token
+typedef enum e_type
 {
+	t_none,
 	t_txt,
 	t_flag,
 	t_pipe,
@@ -24,15 +25,23 @@ typedef enum e_token
 	t_heredoc,
 	t_right,
 	t_append
-}	t_token;
+}	t_type;
+
+typedef enum e_error
+{
+	error_input_fail,
+	error_read_file_fail,
+	error_write_fail,
+	error_
+}	t_error;
 
 typedef struct s_input
 {
 	struct s_input	*next;
 	struct s_input	*prev;
 	struct s_input	*head;
-	char			*str;
-	t_token			token;
+	char			*txt;
+	t_type			type;
 }	t_input;
 
 /* main */
@@ -75,3 +84,12 @@ void		singlecmd(char *cmd, char **envp);
 //static char	**ft_free(char **split_str);
 //static char	**ft_bigsplit(char const *s, char c, char **n_str);
 char		**ft_string_split(char const *s, char c);
+
+/* lists */
+void	ft_lstsethead(t_input **lst, t_input *head);
+int		ft_lstsize(t_input *lst);
+t_input	*ft_lstnew(void *content);
+t_input	*ft_lstlast(t_input *lst);
+void	ft_lstadd_back(t_input **lst, t_input *new_lst);
+void	ft_lstadd_front(t_input **lst, t_input *new_lst);
+void	ft_lstdelone(t_input *lst);
