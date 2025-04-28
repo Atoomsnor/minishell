@@ -3,16 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/04/28 14:28:46 by roversch         ###   ########.fr       */
-=======
-/*   Updated: 2025/04/28 14:15:58 by nhendrik         ###   ########.fr       */
->>>>>>> e256b0b (message)
+/*   Updated: 2025/04/28 14:42:28 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../libft/libft.h"
 #include "pipex.h"
@@ -65,14 +62,10 @@ void	ft_lstsethead(t_input **lst, t_input *head);
 void	ft_lstdelone(t_input *lst);
 
 /* parser */
-<<<<<<< HEAD
 t_type	find_type(char *in);
 t_input	*mat_to_list(char **mat);
 t_input	*parse_list(t_input *input);
 t_input	*init_list(char *in);
-=======
-t_input		*init_list(char *in);
->>>>>>> e256b0b (message)
 
 /* pipe_parsing */
 int		mat_count(char **mat);

@@ -3,16 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/04/28 14:21:33 by roversch         ###   ########.fr       */
-=======
-/*   Updated: 2025/04/28 14:17:01 by nhendrik         ###   ########.fr       */
->>>>>>> e256b0b (message)
+/*   Updated: 2025/04/28 14:42:37 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../include/minishell.h"
 #include <stdio.h>
