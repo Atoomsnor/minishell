@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:49:11 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/04/28 14:17:58 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/28 14:52:07 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,18 @@ static char	**ft_bigsplit(char const *s, char c, char **n_str)
 	{
 		if (s[i] == c)
 			i++;
-		else if (s[i] == 34)
+		else if (s[i] == '"')
 		{
-			w_len = ft_len(&s[i + 1], 34);
+			w_len = ft_len(&s[i + 1], '"');
+			n_str[j] = ft_substr(s, i, w_len + 2);
+			if (!n_str[j])
+				return (ft_free(n_str));
+			i += w_len + 2;
+			j++;
+		}
+		else if (s[i] == '\'')
+		{
+			w_len = ft_len(&s[i + 1], 39);
 			n_str[j] = ft_substr(s, i, w_len + 2);
 			if (!n_str[j])
 				return (ft_free(n_str));

@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:13:12 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/04/28 14:13:26 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/28 15:09:39 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	ft_lstdelone(t_input *lst)
 	if (lst->next && lst->prev)
 	{
 		lst->next->prev = lst->prev;
-		lst->prev->next = lst->prev;
+		lst->prev->next = lst->next;
 	}
 	else if (lst->next)
 		lst->next->prev = NULL;
@@ -44,4 +44,26 @@ void	ft_lstdelone(t_input *lst)
 	if (lst->txt)
 		free(lst->txt);
 	free(lst);
+}
+
+void	ft_lstadd_next(t_input **lst, t_input *new_lst)
+{
+	if (new_lst->next && new_lst->prev)
+	{
+		new_lst->next->prev = new_lst->prev;
+		new_lst->prev->next = new_lst->next;
+	}
+	else if (new_lst->next)
+		new_lst->next->prev = NULL;
+	else if (new_lst->prev)
+		new_lst->prev->next = NULL;
+	new_lst->prev = (*lst);
+	new_lst->next = NULL;
+	new_lst->head = (*lst)->head;
+	if ((*lst)->next)
+	{
+		new_lst->next = (*lst)->next;
+		(*lst)->next->prev = new_lst;
+	}
+	(*lst)->next = new_lst;
 }

@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/28 14:41:52 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/28 17:11:09 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,63 +32,76 @@ void	init_signals(void)
 	signal(SIGUSR2, sighandler);
 }
 
-void	history(char *in)
+void	history(t_shell *shell)
 {
-	static int	hist_count = 0;
-	static char	*hist[HISTORY_SIZE];
 	int			i;
 
 	i = 1;
-	if (hist_count < HISTORY_SIZE)
+	if (shell->hist_count < HISTORY_SIZE)
 	{
-		hist[hist_count] = in;
-		add_history(in);
-		hist_count++;
+		shell->hist[shell->hist_count] = shell->in;
+		add_history(shell->in);
+		shell->hist_count++;
 	}
 	else
 	{
 		rl_clear_history();
 		while (i < HISTORY_SIZE)
 		{
-			hist[i - 1] = hist[i];
-			add_history(hist[i - 1]);
+			shell->hist[i - 1] = shell->hist[i];
+			add_history(shell->hist[i - 1]);
 			i++;
 		}
-		hist[HISTORY_SIZE - 1] = in;
-		add_history(in);
+		shell->hist[HISTORY_SIZE - 1] = shell->in;
+		add_history(shell->in);
 	}
+}
+
+int shelly(t_shell *shell)
+{
+	shell->in = readline("megashell>$ ");
+	if (shell->in && shell->in[0] != '\0')
+	{
+		history(shell);
+		if (shell->in[0] == '<')
+			pipe_parser(shell->in, shell->envp);
+		else
+		{
+			shell->curr_input = init_list(shell);
+			while (shell->curr_input)
+			{
+				printf("%s\n", *parsed);
+				singlecmd(*parsed, envp);
+				shell->curr_input[0]->
+			}
+		}
+		if (g_signalreceived == SIGUSR1)
+			g_signalreceived = 0;
+	}
+	return (1);
+}
+
+t_shell init_shell(char **envp)
+{
+	t_shell shell;
+
+	shell.curr_input = NULL;
+	shell.in = NULL;
+	shell.envp = envp;
+	ft_bzero(shell.hist, HISTORY_SIZE);
+	shell.hist_count = 0;
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	char	*in;
-	t_input	*parsed;
+	t_shell shell;
 
 	(void)argc;
 	(void)argv;
-	in = NULL;
-	parsed = NULL;
 	init_signals();
+	shell = init_shell(envp);
 	while (1)
 	{
-		in = readline("megashell>$ ");
-		if (in && in[0] != '\0')
-		{
-			history(in);
-			if (in[0] == '<')
-				pipe_parser(in, envp);
-			else
-			{
-				parsed = init_list(in);
-				// while (parsed)
-				// {
-				// 	printf("%s\n", *parsed);
-				// 	singlecmd(*parsed, envp);
-				// 	parsed++;
-				// }
-			}
-			if (g_signalreceived == SIGUSR1)
-				g_signalreceived = 0;
-		}
+		shelly(&shell);
 	}
 }

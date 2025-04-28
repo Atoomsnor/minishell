@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:38:15 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/22 12:27:30 by roversch         ###   ########.fr       */
+/*   Updated: 2025/04/28 15:02:54 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,16 +119,17 @@ int	pipex(int argc, char **argv, char **envp, int append)
 	t_px		px;
 	t_fd		fd;
 
-	if (argc < 3)
+	if (argc < 2)
 		return (perror("input error"), 1);
 	px.envp = envp;
 	px.append = append;
+	printf("%i\n", argc);
 	build_structs(&px, &fd, argc, argv);
-	if (argc == 3)
+	if (argc < 3)
 		singleparent(&px, &fd, 1);
 	else if (ft_strncmp(argv[0], "here_doc", 9) == 0)
 	{
-		if (argc < 5)
+		if (argc < 3)
 		{
 			free_array(px.paths);
 			return (perror("input error"), 1);

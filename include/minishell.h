@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/28 14:42:28 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/28 17:06:37 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,15 @@ typedef struct s_input
 	t_type			type;
 }	t_input;
 
+typedef struct s_shell
+{
+	t_input	**curr_input;
+	char	*in;
+	char	**envp;
+	char	*hist[HISTORY_SIZE];
+	int		hist_count;
+}	t_shell;
+
 /* main */
 void	sighandler(int signal);
 void	init_signals(void);
@@ -60,12 +69,13 @@ void	ft_lstadd_front(t_input **lst, t_input *new_lst);
 /* list_utils */
 void	ft_lstsethead(t_input **lst, t_input *head);
 void	ft_lstdelone(t_input *lst);
+void	ft_lstadd_next(t_input **lst, t_input *new_lst);
 
 /* parser */
 t_type	find_type(char *in);
-t_input	*mat_to_list(char **mat);
+t_input	**mat_to_list(char **mat);
 t_input	*parse_list(t_input *input);
-t_input	*init_list(char *in);
+t_input	**init_list(t_shell *shell);
 
 /* pipe_parsing */
 int		mat_count(char **mat);
