@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_parsing.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 21:26:14 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/04/29 16:59:55 by roversch         ###   ########.fr       */
+/*   Updated: 2025/04/29 17:46:08 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ void	pipe_parser(char *in, char **envp)
 	int		i;
 	int		append;
 
+	(void)envp;
 	append = 0;
 	input = ft_string_split(in, ' ');
 	count = mat_count(input);
