@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:38:15 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/29 16:28:27 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/29 16:52:13 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ int	file_handler(t_shell *shell)
 	t_fd		fd;
 	int			argc;
 
+	printf("ye\n");
 	argc = ft_lstsize(shell->curr_input[0]) - 1;
 	if (argc < 2)
 		return (perror("input error"), 1);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:28:58 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/29 14:40:14 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/29 16:50:40 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	free_array(char **array);
 
 /* Main Function */
 void	build_structs(t_px *px, t_fd *fd, int argc, t_input **input);
-int		pipex(int argc, char **argv, char **envp, int append);
+int		file_handler(t_shell *shell);
 void	print_matrix(char **input);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/29 14:41:00 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/29 16:57:11 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	print_matrix(char **input);
 void	pipe_parser(char *in, char **envp);
 
 /* pipex */
-int		pipex(int argc, char **argv, char **envp, int append);
+int		file_handler(t_shell *shell);
 
 /* (ish) singlecmd */
 void	singleparent(t_px *px, t_fd *fd, int start);

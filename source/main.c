@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/29 14:38:29 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/29 17:01:45 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,10 @@ int shelly(t_shell *shell)
 	if (shell->in && shell->in[0] != '\0')
 	{
 		history(shell);
-		pipe_parser(shell->in, shell->envp);
-		// shell->curr_input = init_list(shell);
+		// pipe_parser(shell->in, shell->envp);
+		shell->curr_input = init_list(shell);
+		if (has_type(shell->curr_input[0])
+			file_handler(shell);
 		// singlecmd(shell->curr_input[0]->txt, shell->envp);
 		if (g_signalreceived == SIGUSR1)
 			g_signalreceived = 0;

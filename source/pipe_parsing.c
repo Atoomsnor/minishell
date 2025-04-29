@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 21:26:14 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/04/28 14:19:33 by roversch         ###   ########.fr       */
+/*   Updated: 2025/04/29 16:59:55 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,5 +159,4 @@ void	pipe_parser(char *in, char **envp)
 		}
 		i++;
 	}
-	pipex(count, input, envp, append);
 }
