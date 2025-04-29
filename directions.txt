@@ -1,12 +1,16 @@
 #to do#
 - change pipex/pipex related stuff where it accepts the new token system
 
-- make a bunch of error handeling when inpropper stuff is parsed
+- make a bunch of error handling when inpropper stuff is parsed
 - when multiple infiles or outfiles are given only use the first and last 
 - handle the stuff before parsing to pipex, when theres only 1 cmd, multiple in/outfile etc
 - at the end change this shit #include "../include/minishell.h" 
 - exit/export/unset/cd with no options
 
+- fix path-based commands (absolute path)
+- add function that cleans up input (like pipe_parsing used to-) OR change pipex that it does stuff based on the tokens passed.
+- remove shell struct again (maybe?) (I think shell struct is fine?)
+- orhan bothered me and I forgot what I was putting here
 
 
 #rowan#
