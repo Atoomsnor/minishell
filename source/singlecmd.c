@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   singlecmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 15:36:30 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/22 12:28:11 by roversch         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:47:08 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ void	remove_path(t_px *px)
 {
 	char	*last;
 
-	last = ft_strrchr(px->argv[0], '/');
+	last = ft_strrchr(px->input[0]->txt, '/');
 	if (!last)
 		return ;
-	px->argv[0] = last + 1;
+	px->input[0]->txt = last + 1;
 }
 
 void	singlecmd(char *cmd, char **envp)
@@ -54,7 +54,7 @@ void	singlecmd(char *cmd, char **envp)
 	px.envp = envp;
 	px.argc = 1;
 	px.i = 0;
-	px.argv = &cmd;
+	px.input[0]->txt = cmd;
 	fd.in = STDIN_FILENO;
 	fd.out = STDOUT_FILENO;
 	if (cmd[0] == '/')

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:38:04 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/23 10:34:12 by roversch         ###   ########.fr       */
+/*   Updated: 2025/04/29 16:27:53 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,26 @@ void	die(t_px *px, t_fd *fd, const char *msg, int exit_code)
 	exit(exit_code);
 }
 
-void	build_structs(t_px *px, t_fd *fd, int argc, char **argv)
+void	build_structs(t_px *px, t_fd *fd, int argc, t_input **input)
 {
+	int i;
+
+	i = 0;
 	px->argc = argc;
-	px->argv = argv;
+	px->input = input;
 	px->paths = split_paths(px->envp);
 	if (!px->paths)
 		die(px, NULL, "path error", 1);
-	if (!ft_strncmp("here_doc", argv[0], 9))
+	if (has_type(*input, t_heredoc))
 		fd->in = open("./minishell", O_RDONLY);
 	else
-		fd->in = open(argv[0], O_RDONLY);
+		fd->in = open(input[0]->txt, O_RDONLY);
 	if (fd->in == -1)
 		die(px, fd, "infile error", 1);
-	if (px->append)
-		fd->out = open(argv[argc - 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (has_type(*input, t_append))
+		fd->out = open(input[argc - 1]->txt, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else
-		fd->out = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		fd->out = open(input[argc - 1]->txt, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd->out == -1)
 		die(px, fd, "outfile error", 1);
 }

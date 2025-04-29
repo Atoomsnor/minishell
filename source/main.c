@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/28 17:11:09 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:38:29 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	init_signals(void)
 
 void	history(t_shell *shell)
 {
-	int			i;
+	int	i;
 
 	i = 1;
 	if (shell->hist_count < HISTORY_SIZE)
@@ -63,18 +63,9 @@ int shelly(t_shell *shell)
 	if (shell->in && shell->in[0] != '\0')
 	{
 		history(shell);
-		if (shell->in[0] == '<')
-			pipe_parser(shell->in, shell->envp);
-		else
-		{
-			shell->curr_input = init_list(shell);
-			while (shell->curr_input)
-			{
-				printf("%s\n", *parsed);
-				singlecmd(*parsed, envp);
-				shell->curr_input[0]->
-			}
-		}
+		pipe_parser(shell->in, shell->envp);
+		// shell->curr_input = init_list(shell);
+		// singlecmd(shell->curr_input[0]->txt, shell->envp);
 		if (g_signalreceived == SIGUSR1)
 			g_signalreceived = 0;
 	}
@@ -90,6 +81,7 @@ t_shell init_shell(char **envp)
 	shell.envp = envp;
 	ft_bzero(shell.hist, HISTORY_SIZE);
 	shell.hist_count = 0;
+	return (shell);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -101,7 +93,5 @@ int	main(int argc, char **argv, char **envp)
 	init_signals();
 	shell = init_shell(envp);
 	while (1)
-	{
 		shelly(&shell);
-	}
 }

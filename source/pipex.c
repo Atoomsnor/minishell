@@ -6,11 +6,11 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:38:15 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/28 15:02:54 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/29 16:28:27 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex.h"
+#include "../include/minishell.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -22,7 +22,7 @@ void	child(t_px *px, t_fd *fd)
 {
 	char	*full_path;
 
-	px->cmd = ft_split(px->argv[px->i], ' ');
+	px->cmd = ft_split(px->input[px->i]->txt, ' ');
 	if (!px->cmd)
 		die(px, fd, "malloc error", 1);
 	full_path = find_path(px->paths, px->cmd[0]);
@@ -70,7 +70,8 @@ void	parent(t_px *px, t_fd *fd, int start)
 		if (px->i != 2)
 			close(fd->in);
 		fd->in = fd->pipe[0];
-		waitpid(pid, NULL, 0);
+		waitpid(pid, NULL, 0); //we should wait for child outside the loop.
+		//check that sleep 3 | sleep 3 does 3 and not 6.
 		px->i++;
 	}
 }
@@ -84,7 +85,7 @@ void	here_child(t_px *px, t_fd *fd)
 		line = readline("> ");
 		if (!line)
 			exit(EXIT_SUCCESS);
-		if (ft_strncmp(line, px->argv[1], ft_strlen(px->argv[1])) == 0)
+		if (ft_strncmp(line, px->input[1]->txt, ft_strlen(px->input[1]->txt)) == 0)
 		{
 			free(line);
 			exit(EXIT_SUCCESS);
@@ -114,20 +115,20 @@ void	here_doc(t_px *px, t_fd *fd)
 	parent(px, fd, 2);
 }
 
-int	pipex(int argc, char **argv, char **envp, int append)
+int	file_handler(t_shell *shell)
 {
 	t_px		px;
 	t_fd		fd;
+	int			argc;
 
+	argc = ft_lstsize(shell->curr_input[0]) - 1;
 	if (argc < 2)
 		return (perror("input error"), 1);
-	px.envp = envp;
-	px.append = append;
-	printf("%i\n", argc);
-	build_structs(&px, &fd, argc, argv);
+	px.envp = shell->envp;
+	build_structs(&px, &fd, argc, shell->curr_input);
 	if (argc < 3)
 		singleparent(&px, &fd, 1);
-	else if (ft_strncmp(argv[0], "here_doc", 9) == 0)
+	else if (has_type(shell->curr_input[0], t_heredoc))
 	{
 		if (argc < 3)
 		{

@@ -6,53 +6,16 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/28 17:06:37 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:41:00 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
 #include "../libft/libft.h"
+#include "struct.h"
 #include "pipex.h"
-
-#define HISTORY_SIZE 5
-
-typedef enum e_type
-{
-	t_none,
-	t_txt,
-	t_flag,
-	t_pipe,
-	t_left,
-	t_heredoc,
-	t_right,
-	t_append
-}	t_type;
-
-typedef enum e_error
-{
-	error_input_fail,
-	error_read_file_fail,
-	error_write_fail,
-	error_
-}	t_error;
-
-typedef struct s_input
-{
-	struct s_input	*next;
-	struct s_input	*prev;
-	struct s_input	*head;
-	char			*txt;
-	t_type			type;
-}	t_input;
-
-typedef struct s_shell
-{
-	t_input	**curr_input;
-	char	*in;
-	char	**envp;
-	char	*hist[HISTORY_SIZE];
-	int		hist_count;
-}	t_shell;
 
 /* main */
 void	sighandler(int signal);
@@ -85,18 +48,7 @@ void	check_io_hd(char **input, int *count);
 void	print_matrix(char **input);
 void	pipe_parser(char *in, char **envp);
 
-/* pipex_utils */
-void	die(t_px *px, t_fd *fd, const char *msg, int exit_code);
-void	build_structs(t_px *px, t_fd *fd, int argc, char **argv);
-void	free_array(char **array);
-char	**split_paths(char **envp);
-char	*find_path(char **paths, char *cmd);
-
 /* pipex */
-void	child(t_px *px, t_fd *fd);
-void	parent(t_px *px, t_fd *fd, int start);
-void	here_child(t_px *px, t_fd *fd);
-void	here_doc(t_px *px, t_fd *fd);
 int		pipex(int argc, char **argv, char **envp, int append);
 
 /* (ish) singlecmd */
@@ -119,3 +71,5 @@ char	**ft_string_split(char const *s, char c);
 // void	ft_lstadd_back(t_input **lst, t_input *new_lst);
 // void	ft_lstadd_front(t_input **lst, t_input *new_lst);
 // void	ft_lstdelone(t_input *lst);
+
+#endif

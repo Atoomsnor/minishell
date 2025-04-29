@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/04/28 17:04:21 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:06:18 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ t_input	**mat_to_list(char **mat)
 	t_input	**input;
 	int		i;
 
+	input = ft_calloc(1, sizeof(struct t_input *));
 	(*input) = ft_lstnew(mat[0]);
 	if (!(*input))
 		return (NULL);
@@ -133,11 +134,10 @@ t_input	*parse_list(t_input *input)
 
 t_input	**init_list(t_shell *shell)
 {
-	t_input	*input;
 	char	**ret;
 
 	ret = ft_string_split(shell->in, ' ');
-	shell->curr_input[0] = mat_to_list(ret);
+	shell->curr_input = mat_to_list(ret);
 	parse_list(shell->curr_input[0]);
 	return (shell->curr_input);
 }
