@@ -130,7 +130,7 @@ void	pipe_parser(char *in, char **envp)
 	if (ft_strncmp(input[0], "<<", 3) == 0)
 		input[0] = "here_doc";
 	if (ft_strncmp(input[count - 2], ">>", 3) == 0)
-		append = 1, ft_printf("here\n");
+		append = 1;
 	i = 0;
 	if (input[3][0] != '|' && input[3][0] != '>')
 	{
@@ -160,4 +160,5 @@ void	pipe_parser(char *in, char **envp)
 		}
 		i++;
 	}
+	(void)append;
 }

@@ -18,11 +18,28 @@
 #include <readline/readline.h>
 #include <errno.h>
 
+char **input_to_cmd(t_px *px)
+{
+	t_input *curr;
+	char	**ret;
+
+	curr = list_move(*px->input, px->i);
+	if (curr->next->type == t_flag)
+		ret = ft_calloc(3, sizeof(char *));
+	else
+	 	ret = ft_calloc(2, sizeof(char *));
+	ret[0] = curr->txt;
+	if (curr->next->type == t_flag)
+		ret[1] = curr->next->txt;
+	return (ret);
+}
+
 void	child(t_px *px, t_fd *fd)
 {
 	char	*full_path;
 
-	px->cmd = ft_split(px->input[px->i]->txt, ' ');
+	px->cmd = input_to_cmd(px);
+	printf("cmd: %s\ninput->txt: %s\n", px->cmd[0], list_move(*px->input, px->i)->txt);
 	if (!px->cmd)
 		die(px, fd, "malloc error", 1);
 	full_path = find_path(px->paths, px->cmd[0]);
@@ -121,16 +138,16 @@ int	file_handler(t_shell *shell)
 	t_fd		fd;
 	int			argc;
 
-	printf("ye\n");
-	argc = ft_lstsize(shell->curr_input[0]) - 1;
+	argc = ft_lstsize(*shell->curr_input) - 1;
 	if (argc < 2)
-		return (perror("input error"), 1);
+	return (perror("input error"), 1);
 	px.envp = shell->envp;
 	build_structs(&px, &fd, argc, shell->curr_input);
 	if (argc < 3)
 		singleparent(&px, &fd, 1);
-	else if (has_type(shell->curr_input[0], t_heredoc))
+	else if (has_type(*shell->curr_input, t_heredoc))
 	{
+		printf("YOYOYOYOYOY\n");
 		if (argc < 3)
 		{
 			free_array(px.paths);

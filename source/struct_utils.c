@@ -12,6 +12,7 @@
 
 #include "../include/minishell.h"
 #include <stdarg.h>
+#include <stdio.h>
 
 int has_type(t_input *input, t_type type, ...)
 {

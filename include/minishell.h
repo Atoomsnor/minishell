@@ -33,6 +33,7 @@ void	ft_lstadd_front(t_input **lst, t_input *new_lst);
 void	ft_lstsethead(t_input **lst, t_input *head);
 void	ft_lstdelone(t_input *lst);
 void	ft_lstadd_next(t_input **lst, t_input *new_lst);
+t_input	*list_move(t_input *lst, int times);
 
 /* parser */
 t_type	find_type(char *in);
@@ -71,5 +72,7 @@ char	**ft_string_split(char const *s, char c);
 // void	ft_lstadd_back(t_input **lst, t_input *new_lst);
 // void	ft_lstadd_front(t_input **lst, t_input *new_lst);
 // void	ft_lstdelone(t_input *lst);
+
+void printlist(t_input *c);
 
 #endif

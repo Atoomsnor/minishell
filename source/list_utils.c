@@ -41,6 +41,8 @@ void	ft_lstdelone(t_input *lst)
 		lst->next->prev = NULL;
 	else if (lst->prev)
 		lst->prev->next = NULL;
+	if (lst == lst->head)
+		ft_lstsethead(&lst, lst->next);
 	if (lst->txt)
 		free(lst->txt);
 	free(lst);
@@ -66,4 +68,18 @@ void	ft_lstadd_next(t_input **lst, t_input *new_lst)
 		(*lst)->next->prev = new_lst;
 	}
 	(*lst)->next = new_lst;
+}
+
+
+t_input	*list_move(t_input *lst, int times)
+{
+	t_input	*cpy;
+
+	cpy = lst;
+	while (times > 0 && cpy)
+	{
+		cpy = cpy->next;
+		times--;
+	}
+	return (cpy);
 }

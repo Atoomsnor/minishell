@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex.h"
+#include "../include/minishell.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -33,9 +33,6 @@ void	die(t_px *px, t_fd *fd, const char *msg, int exit_code)
 
 void	build_structs(t_px *px, t_fd *fd, int argc, t_input **input)
 {
-	int i;
-
-	i = 0;
 	px->argc = argc;
 	px->input = input;
 	px->paths = split_paths(px->envp);
@@ -48,9 +45,9 @@ void	build_structs(t_px *px, t_fd *fd, int argc, t_input **input)
 	if (fd->in == -1)
 		die(px, fd, "infile error", 1);
 	if (has_type(*input, t_append))
-		fd->out = open(input[argc - 1]->txt, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		fd->out = open(ft_lstlast(*input)->txt, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else
-		fd->out = open(input[argc - 1]->txt, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		fd->out = open(ft_lstlast(*input)->txt, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd->out == -1)
 		die(px, fd, "outfile error", 1);
 }

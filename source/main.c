@@ -57,6 +57,32 @@ void	history(t_shell *shell)
 	}
 }
 
+void file_handler_prep(t_shell *shell)
+{
+	t_input	*curr;
+	t_input *next;
+
+	curr = *shell->curr_input;
+	while (curr->next)
+	{
+		next = curr->next;
+		if (curr->type != t_txt && curr->type != t_flag)
+			ft_lstdelone(curr);
+		else if (curr->type == t_flag)
+		{
+			ft_strjoin(curr->txt, next->txt);
+			ft_lstdelone(next);
+			next = curr->next;
+		}
+		curr = next;
+	}
+	*shell->curr_input = curr->head;
+	printf("---fhp---\n");
+	printlist(*shell->curr_input);
+	printf("---fhp---\n");
+	file_handler(shell);
+}
+
 int shelly(t_shell *shell)
 {
 	shell->in = readline("megashell>$ ");
@@ -64,10 +90,11 @@ int shelly(t_shell *shell)
 	{
 		history(shell);
 		shell->curr_input = init_list(shell);
-		if (has_type(shell->curr_input[0], t_left, t_right, t_heredoc, t_append))
-			file_handler(shell);
+		printf("here\n");
+		if (has_type(*shell->curr_input, t_left, t_right, t_heredoc, t_append, 0))
+			file_handler_prep(shell);
 		else
-			singlecmd(shell->curr_input[0]->txt, shell->envp);
+			singlecmd((*shell->curr_input)->txt, shell->envp);
 		if (g_signalreceived == SIGUSR1)
 			g_signalreceived = 0;
 	}

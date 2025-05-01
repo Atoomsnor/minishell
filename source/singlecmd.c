@@ -54,6 +54,7 @@ void	singlecmd(char *cmd, char **envp)
 	px.envp = envp;
 	px.argc = 1;
 	px.i = 0;
+	px.input = NULL;
 	px.input[0]->txt = cmd;
 	fd.in = STDIN_FILENO;
 	fd.out = STDOUT_FILENO;

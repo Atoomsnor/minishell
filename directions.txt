@@ -12,6 +12,7 @@
 - remove shell struct again (maybe?) (I think shell struct is fine?)
 - orhan bothered me and I forgot what I was putting here
 
+- maybe ? change input ** in shell struct to hold an actual array of pointers instead of just being a pointer to a pointer so index can be used? (not really needed)
 
 #rowan#
 - clean up new code (norm)

@@ -32,20 +32,24 @@ t_type	find_type(char *in)
 		return (t_txt);
 }
 
-int check_txt(t_input *input)
+int check_txt(t_input *input, int i)
 {
-	if (!ft_strncmp(input->txt, "<", 1))
-		return (1);
-	else if (!ft_strncmp(input->txt, "|", 1))
-		return (1);
-	else if (!ft_strncmp(input->txt, ">", 1))
-		return (1);
-	else if (!ft_strncmp(input->txt, ">>", 2))
-		return (2);
-	else if (!ft_strncmp(input->txt, "<<", 2))
-		return (2);
+	int len;
+
+	len = ft_strlen(input->txt) - 1;
+	printf("len - i: %i char: %c strncmp: %i len: %i\n", len - i, input->txt[len - i], ft_strncmp(&input->txt[len - i], "<", 1), len);
+	if (!ft_strncmp(&input->txt[len - i], "<", 1))
+		return (len - i + 1);
+	else if (!ft_strncmp(&input->txt[len - i], "|", 1))
+		return (len - i + 1);
+	else if (!ft_strncmp(&input->txt[len - i], ">", 1))
+		return (len - i + 1);
+	else if (!ft_strncmp(&input->txt[len - i], ">>", 2))
+		return (len - i + 2);
+	else if (!ft_strncmp(&input->txt[len - i], "<<", 2))
+		return (len - i + 2);
 	else
-		return (0);
+		return (-1);
 }
 
 t_input	**mat_to_list(char **mat)
@@ -80,6 +84,7 @@ t_input	*parse_list(t_input *input)
 {
 	t_input	*cpy;
 	int		i;
+	int		len;
 
 	cpy = input;
 	while (cpy)
@@ -90,45 +95,26 @@ t_input	*parse_list(t_input *input)
 	cpy = input;
 	while (cpy)
 	{
+		i = -1;
 		if (cpy->type == t_txt)
 		{
-			i = check_txt(cpy);
-			if (i)
+			len = ft_strlen(cpy->txt);
+			while (len-- > 0 && i == -1)
+				i = check_txt(cpy, len);
+			printf("yo\n");
+			if (i != -1)
 			{
 				ft_lstadd_next(&cpy, ft_lstnew(ft_substr(cpy->txt,  i, ft_strlen(cpy->txt) - i)));
 				cpy->txt = ft_substr(cpy->txt, 0, i);
 				cpy->next->type = find_type(cpy->next->txt);
+				cpy->type = find_type(cpy->txt);
 			}
 		}
+		printf("here\n");
+		printlist(cpy);
 		cpy = cpy->next;
 	}
 	printlist(input);
-	// while (cpy)
-	// {
-		
-	// }
-	// if (ret[1][0] != '|' && ret[1][0] != '>')
-	// {
-	// 	ret[0] = ft_strjoin(ret[0], " ");
-	// 	ret[0] = ft_strjoin(ret[0], ret[1]);
-	// 	move_list(&ret[1], count);
-	// 	count--;
-	// }
-	// while (ret[i])
-	// {
-	// 	if (ft_strncmp(ret[i], "<", 2) || ft_strncmp(ret[i], "|", 2) ||
-	// 			ft_strncmp(ret[i], ">", 2) || ft_strncmp(ret[i], "<<", 3)
-	// 			|| ft_strncmp(ret[i], "<<", 3))
-	// 	{
-	// 		ret[i + 1] = ft_strjoin(ret[i + 1], " ");
-	// 		ret[i + 1] = ft_strjoin(ret[i + 1], ret[i + 2]);
-	// 		move_list(&ret[i + 2], count - i - 2);
-	// 		count--;
-	// 		move_list(&ret[i], count - i);
-	// 		count--;
-	// 	}
-	// 	i++;
-	// }
 	return (input);
 }
 
