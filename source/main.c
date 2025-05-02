@@ -77,9 +77,7 @@ void file_handler_prep(t_shell *shell)
 		curr = next;
 	}
 	*shell->curr_input = curr->head;
-	printf("---fhp---\n");
 	printlist(*shell->curr_input);
-	printf("---fhp---\n");
 	file_handler(shell);
 }
 
@@ -90,7 +88,6 @@ int shelly(t_shell *shell)
 	{
 		history(shell);
 		shell->curr_input = init_list(shell);
-		printf("here\n");
 		if (has_type(*shell->curr_input, t_left, t_right, t_heredoc, t_append, 0))
 			file_handler_prep(shell);
 		else

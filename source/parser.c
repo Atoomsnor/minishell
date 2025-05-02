@@ -37,17 +37,16 @@ int check_txt(t_input *input, int i)
 	int len;
 
 	len = ft_strlen(input->txt) - 1;
-	printf("len - i: %i char: %c strncmp: %i len: %i\n", len - i, input->txt[len - i], ft_strncmp(&input->txt[len - i], "<", 1), len);
-	if (!ft_strncmp(&input->txt[len - i], "<", 1))
-		return (len - i + 1);
-	else if (!ft_strncmp(&input->txt[len - i], "|", 1))
-		return (len - i + 1);
-	else if (!ft_strncmp(&input->txt[len - i], ">", 1))
-		return (len - i + 1);
-	else if (!ft_strncmp(&input->txt[len - i], ">>", 2))
-		return (len - i + 2);
+	if (!ft_strncmp(&input->txt[len - i], ">>", 2))
+		return (printf("wemadeit %i\n", len - i), len - i);
 	else if (!ft_strncmp(&input->txt[len - i], "<<", 2))
-		return (len - i + 2);
+		return (len - i);
+	else if (!ft_strncmp(&input->txt[len - i], "<", 1))
+		return (len - i);
+	else if (!ft_strncmp(&input->txt[len - i], "|", 1))
+		return (len - i);
+	else if (!ft_strncmp(&input->txt[len - i], ">", 1))
+		return (len - i);
 	else
 		return (-1);
 }
@@ -72,11 +71,13 @@ t_input	**mat_to_list(char **mat)
 
 void printlist(t_input *c)
 {
+	printf("---START---\n");
 	while (c)
 	{
 		printf("%s\n", c->txt);
 		c = c->next;
 	}
+	printf("---END---\n");
 
 }
 
@@ -96,22 +97,23 @@ t_input	*parse_list(t_input *input)
 	while (cpy)
 	{
 		i = -1;
-		if (cpy->type == t_txt)
+		if (cpy->type == t_txt || cpy->type == t_flag)
 		{
 			len = ft_strlen(cpy->txt);
 			while (len-- > 0 && i == -1)
 				i = check_txt(cpy, len);
-			printf("yo\n");
+			if (i == 0)
+				i++;
 			if (i != -1)
 			{
+				printf("i: %i\n", i);
 				ft_lstadd_next(&cpy, ft_lstnew(ft_substr(cpy->txt,  i, ft_strlen(cpy->txt) - i)));
 				cpy->txt = ft_substr(cpy->txt, 0, i);
+				printf("-s-\n%s\n%s\n-e-\n", cpy->txt, cpy->next->txt);
 				cpy->next->type = find_type(cpy->next->txt);
 				cpy->type = find_type(cpy->txt);
 			}
 		}
-		printf("here\n");
-		printlist(cpy);
 		cpy = cpy->next;
 	}
 	printlist(input);

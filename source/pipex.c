@@ -39,7 +39,6 @@ void	child(t_px *px, t_fd *fd)
 	char	*full_path;
 
 	px->cmd = input_to_cmd(px);
-	printf("cmd: %s\ninput->txt: %s\n", px->cmd[0], list_move(*px->input, px->i)->txt);
 	if (!px->cmd)
 		die(px, fd, "malloc error", 1);
 	full_path = find_path(px->paths, px->cmd[0]);
