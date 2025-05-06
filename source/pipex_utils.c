@@ -38,13 +38,13 @@ void	build_structs(t_px *px, t_fd *fd, int argc, t_input **input)
 	px->paths = split_paths(px->envp);
 	if (!px->paths)
 		die(px, NULL, "path error", 1);
-	if (has_type(*input, t_heredoc))
+	if (has_type(*input, t_heredoc, 0))
 		fd->in = open("./minishell", O_RDONLY);
 	else
 		fd->in = open(input[0]->txt, O_RDONLY);
 	if (fd->in == -1)
 		die(px, fd, "infile error", 1);
-	if (has_type(*input, t_append))
+	if (has_type(*input, t_append, 0))
 		fd->out = open(ft_lstlast(*input)->txt, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else
 		fd->out = open(ft_lstlast(*input)->txt, O_WRONLY | O_CREAT | O_TRUNC, 0644);

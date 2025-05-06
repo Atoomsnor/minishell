@@ -51,6 +51,7 @@ void	pipe_parser(char *in, char **envp);
 
 /* pipex */
 int		file_handler(t_shell *shell);
+int		file_h(t_shell *shell);
 
 /* (ish) singlecmd */
 void	singleparent(t_px *px, t_fd *fd, int start);

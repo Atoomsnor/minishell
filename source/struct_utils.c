@@ -14,7 +14,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-int has_type(t_input *input, t_type type, ...)
+int has_type(t_input *input, ...)
 {
 	t_input	*cpy;
 	va_list	ptr;
@@ -25,7 +25,7 @@ int has_type(t_input *input, t_type type, ...)
 	cpy = input;
 	while (cpy)
 	{
-		va_start(ptr, type);
+		va_start(ptr, input);
 		while (1)
 		{
 			curr = va_arg(ptr, t_type);
@@ -33,6 +33,9 @@ int has_type(t_input *input, t_type type, ...)
 				break;
 			if (cpy->type == curr)
 			{
+				//printf(" cpy->type: %i curr: %i t_heredoc: %i\n cpyt->txt: %s\n", cpy->type, curr, t_heredoc, cpy->txt);
+				if (curr == t_heredoc)
+					printf("%i - %i: str - %s\n", cpy->type, t_heredoc, cpy->txt);
 				va_end(ptr);
 				return (1);
 			}

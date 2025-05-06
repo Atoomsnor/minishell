@@ -89,7 +89,7 @@ int shelly(t_shell *shell)
 		history(shell);
 		shell->curr_input = init_list(shell);
 		if (has_type(*shell->curr_input, t_left, t_right, t_heredoc, t_append, 0))
-			file_handler_prep(shell);
+			file_h(shell);
 		else
 			singlecmd((*shell->curr_input)->txt, shell->envp);
 		if (g_signalreceived == SIGUSR1)

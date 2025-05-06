@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   ppxrevised.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/24 11:38:15 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/29 16:52:13 by roversch         ###   ########.fr       */
+/*   Created: 2025/05/03 00:55:27 by nhendrik          #+#    #+#             */
+/*   Updated: 2025/05/03 00:55:27 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,28 +17,92 @@
 #include <sys/wait.h>
 #include <readline/readline.h>
 #include <errno.h>
+#include <fcntl.h>
 
-char **input_to_cmd(t_px *px)
+void	build_str(t_px *px, t_fd *fd, int argc, t_input **input)
+{
+	px->argc = argc;
+	px->input = input;
+	px->paths = split_paths(px->envp);
+	if (!px->paths)
+		die(px, NULL, "path error", 1);
+	if (!has_type(*input, t_left, 0))
+		fd->in = open("./minishell", O_RDONLY);
+	else
+		fd->in = open((*input)->next->txt, O_RDONLY);
+	if (fd->in == -1)
+		die(px, fd, "infile error", 1); 
+	if (has_type(*input, t_append, 0))
+		fd->out = open(ft_lstlast(*input)->txt, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	else
+		fd->out = open(ft_lstlast(*input)->txt, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd->out == -1)
+		die(px, fd, "outfile error", 1);
+}
+
+char **i_to_c(t_px *px)
 {
 	t_input *curr;
 	char	**ret;
 
 	curr = list_move(*px->input, px->i);
-	if (curr->next->type == t_flag)
-		ret = ft_calloc(3, sizeof(char *));
+	if (curr->next->type == t_append && curr->next->type == t_right && curr->next->type == t_pipe)
+		ret = ft_calloc(2, sizeof(char *));
 	else
-	 	ret = ft_calloc(2, sizeof(char *));
+	 	ret = ft_calloc(3, sizeof(char *));
 	ret[0] = curr->txt;
 	if (curr->next->type == t_flag)
+	{
 		ret[1] = curr->next->txt;
+		px->i++;
+	}
+	else if (curr->next->type == t_txt)
+	{
+		curr = curr->next;
+		while (curr && curr->type == t_txt)
+		{
+			ret[1] = ft_strjoin(ret[1], curr->txt);
+			curr = curr->next;
+			px->i++;
+		}
+	}
 	return (ret);
 }
 
-void	child(t_px *px, t_fd *fd)
+char **inptocmd(t_px *px)
+{
+	int		count;
+	t_input *curr;
+	char	**ret;
+
+	count = 0;
+	curr = list_move(*px->input, px->i);
+	while (curr && (curr->type == t_txt || curr->type == t_flag))
+	{
+		count++;
+		curr = curr->next;
+	}
+	ret = ft_calloc(count + 1, sizeof(char *));
+	curr = list_move(*px->input, px->i);
+	count = 0;
+	while (curr && (curr->type == t_txt || curr->type == t_flag))
+	{
+		ret[count] = curr->txt;
+		curr = curr->next;
+		count++;
+	}
+	print_matrix(ret);
+	return (ret);
+}
+
+void	scold(t_px *px, t_fd *fd)
 {
 	char	*full_path;
 
-	px->cmd = input_to_cmd(px);
+	printf("%i\n", px->i);
+	px->cmd = i_to_c(px);
+	printf("%i\n", px->i);
+	print_matrix(px->cmd);
 	if (!px->cmd)
 		die(px, fd, "malloc error", 1);
 	full_path = find_path(px->paths, px->cmd[0]);
@@ -63,7 +127,7 @@ void	child(t_px *px, t_fd *fd)
 	die(px, fd, "execve error", 126);
 }
 
-void	parent(t_px *px, t_fd *fd, int start)
+void	parrot(t_px *px, t_fd *fd, int start)
 {
 	pid_t	pid;
 
@@ -80,7 +144,7 @@ void	parent(t_px *px, t_fd *fd, int start)
 			close(fd->pipe[0]);
 			if (px->i < px->argc - 2)
 				fd->out = fd->pipe[1];
-			child(px, fd);
+			scold(px, fd);
 		}
 		close(fd->pipe[1]);
 		if (px->i != 2)
@@ -88,11 +152,13 @@ void	parent(t_px *px, t_fd *fd, int start)
 		fd->in = fd->pipe[0];
 		waitpid(pid, NULL, 0); //we should wait for child outside the loop.
 		//check that sleep 3 | sleep 3 does 3 and not 6.
+		printf("yolo %i\n", px->i);
 		px->i++;
+		printf("bolo %i\n", px->i);
 	}
 }
 
-void	here_child(t_px *px, t_fd *fd)
+void	here_c(t_px *px, t_fd *fd)
 {
 	char	*line;
 
@@ -101,7 +167,7 @@ void	here_child(t_px *px, t_fd *fd)
 		line = readline("> ");
 		if (!line)
 			exit(EXIT_SUCCESS);
-		if (ft_strncmp(line, (*px->input)->txt, ft_strlen((*px->input)->txt) == 0))
+		if (ft_strncmp(line, px->input[1]->txt, ft_strlen(px->input[1]->txt)) == 0)
 		{
 			free(line);
 			exit(EXIT_SUCCESS);
@@ -111,7 +177,7 @@ void	here_child(t_px *px, t_fd *fd)
 	}
 }
 
-void	here_doc(t_px *px, t_fd *fd)
+void	here_d(t_px *px, t_fd *fd)
 {
 	int		hid;
 
@@ -123,7 +189,7 @@ void	here_doc(t_px *px, t_fd *fd)
 	if (hid == 0)
 	{
 		close(fd->pipe[0]);
-		here_child(px, fd);
+		here_c(px, fd);
 	}
 	close(fd->pipe[1]);
 	fd->in = fd->pipe[0];
@@ -131,7 +197,7 @@ void	here_doc(t_px *px, t_fd *fd)
 	parent(px, fd, 2);
 }
 
-int	file_handler(t_shell *shell)
+int	file_h(t_shell *shell)
 {
 	t_px		px;
 	t_fd		fd;
@@ -141,21 +207,20 @@ int	file_handler(t_shell *shell)
 	if (argc < 2)
 	return (perror("input error"), 1);
 	px.envp = shell->envp;
-	build_structs(&px, &fd, argc, shell->curr_input);
+	build_str(&px, &fd, argc, shell->curr_input);
 	if (argc < 3)
-		singleparent(&px, &fd, 1);
+		singleparent(&px, &fd, 2);
 	else if (has_type(*shell->curr_input, t_heredoc, 0))
 	{
-		printf("YOYOYOYOYOY\n");
 		if (argc < 3)
 		{
 			free_array(px.paths);
 			return (perror("input error"), 1);
 		}
-		here_doc(&px, &fd);
+		here_d(&px, &fd);
 	}
 	else
-		parent(&px, &fd, 1);
+		parrot(&px, &fd, 2);
 	free_array(px.paths);
 	return (0);
 }
