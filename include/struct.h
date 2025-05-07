@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:36:55 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/04/29 17:35:55 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/07 09:57:59 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,6 @@ typedef struct s_px
 }	t_px;
 
 /* struct utils*/
-int	has_type(t_input *input, t_type type, ...);
+int has_type(t_input *input, ...);
 
 #endif

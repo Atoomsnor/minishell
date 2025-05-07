@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 00:55:27 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/03 00:55:27 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/07 12:24:33 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,7 @@ void	build_str(t_px *px, t_fd *fd, int argc, t_input **input)
 		fd->in = open((*input)->next->txt, O_RDONLY);
 	if (fd->in == -1)
 		die(px, fd, "infile error", 1); 
-	if (has_type(*input, t_append, 0))
-		fd->out = open(ft_lstlast(*input)->txt, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	else
-		fd->out = open(ft_lstlast(*input)->txt, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fd->out = open_outfiles(*input);
 	if (fd->out == -1)
 		die(px, fd, "outfile error", 1);
 }
@@ -46,24 +43,22 @@ char **i_to_c(t_px *px)
 	char	**ret;
 
 	curr = list_move(*px->input, px->i);
-	if (curr->next->type == t_append && curr->next->type == t_right && curr->next->type == t_pipe)
+	if (curr->next->type == t_append || curr->next->type == t_right || curr->next->type == t_pipe)
 		ret = ft_calloc(2, sizeof(char *));
 	else
 	 	ret = ft_calloc(3, sizeof(char *));
 	ret[0] = curr->txt;
 	if (curr->next->type == t_flag)
-	{
 		ret[1] = curr->next->txt;
-		px->i++;
-	}
 	else if (curr->next->type == t_txt)
 	{
 		curr = curr->next;
 		while (curr && curr->type == t_txt)
 		{
+			if (ret[1])
+				ret[1] = ft_strjoin (ret[1], " ");
 			ret[1] = ft_strjoin(ret[1], curr->txt);
 			curr = curr->next;
-			px->i++;
 		}
 	}
 	return (ret);
@@ -99,9 +94,7 @@ void	scold(t_px *px, t_fd *fd)
 {
 	char	*full_path;
 
-	printf("%i\n", px->i);
 	px->cmd = i_to_c(px);
-	printf("%i\n", px->i);
 	print_matrix(px->cmd);
 	if (!px->cmd)
 		die(px, fd, "malloc error", 1);
@@ -125,6 +118,22 @@ void	scold(t_px *px, t_fd *fd)
 	free(full_path);
 	free_array(px->cmd);
 	die(px, fd, "execve error", 126);
+}
+
+int	increment_to_next(t_px *px)
+{
+	int i;
+	t_input *in;
+
+	in = list_move(*px->input, px->i);
+	i = 0;
+	while (in && in->type != t_append && in->type != t_right && in->type != t_pipe)
+	{
+		in = in->next;
+		i++;
+	}
+	printf("%i\n", i);
+	return (i);
 }
 
 void	parrot(t_px *px, t_fd *fd, int start)
@@ -152,9 +161,7 @@ void	parrot(t_px *px, t_fd *fd, int start)
 		fd->in = fd->pipe[0];
 		waitpid(pid, NULL, 0); //we should wait for child outside the loop.
 		//check that sleep 3 | sleep 3 does 3 and not 6.
-		printf("yolo %i\n", px->i);
-		px->i++;
-		printf("bolo %i\n", px->i);
+		px->i += increment_to_next(px);
 	}
 }
 
@@ -203,9 +210,10 @@ int	file_h(t_shell *shell)
 	t_fd		fd;
 	int			argc;
 
-	argc = ft_lstsize(*shell->curr_input) - 1;
+	argc = ft_lstsize(*shell->curr_input);
+	printf("argc: %i\n", argc);
 	if (argc < 2)
-	return (perror("input error"), 1);
+		return (perror("input error"), 1);
 	px.envp = shell->envp;
 	build_str(&px, &fd, argc, shell->curr_input);
 	if (argc < 3)

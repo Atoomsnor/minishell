@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:38:04 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/29 16:27:53 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/07 11:56:12 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,7 @@ void	build_structs(t_px *px, t_fd *fd, int argc, t_input **input)
 		fd->in = open(input[0]->txt, O_RDONLY);
 	if (fd->in == -1)
 		die(px, fd, "infile error", 1);
-	if (has_type(*input, t_append, 0))
-		fd->out = open(ft_lstlast(*input)->txt, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	else
-		fd->out = open(ft_lstlast(*input)->txt, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fd->out = open_outfiles(*input);
 	if (fd->out == -1)
 		die(px, fd, "outfile error", 1);
 }
