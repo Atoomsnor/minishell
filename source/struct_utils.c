@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 16:11:18 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/04/29 17:43:59 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/08 15:08:54 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int has_type(t_input *input, ...)
 				break;
 			if (cpy->type == curr)
 			{
-				//printf(" cpy->type: %i curr: %i t_heredoc: %i\n cpyt->txt: %s\n", cpy->type, curr, t_heredoc, cpy->txt);
 				if (curr == t_heredoc)
 					printf("%i - %i: str - %s\n", cpy->type, t_heredoc, cpy->txt);
 				va_end(ptr);

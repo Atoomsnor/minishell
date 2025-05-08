@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:12:39 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/07 13:12:19 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:48:16 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <stdlib.h>
 
 // open all outfiles with correct flags.
 int		open_outfiles(t_input *in)
@@ -65,7 +66,7 @@ void clear_outfiles(t_input *in)
 	}
 }
 
-int	increment_to_next(t_input *input)
+int	increment_to_nex(t_input *input)
 {
 	int i;
 	t_input *in;
@@ -92,6 +93,7 @@ void do_commands(t_shell *shell)
 	pid_t	pid;
 
 	input = *shell->curr_input;
+	fd = malloc(sizeof(t_fd));
 	fd->in = open("./minishell", O_RDONLY);
 	fd->out = open_outfiles(input);
 	if (fd->out)
@@ -107,7 +109,7 @@ void do_commands(t_shell *shell)
 		{
 			close(fd->pipe[0]);
 			run_command(input);
-			list_move(input, increment_to_next(input));
+			list_move(input, increment_to_nex(input));
 		}
 		else if (input->type == t_left)
 		{
@@ -119,7 +121,7 @@ void do_commands(t_shell *shell)
 		{
 			close(fd->pipe[0]);
 			run_command(input);
-			list_move(input, increment_to_next(input));
+			list_move(input, increment_to_nex(input));
 		}
 		else if (input->type == t_right)
 		{

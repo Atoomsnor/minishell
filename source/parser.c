@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/04/29 14:06:18 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/08 15:06:28 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int check_txt(t_input *input, int i)
 
 	len = ft_strlen(input->txt) - 1;
 	if (!ft_strncmp(&input->txt[len - i], ">>", 2))
-		return (printf("wemadeit %i\n", len - i), len - i);
+		return (len - i);
 	else if (!ft_strncmp(&input->txt[len - i], "<<", 2))
 		return (len - i);
 	else if (!ft_strncmp(&input->txt[len - i], "<", 1))
@@ -51,19 +51,19 @@ int check_txt(t_input *input, int i)
 		return (-1);
 }
 
-t_input	**mat_to_list(char **mat)
+t_input	**matrix_to_list(char **matrix)
 {
 	t_input	**input;
 	int		i;
 
 	input = ft_calloc(1, sizeof(struct t_input *));
-	(*input) = ft_lstnew(mat[0]);
+	(*input) = ft_lstnew(matrix[0]);
 	if (!(*input))
 		return (NULL);
 	i = 1;
-	while (mat[i])
+	while (matrix[i])
 	{
-		ft_lstadd_back(input, ft_lstnew(mat[i]));
+		ft_lstadd_back(input, ft_lstnew(matrix[i]));
 		i++;
 	}
 	return (input);
@@ -106,10 +106,8 @@ t_input	*parse_list(t_input *input)
 				i++;
 			if (i != -1)
 			{
-				printf("i: %i\n", i);
 				ft_lstadd_next(&cpy, ft_lstnew(ft_substr(cpy->txt,  i, ft_strlen(cpy->txt) - i)));
 				cpy->txt = ft_substr(cpy->txt, 0, i);
-				printf("-s-\n%s\n%s\n-e-\n", cpy->txt, cpy->next->txt);
 				cpy->next->type = find_type(cpy->next->txt);
 				cpy->type = find_type(cpy->txt);
 			}
@@ -122,10 +120,10 @@ t_input	*parse_list(t_input *input)
 
 t_input	**init_list(t_shell *shell)
 {
-	char	**ret;
+	char	**matrix;
 
-	ret = ft_string_split(shell->in, ' ');
-	shell->curr_input = mat_to_list(ret);
+	matrix = ft_string_split(shell->in, ' ');
+	shell->curr_input = matrix_to_list(matrix);
 	parse_list(shell->curr_input[0]);
 	return (shell->curr_input);
 }

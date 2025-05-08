@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 21:26:14 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/04/29 17:46:08 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:52:27 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ void	print_matrix(char **input)
 	ft_printf("endl\n");
 }
 
-// parse through the pipe-based inputs & convert to pipexable
+// UNUSED
 void	pipe_parser(char *in, char **envp)
 {
 	int		count;
