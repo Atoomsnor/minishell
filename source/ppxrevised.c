@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ppxrevised.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 00:55:27 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/08 15:14:05 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:40:05 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	build_str(t_px *px, t_fd *fd, int argc, t_input **input)
 		fd->in = open((*input)->next->txt, O_RDONLY);
 	if (fd->in == -1)
 		die(px, fd, "infile error", 1); 
-	fd->out = open_outfiles(*input);
+	fd->out = 0;
 	if (fd->out == -1)
 		die(px, fd, "outfile error", 1);
 }
@@ -161,7 +161,7 @@ void	parrot(t_px *px, t_fd *fd, int start)
 		fd->in = fd->pipe[0];
 		waitpid(pid, NULL, 0); //we should wait for child outside the loop.
 		//check that sleep 3 | sleep 3 does 3 and not 6.
-		px->i += increment_to_next(px);
+		px->i += increment_to_next(px) + 1;
 	}
 }
 

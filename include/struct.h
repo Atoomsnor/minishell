@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:36:55 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/07 09:57:59 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:49:58 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,16 @@ typedef struct s_shell
 	int		hist_count;
 }	t_shell;
 
+typedef struct s_cmd
+{
+	struct s_cmd	*next;
+	char			**args;
+	int				in_fd;
+	int				out_fd;
+	int				pipe[2];
+}	t_cmd;
+
+
 typedef struct s_fd
 {
 	int	in;
@@ -62,7 +72,7 @@ typedef struct s_fd
 	int	pipe[2];
 }	t_fd;
 
-typedef struct s_px
+typedef struct s_px //goneso
 {
 	int		i;
 	int		append;

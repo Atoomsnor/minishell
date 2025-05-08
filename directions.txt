@@ -1,4 +1,5 @@
 #to do#
+- pipex is changed in 4idfferent ways, try to make 1 that still used pathfinding.
 - change pipex/pipex related stuff where it accepts the new token system
 
 - make a bunch of error handling when inpropper stuff is parsed

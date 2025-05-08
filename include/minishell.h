@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/07 11:49:59 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:49:45 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,11 @@ char	**ft_string_split(char const *s, char c);
 
 void printlist(t_input *c);
 int	open_outfiles(t_input *in);
+
+t_cmd      *init_cmd(void);
+void       add_argument(t_cmd *cmd, char *arg);
+t_cmd      *parse_cmds(t_input *input);
+void       execute_cmds(t_shell *shell);
+void       handle_error(const char *msg);
 
 #endif

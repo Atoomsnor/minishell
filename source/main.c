@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/08 14:51:15 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:21:11 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int shelly(t_shell *shell)
 		history(shell);
 		shell->curr_input = init_list(shell);
 		if (has_type(*shell->curr_input, t_left, t_right, t_heredoc, t_append, 0))
-			file_h(shell);
+			execute_cmds(shell);
 		else
 			singlecmd((*shell->curr_input)->txt, shell->envp);
 		if (g_signalreceived == SIGUSR1)
