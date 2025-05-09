@@ -83,6 +83,12 @@ typedef struct s_px //goneso
 	t_input	**input;
 }	t_px;
 
+typedef struct s_var
+{
+	char *name;
+	char *content;
+} t_var;
+
 /* struct utils*/
 int has_type(t_input *input, ...);
 

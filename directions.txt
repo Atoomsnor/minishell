@@ -1,9 +1,9 @@
 #to do#
-- pipex is changed in 4idfferent ways, try to make 1 that still used pathfinding.
+- pipex is changed in 4 different ways, try to make 1 that still used pathfinding.
 - change pipex/pipex related stuff where it accepts the new token system
 
 - make a bunch of error handling when inpropper stuff is parsed
-- when multiple infiles or outfiles are given only use the first and last 
+- when multiple infiles or outfiles are given only use the first and last # ----- # wrong
 - handle the stuff before parsing to pipex, when theres only 1 cmd, multiple in/outfile etc
 - at the end change this shit #include "../include/minishell.h" 
 - exit/export/unset/cd with no options

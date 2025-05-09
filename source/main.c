@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-static int	g_signalreceived = 0;
+static volatile sig_atomic_t	g_signalreceived = 0;
 
 // function called when signals are received
 void	sighandler(int signal)
@@ -25,9 +25,24 @@ void	sighandler(int signal)
 	g_signalreceived = signal;
 }
 
+void sigint_handler(int signal)
+{
+	(void)signal;
+	printf("\n");
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+}
+
 // create signals that need to be handled
 void	init_signals(void)
 {
+	struct sigaction sa;
+	
+	sa.sa_handler = sigint_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART;
+	sigaction(SIGINT, &sa, NULL);
 	signal(SIGUSR1, sighandler);
 	signal(SIGUSR2, sighandler);
 }
@@ -92,8 +107,11 @@ int shelly(t_shell *shell)
 			execute_cmds(shell);
 		else
 			singlecmd((*shell->curr_input)->txt, shell->envp);
-		if (g_signalreceived == SIGUSR1)
+		if (g_signalreceived == SIGINT)
+		{
+			printf("signal received!\n");
 			g_signalreceived = 0;
+		}
 	}
 	return (1);
 }
