@@ -1,4 +1,13 @@
 #to do#
+- read both links, first for official stuff, second one for program flow/inspiration
+- https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf
+- https://gitlab.com/madebypixel02/minishell
+- before or in the parser make words like ls -l into a command by giving the fullpath (use findpath functions)
+- look at Mind Map img's in gitlab link and setup something like that before parisng,
+makes excecution much easyer as we can re-use quite some from pipex logic.
+- been told that our struct isn't great and we should add a cmd struct that expends he "text" nodes
+- 
+
 - pipex is changed in 4 different ways, try to make 1 that still used pathfinding.
 - change pipex/pipex related stuff where it accepts the new token system
 
@@ -22,6 +31,8 @@
 - once stuff works, bother people about what we're missing
 
 #nils#
+- go to top of new todo list and focus fully on that, execution comes later
+
 - change pipex/pipex related stuff where it accepts the new token system
 - make the thing actually work in the current and inbetween states
 
