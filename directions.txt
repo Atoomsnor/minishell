@@ -3,6 +3,7 @@
 - https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf
 - https://gitlab.com/madebypixel02/minishell
 - before or in the parser make words like ls -l into a command by giving the fullpath (use findpath functions)
+same as above^, find a place to fill in the new exec struct.
 - look at Mind Map img's in gitlab link and setup something like that before parisng,
 makes excecution much easyer as we can re-use quite some from pipex logic.
 - been told that our struct isn't great and we should add a cmd struct that expends he "text" nodes

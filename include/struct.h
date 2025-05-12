@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:36:55 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/08 17:49:58 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/12 16:39:31 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,21 @@ typedef enum e_type
 	t_right,
 	t_append
 }	t_type;
+
+// typedef struct s_prompt
+// {
+// 	t_list	*cmds;
+// 	char	**envp;
+// 	pid_t	pid;	
+// }	t_prompt;
+
+typedef struct s_exec
+{
+	char	**full_cmd;
+	char	*full_path;
+	int		infile;
+	int		outfile;
+}	t_exec;
 
 typedef enum e_error
 {
@@ -55,7 +70,7 @@ typedef struct s_shell
 	int		hist_count;
 }	t_shell;
 
-typedef struct s_cmd
+typedef struct s_cmd // needs to be goneso
 {
 	struct s_cmd	*next;
 	char			**args;
@@ -65,7 +80,7 @@ typedef struct s_cmd
 }	t_cmd;
 
 
-typedef struct s_fd
+typedef struct s_fd // needs to be goneso
 {
 	int	in;
 	int	out;
