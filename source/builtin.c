@@ -17,9 +17,10 @@
 
 int pwd(int fd)
 {
-	char cwd[INT_MAX];
+	char *cwd;
 
-	if(!getcwd(cwd, INT_MAX))
+	cwd = getcwd(NULL, 0);
+	if(!cwd)
 		return (0);
 	else if (fd < 0)
 		return (0);
@@ -46,12 +47,13 @@ int echo(int fd, char *flag, char *to_write)
 
 int cd(char *path)
 {
-	char	cwd[INT_MAX];
+	char	*cwd;
 	char	*joined_path;
 
 	if (!path)
 		return (0);
-	if(!getcwd(cwd, INT_MAX))
+	cwd = getcwd(NULL, 0);
+	if(!cwd)
 		return (0);
 	if (ft_strncmp(cwd, path, ft_strlen(cwd)))
 	{
@@ -89,4 +91,9 @@ void unset(char *name)
 {
 	if (name)
 		unlink(name);
+}
+
+void bi_exit()
+{
+	//kill(getpid(), SIGTSTP);
 }

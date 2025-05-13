@@ -5,9 +5,8 @@
 - before or in the parser make words like ls -l into a command by giving the fullpath (use findpath functions)
 same as above^, find a place to fill in the new exec struct.
 - look at Mind Map img's in gitlab link and setup something like that before parisng,
-makes excecution much easyer as we can re-use quite some from pipex logic.
-- been told that our struct isn't great and we should add a cmd struct that expends he "text" nodes
-- 
+makes excecution much easier as we can re-use quite some from pipex logic.
+- been told that our struct isn't great and we should add a cmd struct that expands the "text" nodes
 
 - pipex is changed in 4 different ways, try to make 1 that still used pathfinding.
 - change pipex/pipex related stuff where it accepts the new token system
