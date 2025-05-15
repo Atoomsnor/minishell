@@ -6,14 +6,14 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/15 14:34:29 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/15 17:51:19 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include <readline/readline.h>
 #include <readline/history.h>
-#include <signal.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -41,7 +41,22 @@
 // 	file_handler(shell);
 // }
 
-int shelly(char **envp)
+void print_exec(t_exec *exec)
+{
+	int i;
+
+	i = 0;
+	printf("exec\n");
+	printf("in: %i\nout: %i\n", exec->in_fd, exec->out_fd);
+	while (exec->full_cmd[i])
+	{
+		printf("%s\n", exec->full_cmd[i]);
+		i++;
+	}
+	printf("execend\n");
+}
+
+int shelly(void)
 {
 	t_exec	**exec;
 	char	*in;
@@ -56,25 +71,31 @@ int shelly(char **envp)
 		history(in);
 		input = init_list(in);
 		exec = tokens_to_exec(input);
-		//excecution
-
-		// if (has_type(*shell->curr_input, t_left, t_right, t_heredoc, t_append, 0))
-		// 	execute_cmds(shell);
-		// else
-		// 	singlecmd((*shell->curr_input)->txt, shell->envp);
+		print_exec(*exec);
+		if (exec[1])
+			print_exec(exec[1]);
+		for (int i = 0; exec[i]; i++)
+		{
+			if (exec[i]->in_fd > 1)
+				close(exec[i]->in_fd);
+			if (exec[i]->out_fd > 1)
+				close(exec[i]->out_fd);
+		}
+		// expand_exec(); cat -> /usr/bin/cat etc etc
+		// ^^ checkt ook builtins? -> if x == true run builtins else execution?
+		// of voor expand_exec ?
+		//execution
+		
 	}
 	return (1);
 }
 
-int	main(int argc, char **argv, char **envp)
+int	main(void)
 {
-
-	(void)argc;
-	(void)argv;
 	init_signals();
 	while (1)
 	{
-		if (!shelly(envp))
+		if (!shelly())
 			break ;
 	}
 }

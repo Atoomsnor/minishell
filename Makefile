@@ -1,6 +1,6 @@
 NAME = minishell
 
-SRC = main.c string_split.c builtin.c pipex_utils.c pipe_parsing.c \ 
+SRC = main.c string_split.c builtin.c pipex_utils.c pipe_parsing.c \
 parser.c lexer.c linked_list.c list_utils.c struct_utils.c signal.c \
 history.c
 SRC_DIR = source

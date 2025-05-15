@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:36:55 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/15 15:39:58 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:11:07 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,8 @@ typedef struct s_exec
 {
 	char	**full_cmd;
 	char	*full_path;
-	char	*infile_path;
-	char	*outfile_path;
-	int		append_mode;
-	int		heredoc;
+	int		in_fd;
+	int		out_fd;
 }	t_exec;
 
 typedef enum e_error

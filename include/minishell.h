@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/15 14:35:33 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:14:46 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 /* main */
 void	sighandler(int signal);
 void	init_signals(void);
-int		main(int argc, char **argv, char **envp);
 
 /* linked_list */
 int		ft_lstsize(t_input *lst);
