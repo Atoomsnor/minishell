@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:36:55 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/15 14:26:23 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:34:44 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,6 @@ typedef struct s_input
 	char			*txt;
 	t_type			type;
 }	t_input;
-
-typedef struct s_shell
-{
-	t_input	**curr_input;
-	char	*in;
-	char	**envp;
-}	t_shell;
 
 typedef struct s_cmd // needs to be goneso
 {

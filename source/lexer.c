@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/15 11:53:10 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:33:13 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,12 +118,13 @@ t_input	*parse_list(t_input *input)
 	return (input);
 }
 
-t_input	**init_list(t_shell *shell)
+t_input	**init_list(char *in)
 {
 	char	**matrix;
+	t_input **input;
 
-	matrix = ft_string_split(shell->in, ' ');
-	shell->curr_input = matrix_to_list(matrix);
-	parse_list(shell->curr_input[0]);
-	return (shell->curr_input);
+	matrix = ft_string_split(in, ' ');
+	input = matrix_to_list(matrix);
+	parse_list(input[0]);
+	return (input);
 }

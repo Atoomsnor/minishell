@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/15 14:23:37 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:35:33 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ t_input	*list_move(t_input *lst, int times);
 t_type	find_type(char *in);
 t_input	**mat_to_list(char **mat);
 t_input	*parse_list(t_input *input);
-t_input	**init_list(t_shell *shell);
+t_input	**init_list(char *in);
 
 /* parser */
-t_exec tokens_to_exec(t_shell *shell);
+t_exec **tokens_to_exec(t_input **input);
 
 /* pipe_parsing */
 int		mat_count(char **mat);
@@ -53,13 +53,16 @@ void	print_matrix(char **input);
 void	pipe_parser(char *in, char **envp);
 
 /* pipex */
-int		file_handler(t_shell *shell);
-int		file_h(t_shell *shell);
+// int		file_handler(t_shell *shell);
+// int		file_h(t_shell *shell);
 
 /* (ish) singlecmd */
 void	singleparent(t_px *px, t_fd *fd, int start);
 void	remove_path(t_px *px);
 void	singlecmd(char *cmd, char **envp);
+
+/* history */
+void	history(char *in);
 
 /* string_split */
 //static int	ft_count(char const *s, char c);
@@ -83,7 +86,7 @@ int	open_outfiles(t_input *in);
 t_cmd      *init_cmd(void);
 void       add_argument(t_cmd *cmd, char *arg);
 t_cmd      *parse_cmds(t_input *input);
-void       execute_cmds(t_shell *shell);
+// void       execute_cmds(t_shell *shell);
 void       handle_error(const char *msg);
 
 #endif

@@ -29,7 +29,6 @@
 
 
 #nils#
-- make signanls for ctrl c d \ work
 - make stuff from lexer.c into new struct so we can "parse" to exec
 
 #external functions#
