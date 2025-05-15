@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/15 13:37:58 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:28:40 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,16 @@
 
 void	history(t_shell *shell)
 {
-	int	i;
+	static char	*hist[HISTORY_SIZE];
+	static int	hist_count;
+	int			i;
 
 	i = 1;
-	if (shell->hist_count < HISTORY_SIZE)
+	if (hist_count < HISTORY_SIZE)
 	{
-		shell->hist[shell->hist_count] = shell->in;
-		add_history(shell->in);
-		shell->hist_count++;
+		hist[hist_count] = in;
+		add_history(in);
+		hist_count++;
 	}
 	else
 	{
@@ -68,6 +70,9 @@ void file_handler_prep(t_shell *shell)
 
 int shelly(t_shell *shell)
 {
+	t_exec **exec;
+
+	exec = NULL;
 	shell->in = readline("megashell>$ ");
 	if (shell->in == NULL)
 		return (0);
@@ -75,10 +80,13 @@ int shelly(t_shell *shell)
 	{
 		history(shell);
 		shell->curr_input = init_list(shell);
-		if (has_type(*shell->curr_input, t_left, t_right, t_heredoc, t_append, 0))
-			execute_cmds(shell);
-		else
-			singlecmd((*shell->curr_input)->txt, shell->envp);
+		exec = tokens_to_exec(shell);
+		//excecution
+
+		// if (has_type(*shell->curr_input, t_left, t_right, t_heredoc, t_append, 0))
+		// 	execute_cmds(shell);
+		// else
+		// 	singlecmd((*shell->curr_input)->txt, shell->envp);
 	}
 	return (1);
 }

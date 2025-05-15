@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:36:55 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/12 16:39:31 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:26:23 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,6 @@ typedef struct s_shell
 	t_input	**curr_input;
 	char	*in;
 	char	**envp;
-	char	*hist[HISTORY_SIZE];
-	int		hist_count;
 }	t_shell;
 
 typedef struct s_cmd // needs to be goneso

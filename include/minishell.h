@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/08 17:49:45 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:23:37 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,14 @@ void	ft_lstdelone(t_input *lst);
 void	ft_lstadd_next(t_input **lst, t_input *new_lst);
 t_input	*list_move(t_input *lst, int times);
 
-/* parser */
+/* lexer */
 t_type	find_type(char *in);
 t_input	**mat_to_list(char **mat);
 t_input	*parse_list(t_input *input);
 t_input	**init_list(t_shell *shell);
+
+/* parser */
+t_exec tokens_to_exec(t_shell *shell);
 
 /* pipe_parsing */
 int		mat_count(char **mat);

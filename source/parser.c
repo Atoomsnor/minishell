@@ -6,7 +6,13 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/15 12:10:16 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:26:03 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../include/minishell.h"
+
+t_exec **tokens_to_exec(t_shell *shell)
+{
+
+}
