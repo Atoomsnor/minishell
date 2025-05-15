@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/08 17:21:11 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/15 13:37:58 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,36 +16,6 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <stdio.h>
-
-static volatile sig_atomic_t	g_signalreceived = 0;
-
-// function called when signals are received
-void	sighandler(int signal)
-{
-	g_signalreceived = signal;
-}
-
-void sigint_handler(int signal)
-{
-	(void)signal;
-	printf("\n");
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-}
-
-// create signals that need to be handled
-void	init_signals(void)
-{
-	struct sigaction sa;
-	
-	sa.sa_handler = sigint_handler;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &sa, NULL);
-	signal(SIGUSR1, sighandler);
-	signal(SIGUSR2, sighandler);
-}
 
 void	history(t_shell *shell)
 {
@@ -99,7 +69,9 @@ void file_handler_prep(t_shell *shell)
 int shelly(t_shell *shell)
 {
 	shell->in = readline("megashell>$ ");
-	if (shell->in && shell->in[0] != '\0')
+	if (shell->in == NULL)
+		return (0);
+	if (shell->in[0] != '\0')
 	{
 		history(shell);
 		shell->curr_input = init_list(shell);
@@ -107,11 +79,6 @@ int shelly(t_shell *shell)
 			execute_cmds(shell);
 		else
 			singlecmd((*shell->curr_input)->txt, shell->envp);
-		if (g_signalreceived == SIGINT)
-		{
-			printf("signal received!\n");
-			g_signalreceived = 0;
-		}
 	}
 	return (1);
 }
@@ -137,5 +104,8 @@ int	main(int argc, char **argv, char **envp)
 	init_signals();
 	shell = init_shell(envp);
 	while (1)
-		shelly(&shell);
+	{
+		if (!shelly(&shell))
+			break ;
+	}
 }
