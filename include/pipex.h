@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:28:58 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/15 14:35:09 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:41:02 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	child(t_px *px, t_fd *fd);
 void	singleparent(t_px *px, t_fd *fd, int start);
 
 /* Path Handling */
-char	**split_paths(char **envp);
+char	**split_paths(void);
 char	*find_path(char **paths, char *cmd);
 void	free_array(char **array);
 

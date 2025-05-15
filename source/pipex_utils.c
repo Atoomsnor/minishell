@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:38:04 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/08 17:40:20 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:41:39 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	build_structs(t_px *px, t_fd *fd, int argc, t_input **input)
 {
 	px->argc = argc;
 	px->input = input;
-	px->paths = split_paths(px->envp);
+	px->paths = split_paths();
 	if (!px->paths)
 		die(px, NULL, "path error", 1);
 	if (has_type(*input, t_heredoc, 0))
@@ -61,18 +61,17 @@ void	free_array(char **array)
 	free(array);
 }
 
-char	**split_paths(char **envp)
+char	**split_paths(void)
 {
 	char	**paths;
 	char	*tmp;
+	char	*path_env;
 	int		i;
 
-	i = 0;
-	while (envp[i] && ft_strnstr(envp[i], "PATH=", 5) == NULL)
-		i++;
-	if (!envp[i])
+	path_env = getenv("PATH");
+	if (!path_env)
 		return (NULL);
-	paths = ft_split(envp[i] + 5, ':');
+	paths = ft_split(path_env, ':');
 	if (!paths)
 		return (NULL);
 	i = 0;
@@ -87,6 +86,7 @@ char	**split_paths(char **envp)
 	}
 	return (paths);
 }
+
 
 char	*find_path(char **paths, char *cmd)
 {
