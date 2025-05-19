@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:28:58 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/15 14:41:02 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/19 14:53:10 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	die(t_px *px, t_fd *fd, const char *msg, int exit_code);
 void	here_doc(t_px *px, t_fd *fd);
 void	here_child(t_px *px, t_fd *fd);
 void	parent(t_px *px, t_fd *fd, int start);
-void	child(t_px *px, t_fd *fd);
+void	z_child(t_px *px, t_fd *fd);
 void	singleparent(t_px *px, t_fd *fd, int start);
 
 /* Path Handling */

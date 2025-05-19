@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/15 14:33:13 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/19 17:33:29 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,6 @@ t_input	*parse_list(t_input *input)
 		}
 		cpy = cpy->next;
 	}
-	printlist(input);
 	return (input);
 }
 

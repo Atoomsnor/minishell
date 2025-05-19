@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   z_pipex.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:38:15 by roversch          #+#    #+#             */
-/*   Updated: 2025/04/29 16:52:13 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/19 14:53:04 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char **input_to_cmd(t_px *px)
 	return (ret);
 }
 
-void	child(t_px *px, t_fd *fd)
+void	z_child(t_px *px, t_fd *fd)
 {
 	char	*full_path;
 
@@ -80,7 +80,7 @@ void	parent(t_px *px, t_fd *fd, int start)
 			close(fd->pipe[0]);
 			if (px->i < px->argc - 2)
 				fd->out = fd->pipe[1];
-			child(px, fd);
+			z_child(px, fd);
 		}
 		close(fd->pipe[1]);
 		if (px->i != 2)

@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/15 16:14:46 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/19 14:59:04 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,8 @@ void       add_argument(t_cmd *cmd, char *arg);
 t_cmd      *parse_cmds(t_input *input);
 // void       execute_cmds(t_shell *shell);
 void       handle_error(const char *msg);
+
+/* execute */
+int execute(t_exec **exec, char **envp);
 
 #endif

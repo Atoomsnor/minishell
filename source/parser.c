@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/19 13:58:32 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/19 15:37:05 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ t_exec *fill_exec(t_input **input)
 			cmd->full_cmd[i++] = ft_strdup((*input)->txt);
 		*input = (*input)->next;
 	}
-	if (input && !((*input)->type == t_txt || (*input)->type == t_flag))
+	if (*input && !((*input)->type == t_txt || (*input)->type == t_flag))
 		(*input) = (*input)->next;
 	return (cmd);
 }
@@ -178,5 +178,6 @@ t_exec **tokens_to_exec(t_input **input)
 		cmds[i]->full_path = cmd_to_path(cmds[i]);
 		i++;
 	}
+	//remove quotes
 	return (cmds);
 }

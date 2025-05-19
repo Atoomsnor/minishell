@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/19 13:45:14 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/19 17:31:31 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void print_exec(t_exec *exec)
 	printf("execend\n");
 }
 
-int shelly(void)
+int shelly(char **envp)
 {
 	t_exec	**exec;
 	char	*in;
@@ -71,31 +71,30 @@ int shelly(void)
 		history(in);
 		input = init_list(in);
 		exec = tokens_to_exec(input);
-		print_exec(*exec);
-		if (exec[1])
-			print_exec(exec[1]);
-		for (int i = 0; exec[i]; i++)
-		{
-			if (exec[i]->in_fd > 1)
-				close(exec[i]->in_fd);
-			if (exec[i]->out_fd > 1)
-				close(exec[i]->out_fd);
-		}
-		// expand_exec(); cat -> /usr/bin/cat etc etc
-		// ^^ checkt ook builtins? -> if x == true run builtins else execution?
-		// of voor expand_exec ?
-		//execution
+		// print_exec(*exec);
+		// if (exec[1])
+			// print_exec(exec[1]);
+		execute(exec, envp);
+		// for (int i = 0; exec[i]; i++)
+		// {
+		// 	if (exec[i]->in_fd > 1)
+		// 		close(exec[i]->in_fd);
+		// 	if (exec[i]->out_fd > 1)
+		// 		close(exec[i]->out_fd);
+		// }
 		
 	}
 	return (1);
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
+	(void)argc;
+	(void)argv;
 	init_signals();
 	while (1)
 	{
-		if (!shelly())
+		if (!shelly(envp))
 			break ;
 	}
 }
