@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:33:44 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/19 17:48:02 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/19 18:08:58 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,11 @@ int execute(t_exec **exec, char **envp)
 			return (0); // error
 		if (pid == 0)
 		{
-			// close (pipe_fd[0]);
-			// if (exec[i]->out_fd == 1)
-			// 	exec[i]->out_fd = pipe_fd[1];
+			close (pipe_fd[0]);
+			if (!exec[i + 1] && exec[i]->out_fd == 1)
+				pipe_fd[1] = 1;
+			if (exec[i]->out_fd == 1)
+				exec[i]->out_fd = pipe_fd[1];
 			child(exec[i], envp);
 		}
 		i++;
