@@ -6,13 +6,14 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/15 17:55:36 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/19 13:58:32 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include <fcntl.h>
 #include <stdio.h>
+#include <unistd.h>
 
 int count_cmds(t_input *input)
 {
@@ -100,10 +101,7 @@ t_exec *fill_exec(t_input **input)
 			cmd->full_cmd = NULL;
 			cmd->full_path = NULL;
 			cmd->in_fd = 0;
-			if ((*input)->type == t_right)
-				cmd->out_fd = open((*input)->next->txt, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			else
-				cmd->out_fd = open((*input)->next->txt, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			cmd->out_fd = find_out(*input);
 			return (cmd);
 		}
 	}
@@ -124,6 +122,45 @@ t_exec *fill_exec(t_input **input)
 	return (cmd);
 }
 
+int is_buildin(char *cmd)
+{
+	if (ft_strncmp(cmd, "echo", 5) == 0)
+		return (1);
+	else if (ft_strncmp(cmd, "pwd", 4) == 0)
+		return (1);
+	else if (ft_strncmp(cmd, "cd", 3) == 0)
+		return (1);
+	else if (ft_strncmp(cmd, "export", 7) == 0)
+		return (1);
+	else if (ft_strncmp(cmd, "unset", 6) == 0)
+		return (1);
+	else if (ft_strncmp(cmd, "exit", 5) == 0)
+		return (1);
+	else if (ft_strncmp(cmd, "env", 4) == 0)
+		return (1);
+	return (0);
+}
+
+char *cmd_to_path(t_exec *cmd)
+{
+	char *ret;
+
+	ret = NULL;
+	if (cmd->full_cmd[0][0] == '/')
+	{
+		if (access(cmd->full_cmd[0], F_OK | X_OK) == 0)
+			return (cmd->full_cmd[0]);
+		else
+		 	return (NULL); // error
+	}
+	if (is_buildin(cmd->full_cmd[0]))
+		return (NULL);
+	ret = find_path(split_paths(), cmd->full_cmd[0]);
+	if (!ret)
+		return (NULL); // error
+	return (ret);
+}
+
 t_exec **tokens_to_exec(t_input **input)
 {
 	t_exec	**cmds;
@@ -138,6 +175,7 @@ t_exec **tokens_to_exec(t_input **input)
 		while ((*input) && ((*input)->type == t_left || (*input)->type == t_heredoc))
 			*input = (*input)->next->next;
 		cmds[i] = fill_exec(input);
+		cmds[i]->full_path = cmd_to_path(cmds[i]);
 		i++;
 	}
 	return (cmds);

@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/15 17:51:19 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/19 13:45:14 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void print_exec(t_exec *exec)
 
 	i = 0;
 	printf("exec\n");
-	printf("in: %i\nout: %i\n", exec->in_fd, exec->out_fd);
+	printf("in: %i\nout: %i\nfullpath: %s\n", exec->in_fd, exec->out_fd, exec->full_path);
 	while (exec->full_cmd[i])
 	{
 		printf("%s\n", exec->full_cmd[i]);
