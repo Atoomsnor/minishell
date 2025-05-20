@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:33:44 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/20 16:18:23 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/20 16:32:42 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,10 @@ void child(t_exec *exec, char **envp)
 	if (exec->full_path[0] == '\0')
 		run_builtin(exec, exec->out_fd);
 	else
+	{
 		execve(exec->full_path, exec->full_cmd, envp);
+	}
+	exit (1);
 	//error
 }
 
@@ -72,15 +75,12 @@ int execute(t_exec **exec, char **envp)
 			return (0); // error
 		if (pid == 0)
 		{
-			close (pipe_fd[0]);
-			if (!exec[i + 1] && exec[i]->out_fd == 1)
-				pipe_fd[1] = 1;
-			if (exec[i]->out_fd == 1)
+			close(pipe_fd[0]);
+			// if (! && exec[i]->out_fd == 1)
+			// 	pipe_fd[1] = 1;
+			if (exec[i]->out_fd == 1 && exec[i + 1])
 				exec[i]->out_fd = pipe_fd[1];
 			printf("%i outfd %i\n", prev_fd, exec[i]->out_fd);
-			// if (prev_fd != -1 && prev_fd != exec[i]->in_fd)
-			// 	exec[i]->in_fd = prev_fd;
-			// prev_fd = exec[i]->out_fd;
 			child(exec[i], envp);
 		}
 		i++;
@@ -89,3 +89,4 @@ int execute(t_exec **exec, char **envp)
 		wait(NULL);
 	return (1);
 }
+

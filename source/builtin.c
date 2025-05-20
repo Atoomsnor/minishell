@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:15:06 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/20 12:12:56 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/20 16:38:48 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ int	pwd(int fd)
 {
 	char *cwd;
 
+	printf("pwd%i\n", fd);
+
 	cwd = getcwd(NULL, 0);
 	if(!cwd)
 		return (0);
@@ -27,6 +29,7 @@ int	pwd(int fd)
 		return (0);
 	else
 		ft_putendl_fd(cwd, fd);
+	printf("pwd%i\n", fd);
 	return (1);
 }
 

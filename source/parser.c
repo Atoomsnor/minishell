@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/20 16:11:08 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/20 16:34:51 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ t_exec *fill_exec(t_input **input)
 		return (NULL);
 	cmd->in_fd = find_in(*input);
 	cmd->out_fd = find_out(*input);
+	printf("%i\n", cmd->out_fd);
 	while ((*input) && ((*input)->type == t_txt || (*input)->type == t_flag))
 	{
 		if ((*input)->type == t_txt || (*input)->type == t_flag)
