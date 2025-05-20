@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/20 15:13:17 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/20 16:11:08 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ int is_buildin(char *cmd)
 	return (0);
 }
 
-char *cmd_to_path(t_exec *cmd, t_exec **cmds)
+char *cmd_to_path(t_exec *cmd)
 {
 	char *ret;
 
@@ -151,13 +151,13 @@ char *cmd_to_path(t_exec *cmd, t_exec **cmds)
 		if (access(cmd->full_cmd[0], F_OK | X_OK) == 0)
 			return (cmd->full_cmd[0]);
 		else
-		 	return (die(cmds, NULL, error_input_fail), NULL); // error
+		 	return (NULL);
 	}
 	if (is_buildin(cmd->full_cmd[0]))
-		return (NULL);
+		return ("");
 	ret = find_path(split_paths(), cmd->full_cmd[0]);
 	if (!ret)
-		return (die(cmds, NULL, error_input_fail), NULL); // error
+		return (NULL);
 	return (ret);
 }
 
@@ -175,7 +175,11 @@ t_exec **tokens_to_exec(t_input **input)
 		while ((*input) && ((*input)->type == t_left || (*input)->type == t_heredoc))
 			*input = (*input)->next->next;
 		cmds[i] = fill_exec(input);
-		cmds[i]->full_path = cmd_to_path(cmds[i], cmds);
+		if (!cmds[i])
+			return (die(cmds, input, error_fill_exec), NULL);
+		cmds[i]->full_path = cmd_to_path(cmds[i]);
+		if (!cmds[i]->full_path)
+			return (die(cmds, input, error_cmd_to_path), NULL);
 		i++;
 	}
 	//remove quotes

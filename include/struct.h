@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:36:55 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/15 16:11:07 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/20 16:08:50 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ typedef enum e_error
 	error_input_fail,
 	error_read_file_fail,
 	error_write_fail,
+	error_fill_exec,
+	error_cmd_to_path,
 	error_
 }	t_error;
 

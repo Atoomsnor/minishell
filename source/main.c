@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/19 17:31:31 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/20 16:04:24 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,28 @@ void print_exec(t_exec *exec)
 	printf("execend\n");
 }
 
+int sig_interrupted()
+{
+	g_signalreceived = 0;
+	printf("here\n");
+	return (1);
+}
+
 int shelly(char **envp)
 {
+	int		returnvalue;
 	t_exec	**exec;
 	char	*in;
 	t_input **input;
 
 	exec = NULL;
+	returnvalue = 1;
 	in = readline("megashell>$ ");
+	if (g_signalreceived)
+	{
+		g_signalreceived = 0;
+		returnvalue = 130;
+	}
 	if (in == NULL)
 		return (0);
 	if (in[0] != '\0')
@@ -71,20 +85,11 @@ int shelly(char **envp)
 		history(in);
 		input = init_list(in);
 		exec = tokens_to_exec(input);
-		// print_exec(*exec);
-		// if (exec[1])
-			// print_exec(exec[1]);
+		if (!exec)
+			return (1);
 		execute(exec, envp);
-		// for (int i = 0; exec[i]; i++)
-		// {
-		// 	if (exec[i]->in_fd > 1)
-		// 		close(exec[i]->in_fd);
-		// 	if (exec[i]->out_fd > 1)
-		// 		close(exec[i]->out_fd);
-		// }
-		
 	}
-	return (1);
+	return (returnvalue);
 }
 
 int	main(int argc, char **argv, char **envp)

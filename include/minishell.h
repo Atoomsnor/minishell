@@ -6,16 +6,19 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/20 14:58:21 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/20 15:46:57 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+#include <signal.h>
 #include "../libft/libft.h"
 #include "struct.h"
 #include "pipex.h"
+
+extern volatile sig_atomic_t	g_signalreceived;
 
 /* main */
 void	sighandler(int signal);

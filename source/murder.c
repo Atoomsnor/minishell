@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:28:35 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/20 15:15:45 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/20 16:09:40 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@ void shoot_error(t_error error)
 {
 	if (error == error_input_fail)
 		perror("Error input fail\n");
+	else if (error == error_cmd_to_path)
+		perror("Error cmd to path\n"); 
+	else if (error == error_fill_exec)
+		perror("Error fill_exec\n"); 
 }
 
 void lynch_exec(t_exec **exec)
@@ -76,5 +80,4 @@ void	die(t_exec **exec, t_input **input, t_error error)
 	if (input)
 		shank_input(input);
 	shoot_error(error);
-	kill(getpid(), SIGUSR1);
 }
