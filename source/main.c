@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/20 16:04:24 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/20 17:15:36 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,30 +16,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
-
-// void file_handler_prep(t_shell *shell)
-// {
-// 	t_input	*curr;
-// 	t_input *next;
-
-// 	curr = *shell->curr_input;
-// 	while (curr->next)
-// 	{
-// 		next = curr->next;
-// 		if (curr->type != t_txt && curr->type != t_flag)
-// 			ft_lstdelone(curr);
-// 		else if (curr->type == t_flag)
-// 		{
-// 			ft_strjoin(curr->txt, next->txt);
-// 			ft_lstdelone(next);
-// 			next = curr->next;
-// 		}
-// 		curr = next;
-// 	}
-// 	*shell->curr_input = curr->head;
-// 	printlist(*shell->curr_input);
-// 	file_handler(shell);
-// }
 
 void print_exec(t_exec *exec)
 {
@@ -54,13 +30,6 @@ void print_exec(t_exec *exec)
 		i++;
 	}
 	printf("execend\n");
-}
-
-int sig_interrupted()
-{
-	g_signalreceived = 0;
-	printf("here\n");
-	return (1);
 }
 
 int shelly(char **envp)

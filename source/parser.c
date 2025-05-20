@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/20 16:34:51 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/20 17:52:36 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,70 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
+
+void	free_array(char **array)
+{
+	int	i;
+
+	if (!array)
+		return ;
+	i = 0;
+	while (array[i])
+		free(array[i++]);
+	free(array);
+}
+
+
+char	**split_paths(void)
+{
+	char	**paths;
+	char	*tmp;
+	char	*path_env;
+	int		i;
+
+	path_env = getenv("PATH");
+	if (!path_env)
+		return (NULL);
+	paths = ft_split(path_env, ':');
+	if (!paths)
+		return (NULL);
+	i = 0;
+	while (paths[i])
+	{
+		tmp = ft_strjoin(paths[i], "/");
+		if (!tmp)
+			return (free_array(paths), NULL);
+		free(paths[i]);
+		paths[i] = tmp;
+		i++;
+	}
+	return (paths);
+}
+
+
+char	*find_path(char **paths, char *cmd)
+{
+	char	*found_path;
+	int		i;
+
+	if (!cmd || !paths)
+		return (NULL);
+	if (access(cmd, F_OK | X_OK) == 0)
+		return (cmd);
+	i = 0;
+	while (paths[i])
+	{
+		found_path = ft_strjoin(paths[i], cmd);
+		if (!found_path)
+			return (NULL);
+		if (access(found_path, F_OK | X_OK) == 0)
+			return (found_path);
+		free(found_path);
+		i++;
+	}
+	return (NULL);
+}
 
 int count_cmds(t_input *input)
 {
@@ -98,10 +162,14 @@ t_exec *fill_exec(t_input **input)
 	{
 		if ((*input)->prev && (*input)->prev->prev && ((*input)->prev->prev->type == t_right || (*input)->prev->prev->type == t_append))
 		{
-			cmd->full_cmd = NULL;
+			cmd->full_cmd = ft_calloc(2, sizeof(char *));
+			if (!cmd->full_cmd)
+				return (NULL);
+			cmd->full_cmd[0] = ft_strdup("cat");
 			cmd->full_path = NULL;
 			cmd->in_fd = 0;
 			cmd->out_fd = find_out(*input);
+			printf("herege\n");
 			return (cmd);
 		}
 	}
@@ -118,7 +186,9 @@ t_exec *fill_exec(t_input **input)
 			cmd->full_cmd[i++] = ft_strdup((*input)->txt);
 		*input = (*input)->next;
 	}
-	if (*input && !((*input)->type == t_txt || (*input)->type == t_flag))
+	if ((*input)->type == t_right || (*input)->type == t_append)
+		*input = (*input)->next->next;
+	else if (*input && !((*input)->type == t_txt || (*input)->type == t_flag))
 		(*input) = (*input)->next;
 	return (cmd);
 }
@@ -156,6 +226,7 @@ char *cmd_to_path(t_exec *cmd)
 	}
 	if (is_buildin(cmd->full_cmd[0]))
 		return ("");
+	printf("jere\n");
 	ret = find_path(split_paths(), cmd->full_cmd[0]);
 	if (!ret)
 		return (NULL);
@@ -175,12 +246,17 @@ t_exec **tokens_to_exec(t_input **input)
 	{
 		while ((*input) && ((*input)->type == t_left || (*input)->type == t_heredoc))
 			*input = (*input)->next->next;
+		printf("%s\n", (*input)->txt);
 		cmds[i] = fill_exec(input);
 		if (!cmds[i])
 			return (die(cmds, input, error_fill_exec), NULL);
-		cmds[i]->full_path = cmd_to_path(cmds[i]);
-		if (!cmds[i]->full_path)
-			return (die(cmds, input, error_cmd_to_path), NULL);
+		if (cmds[i]->full_cmd)
+		{
+			printf("%s\n", cmds[i]->full_cmd[0]);
+			cmds[i]->full_path = cmd_to_path(cmds[i]);
+			if (!cmds[i]->full_path)
+				return (die(cmds, input, error_cmd_to_path), NULL);
+		}
 		i++;
 	}
 	//remove quotes

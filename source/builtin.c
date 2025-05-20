@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:15:06 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/20 16:38:48 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/20 17:50:26 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,13 @@ int	pwd(int fd)
 {
 	char *cwd;
 
-	printf("pwd%i\n", fd);
-
 	cwd = getcwd(NULL, 0);
 	if(!cwd)
 		return (0);
 	else if (fd < 0)
 		return (0);
 	else
-		ft_putendl_fd(cwd, fd);
-	printf("pwd%i\n", fd);
+		printf("%s\n", cwd);
 	return (1);
 }
 
@@ -54,7 +51,9 @@ int	echo(int fd, char **to_write)
 	}
 	if (cmp)
 		out = ft_strjoin(out, "\n");
-	ft_putstr_fd(out, fd);
+	printf("%s", out);
+	if (out)
+		free(out);
 	return (1);
 }
 
@@ -110,4 +109,16 @@ void	unset(char *name)
 void bi_exit()
 {
 	//kill(getpid(), SIGTSTP);
+}
+
+void	env(char **envp)
+{
+	int	i;
+
+	i = 0;
+	while (envp[i])
+	{
+		printf("%s\n", envp[i]);
+		i++;
+	}
 }
