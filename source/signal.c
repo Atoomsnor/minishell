@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 13:33:15 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/15 14:01:07 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/20 15:15:21 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,14 @@ void sigint_handler(int signal)
 	rl_redisplay();
 }
 
+void sigusrerr_handler(int signal)
+{
+	(void)signal;
+	printf("\n");
+	rl_replace_line("", 0);
+	rl_on_new_line();
+}
+
 // create signals that need to be handled
 void	init_signals(void)
 {
@@ -42,6 +50,6 @@ void	init_signals(void)
 	sa.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &sa, NULL);
 	signal(SIGQUIT, SIG_IGN);
-	signal(SIGUSR1, sighandler);
+	signal(SIGUSR1, sigusrerr_handler);
 	signal(SIGUSR2, sighandler);
 }

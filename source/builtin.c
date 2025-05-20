@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:15:06 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/15 12:05:30 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/20 12:12:56 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 #include <limits.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdio.h>
 
-int pwd(int fd)
+int	pwd(int fd)
 {
 	char *cwd;
 
@@ -29,23 +30,32 @@ int pwd(int fd)
 	return (1);
 }
 
-int echo(int fd, char *flag, char *to_write)
+int	echo(int fd, char **to_write)
 {
-	if (!to_write || fd < 0)
+	char	*out;
+	int 	i;
+	int		cmp;
+
+	if (!to_write || !*to_write || fd < 0)
 		return (0);
-	if (flag)
+	out = NULL;
+	cmp = ft_strncmp(*to_write, "-n", 3);
+	i = 0;
+	if (!cmp)
+		i = 1;
+	while (to_write[i])
 	{
-		if (!ft_strncmp(flag, "-n", 3))
-			ft_putstr_fd(to_write, fd);
-		else
-		 return (0);
+		out = ft_strjoin(out, to_write[i]);
+		out = ft_strjoin(out, " ");
+		i++;
 	}
-	else
-		ft_putendl_fd(to_write, fd);
+	if (cmp)
+		out = ft_strjoin(out, "\n");
+	ft_putstr_fd(out, fd);
 	return (1);
 }
 
-int cd(char *path)
+int	cd(char *path)
 {
 	char	*cwd;
 	char	*joined_path;
@@ -55,9 +65,10 @@ int cd(char *path)
 	cwd = getcwd(NULL, 0);
 	if(!cwd)
 		return (0);
-	if (ft_strncmp(cwd, path, ft_strlen(cwd)))
+	if (ft_strncmp(cwd, path, ft_strlen(cwd)) && path[0] != '/')
 	{
-		joined_path = ft_strjoin(cwd, path);
+		joined_path = ft_strjoin(cwd, "/");
+		joined_path = ft_strjoin(joined_path, path);
 		if (!chdir(joined_path))
 			return (0);
 	}
@@ -72,7 +83,7 @@ int cd(char *path)
 // different type? (struct?)
 // takes VAR name & str
 // VAR name can be called using a wildcard -> look for array of these vars?
-t_var *export(char *var_name, char *str)
+t_var *bi_export(char *var_name, char *str)
 {
 	t_var *var;
 
@@ -87,7 +98,7 @@ t_var *export(char *var_name, char *str)
 }
 
 // works in sync with export, destroys a saved var
-void unset(char *name)
+void	unset(char *name)
 {
 	if (name)
 		unlink(name);

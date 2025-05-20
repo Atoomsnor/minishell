@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:38:15 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/19 14:53:04 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/20 12:23:25 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,12 @@ void	z_child(t_px *px, t_fd *fd)
 
 	px->cmd = input_to_cmd(px);
 	if (!px->cmd)
-		die(px, fd, "malloc error", 1);
+		z_die(px, fd, "malloc error", 1);
 	full_path = find_path(px->paths, px->cmd[0]);
 	if (!full_path)
 	{
 		free_array(px->cmd);
-		die(px, fd, "path error", 127);
+		z_die(px, fd, "path error", 127);
 	}
 	if (fd->in != STDIN_FILENO)
 	{
@@ -60,7 +60,7 @@ void	z_child(t_px *px, t_fd *fd)
 	execve(full_path, px->cmd, px->envp);
 	free(full_path);
 	free_array(px->cmd);
-	die(px, fd, "execve error", 126);
+	z_die(px, fd, "execve error", 126);
 }
 
 void	parent(t_px *px, t_fd *fd, int start)
@@ -71,10 +71,10 @@ void	parent(t_px *px, t_fd *fd, int start)
 	while (px->i < px->argc - 1)
 	{
 		if (pipe(fd->pipe) == -1)
-			die(px, fd, "pipe error", 1);
+			z_die(px, fd, "pipe error", 1);
 		pid = fork();
 		if (pid == -1)
-			die(px, fd, "fork error", 1);
+			z_die(px, fd, "fork error", 1);
 		if (pid == 0)
 		{
 			close(fd->pipe[0]);
@@ -116,10 +116,10 @@ void	here_doc(t_px *px, t_fd *fd)
 	int		hid;
 
 	if (pipe(fd->pipe) == -1)
-		die(px, fd, "pipe error", 1);
+		z_die(px, fd, "pipe error", 1);
 	hid = fork();
 	if (hid == -1)
-		die(px, fd, "fork error", 1);
+		z_die(px, fd, "fork error", 1);
 	if (hid == 0)
 	{
 		close(fd->pipe[0]);

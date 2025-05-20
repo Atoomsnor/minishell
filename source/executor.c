@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:33:44 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/19 18:08:58 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/20 12:28:29 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,26 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/wait.h>
+#include <stdio.h>
+
+int run_builtin(t_exec *exec, int fd)
+{
+	if (ft_strncmp(exec->full_cmd[0], "echo", 5) == 0)
+		echo(fd, &(exec->full_cmd[1]));
+	else if (ft_strncmp(exec->full_cmd[0], "pwd", 4) == 0)
+		pwd(fd);
+	else if (ft_strncmp(exec->full_cmd[0], "cd", 3) == 0)
+		cd(exec->full_cmd[1]);
+	else if (ft_strncmp(exec->full_cmd[0], "export", 7) == 0)
+		bi_export(exec->full_cmd[0], exec->full_cmd[1]); //wrong needs to be fixed
+	else if (ft_strncmp(exec->full_cmd[0], "unset", 6) == 0)
+		unset(exec->full_cmd[1]);
+	else if (ft_strncmp(exec->full_cmd[0], "exit", 5) == 0)
+		bi_exit();
+	else if (ft_strncmp(exec->full_cmd[0], "env", 4) == 0)
+		return (1); //needs to be added
+	return (0);
+}
 
 void child(t_exec *exec, char **envp)
 {
@@ -27,7 +47,10 @@ void child(t_exec *exec, char **envp)
 		dup2(exec->out_fd, STDOUT_FILENO);
 		close(exec->out_fd);
 	}
-	execve(exec->full_path, exec->full_cmd, envp);
+	if (!exec->full_path)
+		run_builtin(exec, exec->out_fd);
+	else
+		execve(exec->full_path, exec->full_cmd, envp);
 	//error
 }
 

@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:28:58 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/19 14:53:10 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/20 12:23:19 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 
 /* Error Handling */
-void	die(t_px *px, t_fd *fd, const char *msg, int exit_code);
+void	z_die(t_px *px, t_fd *fd, const char *msg, int exit_code);
 
 /* Process Management */
 void	here_doc(t_px *px, t_fd *fd);

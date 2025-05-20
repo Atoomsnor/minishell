@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/19 15:37:05 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/20 15:13:17 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ int is_buildin(char *cmd)
 	return (0);
 }
 
-char *cmd_to_path(t_exec *cmd)
+char *cmd_to_path(t_exec *cmd, t_exec **cmds)
 {
 	char *ret;
 
@@ -151,13 +151,13 @@ char *cmd_to_path(t_exec *cmd)
 		if (access(cmd->full_cmd[0], F_OK | X_OK) == 0)
 			return (cmd->full_cmd[0]);
 		else
-		 	return (NULL); // error
+		 	return (die(cmds, NULL, error_input_fail), NULL); // error
 	}
 	if (is_buildin(cmd->full_cmd[0]))
 		return (NULL);
 	ret = find_path(split_paths(), cmd->full_cmd[0]);
 	if (!ret)
-		return (NULL); // error
+		return (die(cmds, NULL, error_input_fail), NULL); // error
 	return (ret);
 }
 
@@ -175,7 +175,7 @@ t_exec **tokens_to_exec(t_input **input)
 		while ((*input) && ((*input)->type == t_left || (*input)->type == t_heredoc))
 			*input = (*input)->next->next;
 		cmds[i] = fill_exec(input);
-		cmds[i]->full_path = cmd_to_path(cmds[i]);
+		cmds[i]->full_path = cmd_to_path(cmds[i], cmds);
 		i++;
 	}
 	//remove quotes

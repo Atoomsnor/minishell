@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/19 14:59:04 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/20 14:58:21 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,5 +90,16 @@ void       handle_error(const char *msg);
 
 /* execute */
 int execute(t_exec **exec, char **envp);
+
+/* murder */
+void	die(t_exec **exec, t_input **input, t_error error);
+
+/* builtins */
+int		pwd(int fd);
+int		echo(int fd, char **to_write);
+int		cd(char *path);
+t_var	*bi_export(char *var_name, char *str);
+void	unset(char *name);
+void	bi_exit();
 
 #endif

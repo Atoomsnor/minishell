@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:38:04 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/15 14:41:39 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/20 12:22:17 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <fcntl.h>
 #include <signal.h>
 
-void	die(t_px *px, t_fd *fd, const char *msg, int exit_code)
+void	z_die(t_px *px, t_fd *fd, const char *msg, int exit_code)
 {
 	if (fd)
 	{
@@ -37,16 +37,16 @@ void	build_structs(t_px *px, t_fd *fd, int argc, t_input **input)
 	px->input = input;
 	px->paths = split_paths();
 	if (!px->paths)
-		die(px, NULL, "path error", 1);
+		z_die(px, NULL, "path error", 1);
 	if (has_type(*input, t_heredoc, 0))
 		fd->in = open("./minishell", O_RDONLY);
 	else
 		fd->in = open(input[0]->txt, O_RDONLY);
 	if (fd->in == -1)
-		die(px, fd, "infile error", 1);
+		z_die(px, fd, "infile error", 1);
 	fd->out = 0;
 	if (fd->out == -1)
-		die(px, fd, "outfile error", 1);
+		z_die(px, fd, "outfile error", 1);
 }
 
 void	free_array(char **array)

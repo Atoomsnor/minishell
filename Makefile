@@ -2,7 +2,7 @@ NAME = minishell
 
 SRC = main.c string_split.c builtin.c pipex_utils.c pipe_parsing.c \
 parser.c lexer.c linked_list.c list_utils.c struct_utils.c signal.c \
-history.c executor.c
+history.c executor.c murder.c
 SRC_DIR = source
 
 SRC_COPE	= $(SRC:%=$(SRC_DIR)/%)
