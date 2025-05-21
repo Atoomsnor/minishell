@@ -33,8 +33,6 @@ int has_type(t_input *input, ...)
 				break;
 			if (cpy->type == curr)
 			{
-				if (curr == t_heredoc)
-					printf("%i - %i: str - %s\n", cpy->type, t_heredoc, cpy->txt);
 				va_end(ptr);
 				return (1);
 			}

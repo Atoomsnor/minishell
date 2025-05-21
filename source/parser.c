@@ -138,7 +138,7 @@ int find_out(t_input *input)
 	while (input)
 	{
 		if (input->type == t_right)
-			return (open(input->next->txt, O_WRONLY | O_CREAT | O_TRUNC, 0644));
+			return (open(input->next->txt, O_RDWR | O_CREAT | O_TRUNC, 0644));
 		else if (input->type == t_append)
 			return (open(input->next->txt, O_WRONLY | O_CREAT | O_APPEND, 0644));
 		else if (input->type == t_pipe)
@@ -169,7 +169,6 @@ t_exec *fill_exec(t_input **input)
 			cmd->full_path = NULL;
 			cmd->in_fd = 0;
 			cmd->out_fd = find_out(*input);
-			printf("herege\n");
 			return (cmd);
 		}
 	}
@@ -179,14 +178,13 @@ t_exec *fill_exec(t_input **input)
 		return (NULL);
 	cmd->in_fd = find_in(*input);
 	cmd->out_fd = find_out(*input);
-	printf("%i\n", cmd->out_fd);
 	while ((*input) && ((*input)->type == t_txt || (*input)->type == t_flag))
 	{
 		if ((*input)->type == t_txt || (*input)->type == t_flag)
 			cmd->full_cmd[i++] = ft_strdup((*input)->txt);
 		*input = (*input)->next;
 	}
-	if ((*input)->type == t_right || (*input)->type == t_append)
+	if (*input && ((*input)->type == t_right || (*input)->type == t_append) && (*input)->next)
 		*input = (*input)->next->next;
 	else if (*input && !((*input)->type == t_txt || (*input)->type == t_flag))
 		(*input) = (*input)->next;
@@ -226,7 +224,6 @@ char *cmd_to_path(t_exec *cmd)
 	}
 	if (is_buildin(cmd->full_cmd[0]))
 		return ("");
-	printf("jere\n");
 	ret = find_path(split_paths(), cmd->full_cmd[0]);
 	if (!ret)
 		return (NULL);
@@ -246,13 +243,11 @@ t_exec **tokens_to_exec(t_input **input)
 	{
 		while ((*input) && ((*input)->type == t_left || (*input)->type == t_heredoc))
 			*input = (*input)->next->next;
-		printf("%s\n", (*input)->txt);
 		cmds[i] = fill_exec(input);
 		if (!cmds[i])
 			return (die(cmds, input, error_fill_exec), NULL);
 		if (cmds[i]->full_cmd)
 		{
-			printf("%s\n", cmds[i]->full_cmd[0]);
 			cmds[i]->full_path = cmd_to_path(cmds[i]);
 			if (!cmds[i]->full_path)
 				return (die(cmds, input, error_cmd_to_path), NULL);
