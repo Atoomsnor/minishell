@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/22 15:48:18 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/22 16:01:04 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ t_input	**init_list(char *in)
 
 	matrix = ft_string_split(in, ' ');
 	input = matrix_to_list(matrix);
-	// free_array(matrix); //this helps but breaks xddd
+	free_array(matrix);
 	parse_list(input[0]);
 	return (input);
 }

@@ -2,6 +2,9 @@
 - https://gitlab.com/madebypixel02/minishell
 
 #to do#
+
+- megashell>$ < infile cat > out doesnt work on ur push or mine
+
 - fix leaks
 - fix quotes
 - fix envoirement veriable ($ stuff)
@@ -49,10 +52,19 @@ cmd_to_path change with making an array to free up
 ==14946==    still reachable: 208,235 bytes in 226 blocks
 ==14946==         suppressed: 0 bytes in 0 blocks
 
-free_array(matrix) in init_list //breaks stuff so commented out xdd
+free_array(matrix) in init_list broke but
+not with node->txt = ft_strdup((char *)content); in ft_lstnew
 ==17353== LEAK SUMMARY:
 ==17353==    definitely lost: 72 bytes in 3 blocks
 ==17353==    indirectly lost: 178 bytes in 9 blocks
 ==17353==      possibly lost: 0 bytes in 0 blocks
 ==17353==    still reachable: 208,235 bytes in 226 blocks
 ==17353==         suppressed: 0 bytes in 0 blocks
+
+added lynch/shank at end of shelly 
+==29543== LEAK SUMMARY:
+==29543==    definitely lost: 72 bytes in 3 blocks
+==29543==    indirectly lost: 88 bytes in 5 blocks
+==29543==      possibly lost: 0 bytes in 0 blocks
+==29543==    still reachable: 208,235 bytes in 226 blocks
+==29543==         suppressed: 0 bytes in 0 blocks

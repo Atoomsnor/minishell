@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 12:08:29 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/22 15:22:16 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:59:48 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_input	*ft_lstnew(void *content)
 	node = (t_input *)malloc(sizeof(t_input));
 	if (!node)
 		return (NULL);
-	node->txt = (char *)content;
+	node->txt = ft_strdup((char *)content);
 	node->head = node;
 	node->next = NULL;
 	node->prev = NULL;

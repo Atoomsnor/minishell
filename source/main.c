@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/22 15:34:03 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/22 16:06:40 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,15 @@ int	shelly(char **envp)
 		input = init_list(in);
 		exec = tokens_to_exec(input);
 		if (!exec)
-			return (1); //memcheck? return (shank_imput(imput), 1)
+			return (shank_input(input), 1);
 		if (exec[1] || exec[0]->full_path[0] != '\0')
 			execute(exec, envp);
 		else
 			run_builtin(exec[0], exec[0]->out_fd, envp);
+		lynch_exec(exec);
+		shank_input(input);
 	}
+	free(in); //doesnt do anything afaik but saw someone doing it
 	return (returnvalue);
 }
 
