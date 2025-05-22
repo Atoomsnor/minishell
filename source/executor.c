@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:33:44 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/22 14:18:13 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:44:31 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,16 +72,15 @@ int execute(t_exec **exec, char **envp)
 		pid = fork();
 		if (pid == -1)
 			return (0);
-		if (pid == 0)
-		{
-			close(pipe_fd[0]);
-			if (exec[i]->out_fd == 1 && exec[i + 1])
-				exec[i]->out_fd = pipe_fd[1];
-			if (prev_fd != -1 && exec[i]->in_fd == 0)
-				exec[i]->in_fd = prev_fd;
-			printf("infd %i outfd %i prevfd %i\nfullpath %s\n", exec[i]->in_fd, exec[i]->out_fd, prev_fd, exec[i]->full_path);
+		if (exec[i]->out_fd == 1 && exec[i + 1])
+			exec[i]->out_fd = pipe_fd[1];
+		if (prev_fd != -1 && exec[i]->in_fd == 0)
+			exec[i]->in_fd = prev_fd;
+		// printf("infd %i outfd %i prevfd %i\nfullpath %s\n", exec[i]->in_fd, exec[i]->out_fd, prev_fd, exec[i]->full_path);
+		if (!exec[i + 1])
+			run_builtin(exec[i], exec[i]->out_fd, envp);
+		else if (pid == 0)
 			child(exec[i], envp);
-		}
 		prev_fd = exec[i]->out_fd;
 		i++;
 	}
