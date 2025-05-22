@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/22 12:28:10 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:16:57 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ int find_out(t_input *input)
 		{
 			if (fd > 1)
 				close(fd);
-			fd = open(input->next->txt, O_RDWR | O_CREAT | O_TRUNC, 0644);
+			fd = open(input->next->txt, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		}
 		else if (input->type == t_append)
 		{
@@ -171,7 +171,8 @@ t_exec *fill_exec(t_input **input)
 	while ((*input) && ((*input)->type == t_txt || (*input)->type == t_flag))
 	{
 		if ((*input)->type == t_txt || (*input)->type == t_flag)
-			cmd->full_cmd[i++] = ft_strdup((*input)->txt);
+			cmd->full_cmd[i] = ft_strdup((*input)->txt);
+		i++;
 		*input = (*input)->next;
 	}
 	return (cmd);
@@ -227,7 +228,8 @@ t_exec **tokens_to_exec(t_input **input)
 	i = 0;
 	while (i < count)
 	{
-		
+		if ((*input) && (*input)->type == t_pipe)
+			*input = (*input)->next;
 		while ((*input) && (*input)->next && ((*input)->type == t_left || (*input)->type == t_heredoc || (*input)->type == t_right || (*input)->type == t_append))
 			*input = (*input)->next->next;
 		if (!(*input))

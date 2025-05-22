@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:33:44 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/22 11:45:59 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:18:13 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int execute(t_exec **exec, char **envp)
 				exec[i]->out_fd = pipe_fd[1];
 			if (prev_fd != -1 && exec[i]->in_fd == 0)
 				exec[i]->in_fd = prev_fd;
-			// printf("infd %i outfd %i prevfd %i\nfullpath %s\n", exec[i]->in_fd, exec[i]->out_fd, prev_fd, exec[i]->full_path);
+			printf("infd %i outfd %i prevfd %i\nfullpath %s\n", exec[i]->in_fd, exec[i]->out_fd, prev_fd, exec[i]->full_path);
 			child(exec[i], envp);
 		}
 		prev_fd = exec[i]->out_fd;
