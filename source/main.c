@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/20 17:15:36 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/22 13:52:36 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,10 @@ int shelly(char **envp)
 		exec = tokens_to_exec(input);
 		if (!exec)
 			return (1);
-		execute(exec, envp);
+		if (exec[1] || !is_buildin(exec[0]->full_cmd[0]))
+			execute(exec, envp);
+		else
+		 	run_builtin(exec[0], exec[0]->out_fd, envp);
 	}
 	return (returnvalue);
 }
