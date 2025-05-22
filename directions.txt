@@ -68,3 +68,20 @@ added lynch/shank at end of shelly
 ==29543==      possibly lost: 0 bytes in 0 blocks
 ==29543==    still reachable: 208,235 bytes in 226 blocks
 ==29543==         suppressed: 0 bytes in 0 blocks
+
+all above commands where used with cd | ls,
+this one was done with < infile cat > out
+==33381== LEAK SUMMARY:
+==33381==    definitely lost: 56 bytes in 2 blocks
+==33381==    indirectly lost: 93 bytes in 5 blocks
+==33381==      possibly lost: 0 bytes in 0 blocks
+==33381==    still reachable: 208,238 bytes in 225 blocks
+==33381==         suppressed: 0 bytes in 0 blocks
+
+Summary Table
+ls | cd does an invalid free triggered by lynch_exec
+Leak Source		Direct		Indirect	Function Path
+fill_exec		16 B		0 B			ft_calloc → fill_exec → tokens_to_exec
+matrix_to_list	40 B		93 B		ft_lstnew → matrix_to_list → init_list
+Total Leaked	56 B		93 B	
+Still Reachable	208 KB		—			Likely global structures not freed on shutdown
