@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:15:06 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/20 17:50:26 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/22 12:27:30 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,12 @@ int	cd(char *path)
 		joined_path = ft_strjoin(cwd, "/");
 		joined_path = ft_strjoin(joined_path, path);
 		if (!chdir(joined_path))
-			return (0);
+			return (printf("it worked!\n"), 0);
 	}
 	else
 	{
 		if (!chdir(path))
-			return (0);
+			return (printf("it worked! v2\n"), 0);
 	}
 	return (1);
 }

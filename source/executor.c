@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:33:44 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/20 17:54:03 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/22 11:45:59 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int run_builtin(t_exec *exec, int fd, char **envp)
 	else if (ft_strncmp(exec->full_cmd[0], "exit", 5) == 0)
 		bi_exit();
 	else if (ft_strncmp(exec->full_cmd[0], "env", 4) == 0)
-		env(envp); //needs to be added
+		env(envp);
 	return (0);
 }
 
@@ -47,7 +47,6 @@ void child(t_exec *exec, char **envp)
 		dup2(exec->out_fd, STDOUT_FILENO);
 		close(exec->out_fd);
 	}
-	printf("child out_fd: %d\n", exec->out_fd);
 	if (exec->full_path[0] == '\0')
 		run_builtin(exec, exec->out_fd, envp);
 	else
@@ -80,7 +79,7 @@ int execute(t_exec **exec, char **envp)
 				exec[i]->out_fd = pipe_fd[1];
 			if (prev_fd != -1 && exec[i]->in_fd == 0)
 				exec[i]->in_fd = prev_fd;
-			printf("infd %i outfd %i prevfd %i\nfullpath %s\n", exec[i]->in_fd, exec[i]->out_fd, prev_fd, exec[i]->full_path);
+			// printf("infd %i outfd %i prevfd %i\nfullpath %s\n", exec[i]->in_fd, exec[i]->out_fd, prev_fd, exec[i]->full_path);
 			child(exec[i], envp);
 		}
 		prev_fd = exec[i]->out_fd;

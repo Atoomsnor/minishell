@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/20 17:52:36 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/22 12:28:10 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,13 +88,6 @@ int count_cmds(t_input *input)
 	{
 		if (input->type == t_pipe)
 			count++;
-		else if ((input->type == t_right || input->type == t_append)
-				&& (input->next && input->next->next 
-				&& (input->next->next->type == t_right 
-				|| input->next->next->type == t_append)))
-		{
-			count++;
-		}
 		input = input->next;
 	}
 	return (count);
@@ -135,17 +128,28 @@ int find_in(t_input *input)
 
 int find_out(t_input *input)
 {
+	int fd;
+
+	fd = 1;
 	while (input)
 	{
 		if (input->type == t_right)
-			return (open(input->next->txt, O_RDWR | O_CREAT | O_TRUNC, 0644));
+		{
+			if (fd > 1)
+				close(fd);
+			fd = open(input->next->txt, O_RDWR | O_CREAT | O_TRUNC, 0644);
+		}
 		else if (input->type == t_append)
-			return (open(input->next->txt, O_WRONLY | O_CREAT | O_APPEND, 0644));
+		{
+			if (fd > 1)
+				close(fd);
+			fd = open(input->next->txt, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		}
 		else if (input->type == t_pipe)
-			return (1);
+			return (fd);
 		input = input->next;
 	}
-	return (1);
+	return (fd);
 }
 
 t_exec *fill_exec(t_input **input)
@@ -158,20 +162,6 @@ t_exec *fill_exec(t_input **input)
 	cmd = ft_calloc(1, sizeof(t_exec));
 	if (!cmd)
 		return (NULL);
-	if ((*input)->type == t_right || (*input)->type == t_append)
-	{
-		if ((*input)->prev && (*input)->prev->prev && ((*input)->prev->prev->type == t_right || (*input)->prev->prev->type == t_append))
-		{
-			cmd->full_cmd = ft_calloc(2, sizeof(char *));
-			if (!cmd->full_cmd)
-				return (NULL);
-			cmd->full_cmd[0] = ft_strdup("cat");
-			cmd->full_path = NULL;
-			cmd->in_fd = 0;
-			cmd->out_fd = find_out(*input);
-			return (cmd);
-		}
-	}
 	count = count_till_pipe(*input);
 	cmd->full_cmd = ft_calloc(count + 1, sizeof(char *));
 	if (!cmd->full_cmd)
@@ -184,10 +174,6 @@ t_exec *fill_exec(t_input **input)
 			cmd->full_cmd[i++] = ft_strdup((*input)->txt);
 		*input = (*input)->next;
 	}
-	if (*input && ((*input)->type == t_right || (*input)->type == t_append) && (*input)->next)
-		*input = (*input)->next->next;
-	else if (*input && !((*input)->type == t_txt || (*input)->type == t_flag))
-		(*input) = (*input)->next;
 	return (cmd);
 }
 
@@ -241,8 +227,11 @@ t_exec **tokens_to_exec(t_input **input)
 	i = 0;
 	while (i < count)
 	{
-		while ((*input) && ((*input)->type == t_left || (*input)->type == t_heredoc))
+		
+		while ((*input) && (*input)->next && ((*input)->type == t_left || (*input)->type == t_heredoc || (*input)->type == t_right || (*input)->type == t_append))
 			*input = (*input)->next->next;
+		if (!(*input))
+			return (die(cmds, input, error_fill_exec), NULL);
 		cmds[i] = fill_exec(input);
 		if (!cmds[i])
 			return (die(cmds, input, error_fill_exec), NULL);
