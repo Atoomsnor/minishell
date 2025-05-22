@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/22 11:46:26 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:19:26 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void	shank_input(t_input **input);
 void	die(t_exec **exec, t_input **input, t_error error);
 
 /* parser */
+void	free_array(char **array);
 char	**split_paths(void);
 char	*find_path(char **paths, char *cmd);
 int		count_cmds(t_input *input);

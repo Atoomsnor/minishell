@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   murder.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:28:35 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/20 16:09:40 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:34:50 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,17 @@
 #include <stdio.h>
 #include <unistd.h>
 
-void shoot_error(t_error error)
+void	shoot_error(t_error error)
 {
 	if (error == error_input_fail)
 		perror("Error input fail\n");
 	else if (error == error_cmd_to_path)
-		perror("Error cmd to path\n"); 
+		perror("Error cmd to path\n");
 	else if (error == error_fill_exec)
-		perror("Error fill_exec\n"); 
+		perror("Error fill_exec\n");
 }
 
-void lynch_exec(t_exec **exec)
+void	lynch_exec(t_exec **exec)
 {
 	int	i;
 	int	j;
@@ -55,9 +55,9 @@ void lynch_exec(t_exec **exec)
 		free(exec);
 }
 
-void shank_input(t_input **input)
+void	shank_input(t_input **input)
 {
-	t_input *next;
+	t_input	*next;
 
 	if (!input)
 		return ;

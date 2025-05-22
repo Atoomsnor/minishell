@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:28:58 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/20 12:23:19 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:38:35 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,32 @@
 # include "../libft/libft.h"
 #include "struct.h"
 
+typedef struct s_cmd // needs to be goneso
+{
+	struct s_cmd	*next;
+	char			**args;
+	int				in_fd;
+	int				out_fd;
+	int				pipe[2];
+}	t_cmd;
+
+typedef struct s_fd // needs to be goneso
+{
+	int	in;
+	int	out;
+	int	pipe[2];
+}	t_fd;
+
+typedef struct s_px //goneso
+{
+	int		i;
+	int		append;
+	int		argc;
+	char	**paths;
+	char	**envp;
+	char	**cmd;
+	t_input	**input;
+}	t_px;
 
 /* Error Handling */
 void	z_die(t_px *px, t_fd *fd, const char *msg, int exit_code);

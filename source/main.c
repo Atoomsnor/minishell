@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/22 14:17:26 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:34:03 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void print_exec(t_exec *exec)
+void	print_exec(t_exec *exec)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	printf("exec\n");
@@ -32,12 +32,12 @@ void print_exec(t_exec *exec)
 	printf("execend\n");
 }
 
-int shelly(char **envp)
+int	shelly(char **envp)
 {
-	int		returnvalue;
+	t_input	**input;
 	t_exec	**exec;
 	char	*in;
-	t_input **input;
+	int		returnvalue;
 
 	exec = NULL;
 	returnvalue = 1;
@@ -55,11 +55,11 @@ int shelly(char **envp)
 		input = init_list(in);
 		exec = tokens_to_exec(input);
 		if (!exec)
-			return (1);
+			return (1); //memcheck? return (shank_imput(imput), 1)
 		if (exec[1] || exec[0]->full_path[0] != '\0')
 			execute(exec, envp);
 		else
-		 	run_builtin(exec[0], exec[0]->out_fd, envp);
+			run_builtin(exec[0], exec[0]->out_fd, envp);
 	}
 	return (returnvalue);
 }

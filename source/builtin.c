@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:15:06 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/22 12:27:30 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:29:58 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@
 
 int	pwd(int fd)
 {
-	char *cwd;
+	char	*cwd;
 
 	cwd = getcwd(NULL, 0);
-	if(!cwd)
+	if (!cwd)
 		return (0);
 	else if (fd < 0)
 		return (0);
@@ -33,7 +33,7 @@ int	pwd(int fd)
 int	echo(int fd, char **to_write)
 {
 	char	*out;
-	int 	i;
+	int		i;
 	int		cmp;
 
 	if (!to_write || !*to_write || fd < 0)
@@ -65,7 +65,7 @@ int	cd(char *path)
 	if (!path)
 		return (0);
 	cwd = getcwd(NULL, 0);
-	if(!cwd)
+	if (!cwd)
 		return (0);
 	if (ft_strncmp(cwd, path, ft_strlen(cwd)) && path[0] != '/')
 	{
@@ -85,9 +85,9 @@ int	cd(char *path)
 // different type? (struct?)
 // takes VAR name & str
 // VAR name can be called using a wildcard -> look for array of these vars?
-t_var *bi_export(char *var_name, char *str)
+t_var	*bi_export(char *var_name, char *str)
 {
-	t_var *var;
+	t_var	*var;
 
 	if (!var_name || !str)
 		return (NULL);
@@ -106,7 +106,7 @@ void	unset(char *name)
 		unlink(name);
 }
 
-void bi_exit()
+void	bi_exit()
 {
 	//kill(getpid(), SIGTSTP);
 }

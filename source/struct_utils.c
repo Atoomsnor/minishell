@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 16:11:18 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/08 15:08:54 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:36:41 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-int has_type(t_input *input, ...)
+int	has_type(t_input *input, ...)
 {
 	t_input	*cpy;
 	va_list	ptr;
-	t_type curr;
+	t_type	curr;
 
 	if (!input)
 		return (0);
@@ -30,7 +30,7 @@ int has_type(t_input *input, ...)
 		{
 			curr = va_arg(ptr, t_type);
 			if (curr == 0)
-				break;
+				break ;
 			if (cpy->type == curr)
 			{
 				va_end(ptr);

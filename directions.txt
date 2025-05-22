@@ -2,34 +2,23 @@
 - https://gitlab.com/madebypixel02/minishell
 
 #to do#
-- make stuff from lexer.c into new struct so we can "parse" to exec
-- make signanls for ctrl c d \ work
-- if fullpath isnt given , make txt token into fullpath
-
-
-- pipex is changed in 4 different ways, try to make 1 that still used pathfinding.
-- change pipex/pipex related stuff where it accepts the new exec struct
+- fix leaks
+- fix quotes
+- fix envoirement veriable ($ stuff)
 
 - make a bunch of error handling when inpropper stuff is parsed
-- when multiple infiles or outfiles are given only use the first and last # ----- # wrong
-- handle the stuff before parsing to pipex, when theres only 1 cmd, multiple in/outfile etc
 - at the end change this shit #include "../include/minishell.h" 
 
-
-- add function that cleans up input (like pipe_parsing used to-) OR change pipex that it does stuff based on the tokens passed.
 - orhan bothered me and I forgot what I was putting here
 
-- maybe ? change input ** in shell struct to hold an actual array of pointers instead of just being a pointer to a pointer so index can be used? (not really needed)
 - stuff like "" " "" can happen? ask others for stuff that will break our program
 
 #rowan#
-- if fullpath isnt given , make txt token into fullpath
-- make stuff from lexer.c into new struct so we can "parse" to exec
 - clean up new code (norm)
 
-
 #nils#
-- make stuff from lexer.c into new struct so we can "parse" to exec
+- mald about rowan's dyslexia
+- be bored before raid and start on envoirement stuff
 
 #external functions#
 
@@ -43,3 +32,27 @@ dup, dup2, pipe, opendir, readdir, closedir,
 strerror, perror, isatty, ttyname, ttyslot, ioctl,
 getenv, tcsetattr, tcgetattr, tgetent, tgetflag,
 tgetnum, tgetstr, tgoto, tputs
+
+pre
+==13961== LEAK SUMMARY:
+==13961==    definitely lost: 208 bytes in 5 blocks
+==13961==    indirectly lost: 364 bytes in 24 blocks
+==13961==      possibly lost: 0 bytes in 0 blocks
+==13961==    still reachable: 208,235 bytes in 226 blocks
+==13961==         suppressed: 0 bytes in 0 blocks
+
+cmd_to_path change with making an array to free up
+==14946== LEAK SUMMARY:
+==14946==    definitely lost: 104 bytes in 4 blocks
+==14946==    indirectly lost: 186 bytes in 12 blocks
+==14946==      possibly lost: 0 bytes in 0 blocks
+==14946==    still reachable: 208,235 bytes in 226 blocks
+==14946==         suppressed: 0 bytes in 0 blocks
+
+free_array(matrix) in init_list //breaks stuff so commented out xdd
+==17353== LEAK SUMMARY:
+==17353==    definitely lost: 72 bytes in 3 blocks
+==17353==    indirectly lost: 178 bytes in 9 blocks
+==17353==      possibly lost: 0 bytes in 0 blocks
+==17353==    still reachable: 208,235 bytes in 226 blocks
+==17353==         suppressed: 0 bytes in 0 blocks

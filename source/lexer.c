@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/19 17:33:29 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:48:18 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../include/minishell.h"
 #include <stdio.h>
@@ -32,9 +31,9 @@ t_type	find_type(char *in)
 		return (t_txt);
 }
 
-int check_txt(t_input *input, int i)
+int	check_txt(t_input *input, int i)
 {
-	int len;
+	int	len;
 
 	len = ft_strlen(input->txt) - 1;
 	if (!ft_strncmp(&input->txt[len - i], ">>", 2))
@@ -56,7 +55,7 @@ t_input	**matrix_to_list(char **matrix)
 	t_input	**input;
 	int		i;
 
-	input = ft_calloc(1, sizeof(struct t_input *));
+	input = ft_calloc(1, sizeof(struct t_input *)); //memcheck?
 	(*input) = ft_lstnew(matrix[0]);
 	if (!(*input))
 		return (NULL);
@@ -69,7 +68,7 @@ t_input	**matrix_to_list(char **matrix)
 	return (input);
 }
 
-void printlist(t_input *c)
+void	printlist(t_input *c)
 {
 	printf("---START---\n");
 	while (c)
@@ -78,7 +77,6 @@ void printlist(t_input *c)
 		c = c->next;
 	}
 	printf("---END---\n");
-
 }
 
 t_input	*parse_list(t_input *input)
@@ -119,11 +117,12 @@ t_input	*parse_list(t_input *input)
 
 t_input	**init_list(char *in)
 {
+	t_input	**input;
 	char	**matrix;
-	t_input **input;
 
 	matrix = ft_string_split(in, ' ');
 	input = matrix_to_list(matrix);
+	// free_array(matrix); //this helps but breaks xddd
 	parse_list(input[0]);
 	return (input);
 }

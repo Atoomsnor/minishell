@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/22 14:16:57 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:46:22 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	free_array(char **array)
 		free(array[i++]);
 	free(array);
 }
-
 
 char	**split_paths(void)
 {
@@ -55,7 +54,6 @@ char	**split_paths(void)
 	return (paths);
 }
 
-
 char	*find_path(char **paths, char *cmd)
 {
 	char	*found_path;
@@ -79,9 +77,9 @@ char	*find_path(char **paths, char *cmd)
 	return (NULL);
 }
 
-int count_cmds(t_input *input)
+int	count_cmds(t_input *input)
 {
-	int count;
+	int	count;
 
 	count = 1;
 	while (input)
@@ -93,10 +91,10 @@ int count_cmds(t_input *input)
 	return (count);
 }
 
-int count_till_pipe(t_input *input)
+int	count_till_pipe(t_input *input)
 {
-	t_input *cpy;
-	int count;
+	t_input	*cpy;
+	int		count;
 
 	count = 0;
 	cpy = input;
@@ -108,7 +106,7 @@ int count_till_pipe(t_input *input)
 	return (count);
 }
 
-int find_in(t_input *input)
+int	find_in(t_input *input)
 {
 	while (input)
 	{
@@ -126,9 +124,9 @@ int find_in(t_input *input)
 	return (0);
 }
 
-int find_out(t_input *input)
+int	find_out(t_input *input)
 {
-	int fd;
+	int	fd;
 
 	fd = 1;
 	while (input)
@@ -152,11 +150,11 @@ int find_out(t_input *input)
 	return (fd);
 }
 
-t_exec *fill_exec(t_input **input)
+t_exec	*fill_exec(t_input **input)
 {
-	t_exec *cmd;
-	int	count;
-	int	i;
+	t_exec	*cmd;
+	int		count;
+	int		i;
 
 	i = 0;
 	cmd = ft_calloc(1, sizeof(t_exec));
@@ -178,7 +176,7 @@ t_exec *fill_exec(t_input **input)
 	return (cmd);
 }
 
-int is_buildin(char *cmd)
+int	is_buildin(char *cmd)
 {
 	if (ft_strncmp(cmd, "echo", 5) == 0)
 		return (1);
@@ -197,31 +195,34 @@ int is_buildin(char *cmd)
 	return (0);
 }
 
-char *cmd_to_path(t_exec *cmd)
+char	*cmd_to_path(t_exec *cmd)
 {
-	char *ret;
+	char	**paths;
+	char	*ret;
 
 	ret = NULL;
 	if (cmd->full_cmd[0][0] == '/')
 	{
 		if (access(cmd->full_cmd[0], F_OK | X_OK) == 0)
-			return (cmd->full_cmd[0]);
+			return (cmd->full_cmd[0]); //chat says ft_strdup(cmd->full_cmd[0]) on return
 		else
-		 	return (NULL);
+			return (NULL);
 	}
 	if (is_buildin(cmd->full_cmd[0]))
-		return ("");
-	ret = find_path(split_paths(), cmd->full_cmd[0]);
-	if (!ret)
+		return (""); //chat says ft_strdup("") on return
+	paths = split_paths();
+	if (!paths)
 		return (NULL);
+	ret = find_path(paths, cmd->full_cmd[0]);
+	free_array(paths);
 	return (ret);
 }
 
-t_exec **tokens_to_exec(t_input **input)
+t_exec	**tokens_to_exec(t_input **input)
 {
 	t_exec	**cmds;
-	int	count;
-	int	i;
+	int		count;
+	int		i;
 
 	count = count_cmds(*input);
 	cmds = ft_calloc(count + 1, sizeof(t_exec *));
@@ -230,7 +231,9 @@ t_exec **tokens_to_exec(t_input **input)
 	{
 		if ((*input) && (*input)->type == t_pipe)
 			*input = (*input)->next;
-		while ((*input) && (*input)->next && ((*input)->type == t_left || (*input)->type == t_heredoc || (*input)->type == t_right || (*input)->type == t_append))
+		while ((*input) && (*input)->next && ((*input)->type == t_left
+				|| (*input)->type == t_heredoc || (*input)->type == t_right
+				|| (*input)->type == t_append))
 			*input = (*input)->next->next;
 		if (!(*input))
 			return (die(cmds, input, error_fill_exec), NULL);

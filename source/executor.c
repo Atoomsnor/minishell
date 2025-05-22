@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:33:44 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/22 14:44:31 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:47:44 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <sys/wait.h>
 #include <stdio.h>
 
-int run_builtin(t_exec *exec, int fd, char **envp)
+int	run_builtin(t_exec *exec, int fd, char **envp)
 {
 	if (ft_strncmp(exec->full_cmd[0], "echo", 5) == 0)
 		echo(fd, &(exec->full_cmd[1]));
@@ -35,7 +35,7 @@ int run_builtin(t_exec *exec, int fd, char **envp)
 	return (0);
 }
 
-void child(t_exec *exec, char **envp)
+void	child(t_exec *exec, char **envp)
 {
 	if (exec->in_fd != STDIN_FILENO)
 	{
@@ -50,18 +50,16 @@ void child(t_exec *exec, char **envp)
 	if (exec->full_path[0] == '\0')
 		run_builtin(exec, exec->out_fd, envp);
 	else
-	{
 		execve(exec->full_path, exec->full_cmd, envp);
-	}
 	exit (1);
 }
 
-int execute(t_exec **exec, char **envp)
+int	execute(t_exec **exec, char **envp)
 {
+	pid_t	pid;
 	int		i;
 	int		pipe_fd[2];
 	int		prev_fd;
-	pid_t	pid;
 
 	i = 0;
 	prev_fd = -1;
@@ -88,4 +86,3 @@ int execute(t_exec **exec, char **envp)
 		wait(NULL);
 	return (1);
 }
-
