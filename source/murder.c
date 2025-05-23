@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   murder.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:28:35 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/22 15:34:50 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/23 15:22:49 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	lynch_exec(t_exec **exec)
 		return ;
 	while (exec[i])
 	{
-		if (exec[i]->full_path)
+		if (exec[i]->full_path && exec[i]->full_path[0] != '\0')
 			free(exec[i]->full_path);
 		if (exec[i]->full_cmd)
 		{
@@ -62,6 +62,8 @@ void	shank_input(t_input **input)
 	if (!input)
 		return ;
 	next = NULL;
+	if (*input && *input != (*input)->head)
+		*input = (*input)->head;
 	while (*input)
 	{
 		if ((*input)->txt)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:33:44 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/22 15:47:44 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/24 00:55:09 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ int	execute(t_exec **exec, char **envp)
 			exec[i]->out_fd = pipe_fd[1];
 		if (prev_fd != -1 && exec[i]->in_fd == 0)
 			exec[i]->in_fd = prev_fd;
-		// printf("infd %i outfd %i prevfd %i\nfullpath %s\n", exec[i]->in_fd, exec[i]->out_fd, prev_fd, exec[i]->full_path);
-		if (!exec[i + 1])
+		printf("infd %i outfd %i prevfd %i\nfullpath %s\n", exec[i]->in_fd, exec[i]->out_fd, prev_fd, exec[i]->full_path);
+		if (pid == 0 && !exec[i + 1] && exec[i]->full_path[0] == '\0')
 			run_builtin(exec[i], exec[i]->out_fd, envp);
 		else if (pid == 0)
 			child(exec[i], envp);

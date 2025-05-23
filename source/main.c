@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/22 16:06:40 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/24 01:13:59 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,25 @@ void	print_exec(t_exec *exec)
 	printf("execend\n");
 }
 
+char *skip_spaces(char *in)
+{
+	int i;
+	char *ret;
+
+	i = 0;
+	if (!in)
+		return (NULL);
+	while (in[i] == ' ')
+		i++;
+	if (in[i])
+	{
+		ret = ft_substr(in, i, ft_strlen(in) - i);
+		free(in);
+		return (ret);
+	}
+	return (NULL);
+}
+
 int	shelly(char **envp)
 {
 	t_input	**input;
@@ -49,21 +68,22 @@ int	shelly(char **envp)
 	}
 	if (in == NULL)
 		return (0);
-	if (in[0] != '\0')
+	if (in[0] == ' ')
+		in = skip_spaces(in);
+	if (in && in[0] != '\0')
 	{
 		history(in);
 		input = init_list(in);
 		exec = tokens_to_exec(input);
+		shank_input(input);
 		if (!exec)
-			return (shank_input(input), 1);
+			return (1);
 		if (exec[1] || exec[0]->full_path[0] != '\0')
 			execute(exec, envp);
 		else
 			run_builtin(exec[0], exec[0]->out_fd, envp);
 		lynch_exec(exec);
-		shank_input(input);
 	}
-	free(in); //doesnt do anything afaik but saw someone doing it
 	return (returnvalue);
 }
 
@@ -77,4 +97,5 @@ int	main(int argc, char **argv, char **envp)
 		if (!shelly(envp))
 			break ;
 	}
+	rl_clear_history();
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:15:06 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/22 15:29:58 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/24 00:57:09 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ int	pwd(int fd)
 	else if (fd < 0)
 		return (0);
 	else
-		printf("%s\n", cwd);
+		ft_putendl_fd(cwd, fd);
+	if (cwd)
+		free(cwd);
 	return (1);
 }
 
@@ -51,7 +53,7 @@ int	echo(int fd, char **to_write)
 	}
 	if (cmp)
 		out = ft_strjoin(out, "\n");
-	printf("%s", out);
+	ft_putstr_fd(out, fd);
 	if (out)
 		free(out);
 	return (1);
@@ -70,14 +72,16 @@ int	cd(char *path)
 	if (ft_strncmp(cwd, path, ft_strlen(cwd)) && path[0] != '/')
 	{
 		joined_path = ft_strjoin(cwd, "/");
+		if (cwd)
+			free(cwd);
 		joined_path = ft_strjoin(joined_path, path);
 		if (!chdir(joined_path))
-			return (printf("it worked!\n"), 0);
+			return (free(joined_path), 0);
 	}
 	else
 	{
 		if (!chdir(path))
-			return (printf("it worked! v2\n"), 0);
+			return (free(cwd), 0);
 	}
 	return (1);
 }
