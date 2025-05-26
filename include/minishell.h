@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/22 15:19:26 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/26 12:54:27 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int		find_out(t_input *input);
 t_exec	*fill_exec(t_input **input);
 int		is_buildin(char *cmd);
 char	*cmd_to_path(t_exec *cmd);
-t_exec **tokens_to_exec(t_input **input);
+t_exec **tokens_to_exec(t_input **input, char **envp);
 
 /* execute */
 int		run_builtin(t_exec *exec, int fd, char **envp);

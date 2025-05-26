@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/24 00:54:36 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/26 13:32:29 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,7 @@ t_exec	*fill_exec(t_input **input)
 	int		i;
 
 	i = 0;
+	printf("filly %s\n", (*input)->txt);
 	cmd = ft_calloc(1, sizeof(t_exec));
 	if (!cmd)
 		return (NULL);
@@ -168,6 +169,7 @@ t_exec	*fill_exec(t_input **input)
 	cmd->out_fd = find_out(*input);
 	while ((*input) && ((*input)->type == t_txt || (*input)->type == t_flag))
 	{
+		printf("filly %s\n", (*input)->txt);
 		if ((*input)->type == t_txt || (*input)->type == t_flag)
 			cmd->full_cmd[i] = ft_strdup((*input)->txt);
 		i++;
@@ -218,53 +220,42 @@ char	*cmd_to_path(t_exec *cmd)
 	return (ret);
 }
 
-t_exec **unquote(t_exec **exec)
-{
-	int i;
-
-	i = 0;
-	while (exec[i])
-	{
-		if (exec[i]->full_cmd)
-		i++;
-	}
-	return (exec);
-}
-
-t_exec	**tokens_to_exec(t_input **input)
+t_exec	**tokens_to_exec(t_input **input, char **envp)
 {
 	t_exec	**cmds;
 	int		count;
 	int		i;
 
+	(void)envp;
 	count = count_cmds(*input);
 	cmds = ft_calloc(count + 1, sizeof(t_exec *));
 	i = 0;
 	while (i < count)
 	{
-		if ((*input) && (*input)->type == t_pipe)
-			*input = (*input)->next;
-		while ((*input) && (*input)->next && ((*input)->type == t_left
-				|| (*input)->type == t_heredoc || (*input)->type == t_right
-				|| (*input)->type == t_append))
-			*input = (*input)->next->next;
-		if ((*input) && (*input)->type == t_pipe)
-			*input = (*input)->next;
+		while ((*input)->type != t_flag && (*input)->type != t_txt)
+		{
+			if ((*input) && (*input)->type == t_pipe)
+				*input = (*input)->next;
+			else if ((*input) && (*input)->next && ((*input)->type == t_left
+					|| (*input)->type == t_heredoc || (*input)->type == t_right
+					|| (*input)->type == t_append))
+				*input = (*input)->next->next;
+			else
+				*input = (*input)->next;
+		}
 		if (!(*input))
 			return (die(cmds, input, error_fill_exec), NULL);
-		printf("txt: %s\n", (*input)->txt);
 		cmds[i] = fill_exec(input);
 		if (!cmds[i])
 			return (die(cmds, input, error_fill_exec), NULL);
+		// remove quotes here
 		if (cmds[i]->full_cmd)
 		{
-			printf("%s\n %s\n", cmds[i]->full_cmd[0], cmds[i]->full_cmd[1]);
 			cmds[i]->full_path = cmd_to_path(cmds[i]);
 			if (!cmds[i]->full_path)
 				return (die(cmds, input, error_cmd_to_path), NULL);
 		}
 		i++;
 	}
-	//remove quotes
 	return (cmds);
 }
