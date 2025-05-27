@@ -83,7 +83,7 @@ void handle_wildcard(char *str)
 	while (str[i] && str[i] != ' ')
 		i++;
 	var_name = ft_substr(str, wc + 1, i - wc);
-
+	(void)var_name;
 }
 
 void quotesiginthandyman(int signal)
@@ -128,7 +128,7 @@ t_exec *dequote(t_exec *exec, char **env)
 			else 
 			{
 				signal(SIGINT, quotesiginthandyman);
-				while (!g_signalreceived && !has_char(quote, quote_type))
+				while (!g_signalreceived && has_char(quote, quote_type) < 0)
 				{
 					quote = readline("dquote>");
 					if (quote[0] == '\0')
@@ -136,7 +136,6 @@ t_exec *dequote(t_exec *exec, char **env)
 					else
 						exec->full_cmd[i] = ft_strjoin(exec->full_cmd[i], quote);
 				}
-				// printf("%s\n", exec->full_cmd[i]);
 				g_signalreceived = 0;
 				signal(SIGINT, sigint_handler);
 				i++;
