@@ -2,6 +2,7 @@ NAME = minishell
 
 SRC = main.c string_split.c builtin.c history.c executor.c murder.c \
 parser.c lexer.c linked_list.c list_utils.c struct_utils.c signal.c \
+and_i_quote.c
 
 SRC_DIR = source
 

@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:28:35 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/23 15:22:49 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/27 19:43:37 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,27 @@
 #include <stdio.h>
 #include <unistd.h>
 
+int	blast_error(t_error error, t_exec *exec)
+{
+	if (!exec || !exec->full_cmd || !exec->full_cmd[0])
+		return (0); 
+	if (error == error_input_fail)
+		ft_putstr_fd("Error input fail", 2);
+	else if (error == error_cmd_to_path)
+		print_strings_fd(2, exec->full_cmd[0], ": ", "command not found\n", NULL);
+	else if (error == error_fill_exec)
+		perror("Error fill_exec");
+	return (1);
+}
+
 void	shoot_error(t_error error)
 {
 	if (error == error_input_fail)
-		perror("Error input fail\n");
+		ft_putstr_fd("Error input fail", 2);
 	else if (error == error_cmd_to_path)
-		perror("Error cmd to path\n");
+		perror("Command not found");
 	else if (error == error_fill_exec)
-		perror("Error fill_exec\n");
+		perror("Error fill_exec");
 }
 
 void	lynch_exec(t_exec **exec)
@@ -77,9 +90,15 @@ void	shank_input(t_input **input)
 
 void	die(t_exec **exec, t_input **input, t_error error)
 {
+	
 	if (exec)
+	{
+		if (!blast_error(error, *exec))
+			shoot_error(error);
 		lynch_exec(exec);
+	}
+	else
+		shoot_error(error);
 	if (input)
 		shank_input(input);
-	shoot_error(error);
 }

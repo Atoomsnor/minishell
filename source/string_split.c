@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:49:11 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/04/28 14:52:07 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/27 18:13:01 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,46 +57,62 @@ static char	**ft_free(char **split_str)
 	return (NULL);
 }
 
+static char *another_one(char const *s, char c, int *i)
+{
+	char *ret;
+	int w_len;
+
+	ret = NULL;
+	w_len = 0;
+	if (s[*i] == '"')
+	{
+		w_len = ft_len(&s[*i + 1], '"');
+		ret = ft_substr(s, *i, w_len + 2);
+		if (!ret)
+			return (free(ret), NULL);
+		*i += w_len + 2;
+		if (s[*i] != c)
+			ret = ft_strjoin(ret, another_one(s, c, i));
+	}
+	else if (s[*i] == '\'')
+	{
+		w_len = ft_len(&s[*i + 1], '\'');
+		ret = ft_substr(s, *i, w_len + 2);
+		if (!ret)
+			return (free(ret), NULL);
+		*i += w_len + 2;
+		if (s[*i] != c)
+			ret = ft_strjoin(ret, another_one(s, c, i));
+	}
+	else
+	{
+		w_len = ft_len(&s[*i], c);
+		ret = ft_substr(s, *i, w_len);
+		if (!ret)
+			return (free(ret), NULL);
+		*i += w_len;
+	}
+	return (ret);
+}
+
 static char	**ft_bigsplit(char const *s, char c, char **n_str)
 {
 	int	i;
 	int	j;
-	int	w_len;
 
 	i = 0;
 	j = 0;
-	w_len = 0;
 	if (!n_str)
 		return (NULL);
 	while (s[i])
 	{
 		if (s[i] == c)
 			i++;
-		else if (s[i] == '"')
-		{
-			w_len = ft_len(&s[i + 1], '"');
-			n_str[j] = ft_substr(s, i, w_len + 2);
-			if (!n_str[j])
-				return (ft_free(n_str));
-			i += w_len + 2;
-			j++;
-		}
-		else if (s[i] == '\'')
-		{
-			w_len = ft_len(&s[i + 1], 39);
-			n_str[j] = ft_substr(s, i, w_len + 2);
-			if (!n_str[j])
-				return (ft_free(n_str));
-			i += w_len + 2;
-			j++;
-		}
 		else
 		{
-			w_len = ft_len(s + i, c);
-			n_str[j] = ft_substr(s, i, w_len);
+			n_str[j] = another_one(s, c, &i);
 			if (!n_str[j])
 				return (ft_free(n_str));
-			i += w_len;
 			j++;
 		}
 	}
@@ -111,7 +127,7 @@ char	**ft_string_split(char const *s, char c)
 
 	if (!s)
 		return (NULL);
-	n_str = (char **)malloc(sizeof(char *) * (ft_count(s, c) + 1));
+	n_str = ft_calloc(sizeof(char *), ft_count(s, c) + 1);
 	if (!n_str)
 		return (NULL);
 	return (ft_bigsplit(s, c, n_str));

@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/26 13:18:38 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/27 18:38:20 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,12 @@ int	shelly(char **envp)
 	{
 		history(in);
 		input = init_list(in);
-		printf("little einstein\n");
+		if (!input)
+			return (1);
 		exec = tokens_to_exec(input, envp);
-		shank_input(input);
 		if (!exec)
 			return (1);
+		shank_input(input);
 		if (exec[1] || exec[0]->full_path[0] != '\0')
 			execute(exec, envp);
 		else

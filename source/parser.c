@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/26 13:32:29 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/27 19:10:26 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,6 @@ t_exec	*fill_exec(t_input **input)
 	int		i;
 
 	i = 0;
-	printf("filly %s\n", (*input)->txt);
 	cmd = ft_calloc(1, sizeof(t_exec));
 	if (!cmd)
 		return (NULL);
@@ -169,7 +168,6 @@ t_exec	*fill_exec(t_input **input)
 	cmd->out_fd = find_out(*input);
 	while ((*input) && ((*input)->type == t_txt || (*input)->type == t_flag))
 	{
-		printf("filly %s\n", (*input)->txt);
 		if ((*input)->type == t_txt || (*input)->type == t_flag)
 			cmd->full_cmd[i] = ft_strdup((*input)->txt);
 		i++;
@@ -212,9 +210,11 @@ char	*cmd_to_path(t_exec *cmd)
 	}
 	if (is_buildin(cmd->full_cmd[0]))
 		return (""); //chat says ft_strdup("") on return
+	printf("err1\n");
 	paths = split_paths();
 	if (!paths)
 		return (NULL);
+	printf("err2\n");
 	ret = find_path(paths, cmd->full_cmd[0]);
 	free_array(paths);
 	return (ret);
@@ -248,7 +248,7 @@ t_exec	**tokens_to_exec(t_input **input, char **envp)
 		cmds[i] = fill_exec(input);
 		if (!cmds[i])
 			return (die(cmds, input, error_fill_exec), NULL);
-		// remove quotes here
+		cmds[i] = dequote(cmds[i], envp);
 		if (cmds[i]->full_cmd)
 		{
 			cmds[i]->full_path = cmd_to_path(cmds[i]);

@@ -6,12 +6,14 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/23 15:16:19 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/27 18:04:00 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <fcntl.h>
 #include <stdio.h>
+#include <unistd.h>
 
 t_type	find_type(char *in)
 {
@@ -120,7 +122,10 @@ t_input	**init_list(char *in)
 	t_input	**input;
 	char	**matrix;
 
+	ft_putstr_fd(in, open("out", O_WRONLY));
 	matrix = ft_string_split(in, ' ');
+	printf("lexer0: %s\n", matrix[0]);
+	printf("lexer1: %s\n", matrix[1]);
 	input = matrix_to_list(matrix);
 	free_array(matrix);
 	parse_list(input[0]);

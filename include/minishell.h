@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/26 12:54:27 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/27 19:38:06 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,10 @@ t_var	*bi_export(char *var_name, char *str);
 void	unset(char *name);
 void	bi_exit();
 void	env(char **envp);
+
+/* quote */
+t_exec *dequote(t_exec *exec, char **env);
+void	print_strings_fd(int fd, ...);
 
 /* pipe_parsing */
 // int		mat_count(char **mat);
