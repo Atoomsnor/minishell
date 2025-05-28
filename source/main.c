@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/28 19:01:42 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/28 20:25:05 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ void	print_exec(t_exec *exec)
 	printf("execend\n");
 }
 
-char *skip_spaces(char *in)
+char	*skip_spaces(char *in)
 {
-	int i;
-	char *ret;
+	char	*ret;
+	int		i;
 
 	i = 0;
 	if (!in)

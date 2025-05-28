@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:15:06 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/28 18:23:38 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/28 20:21:24 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ int	pwd(int fd)
 	return (1);
 }
 
-char *join_strings(char *s1, char *s2)
+char	*join_strings(char *s1, char *s2)
 {
-	char *ret;
+	char	*ret;
 
 	ret = ft_strjoin(s1, s2);
 	if (s1)
@@ -45,8 +45,8 @@ char *join_strings(char *s1, char *s2)
 int	echo(int fd, char **to_write)
 {
 	char	*out;
-	int		i;
 	int		cmp;
+	int		i;
 
 	if (!to_write || !*to_write || fd < 0)
 		return (0);
@@ -99,10 +99,10 @@ int	cd(char *path)
 
 char	**exporting(char *str, char **env)
 {
-	int	i;
-	int	len;
-	char **new_env;
-	
+	char	**new_env;
+	int		len;
+	int		i;
+
 	if (str)
 	{
 		len = 0;
@@ -122,7 +122,6 @@ char	**exporting(char *str, char **env)
 			new_env[i] = env[i - 1];
 			i++;
 		}
-		printf("i: %i len: %i\n", i ,len);
 		return (new_env);
 	}
 	return (NULL);
@@ -131,14 +130,14 @@ char	**exporting(char *str, char **env)
 // works in sync with export, destroys a saved var
 void	unset(char *name, char **env)
 {
-	int i;
-	int len;
+	int	len;
+	int	i;
 
 	if (name)
 	{
 		i = 0;
 		len = 0;
-		while(env[len])
+		while (env[len])
 			len++;
 		while (env[i])
 		{

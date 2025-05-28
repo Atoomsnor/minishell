@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:36:55 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/22 15:38:24 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/28 19:31:58 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct s_exec
 {
 	char	**full_cmd;
 	char	*full_path;
+	int		pipe[2];
 	int		in_fd;
 	int		out_fd;
 }	t_exec;

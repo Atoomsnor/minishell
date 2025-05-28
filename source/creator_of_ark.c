@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   creator_of_ark.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 12:48:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/28 14:35:44 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/28 20:17:45 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-
-// char *find_var_in_env(char *var_name, char **env)
-// {
-// 	int i;
-// 	int	j;
-
-// 	i = 0;
-// 	while (env[i])
-// 	{
-// 		if (ft_strncmp(var_name, env[i], ft_strlen(var_name)) == 0)
-// 			break ; 
-// 		i++;
-// 	}
-// 	if (!env[i])
-// 		return (NULL);
-// 	j = 0;
-// 	while(env[i][j])
-// 	{
-// 		if (env[i][j] == '=')
-// 			return (ft_substr(env[i], j + 1, ft_strlen(env[i]) - j + 1));
-// 		j++;
-// 	}
-// 	return (NULL);
-// }
-
-char *find_var_in_env(char *var_name, char **env)
+char	*find_var_in_env(char *var_name, char **env)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!var_name)
@@ -49,20 +24,20 @@ char *find_var_in_env(char *var_name, char **env)
 	while (env[i])
 	{
 		if (ft_strncmp(var_name, env[i], ft_strlen(var_name)) == 0)
-			return (env[i]); 
+			return (env[i]);
 		i++;
 	}
 	return (NULL);
 }
 
-char *trim_var_name(char *str)
+char	*trim_var_name(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!str)
 		return (NULL);
-	while(str[i])
+	while (str[i])
 	{
 		if (str[i] == '=')
 			return (ft_substr(str, i + 1, ft_strlen(str) - i + 1));
@@ -71,25 +46,25 @@ char *trim_var_name(char *str)
 	return (NULL);
 }
 
-char *remove_wildcard(char *str, char *var, int start_pos, int end_pos)
+char	*remove_wildcard(char *str, char *var, int start_pos, int end_pos)
 {
-	char *out;
+	char	*out;
 
 	out = ft_strjoin(ft_substr(str, 0, start_pos), var);
 	out = ft_strjoin(out, ft_substr(str, end_pos, ft_strlen(str) - end_pos));
 	return (out);
 }
 
-char *handle_wildcard(char *str, char **env, int retval)
+char	*handle_wildcard(char *str, char **env, int retval)
 {
-	int i;
-	int wc;
-	char *var_name;
+	char	*var_name;
+	int		i;
+	int		wc;
 
 	i = 0;
 	if (!str)
 		return (NULL);
-	while(str[i] && str[i] != '$')
+	while (str[i] && str[i] != '$')
 		i++;
 	if (!str[i])
 		return (NULL);

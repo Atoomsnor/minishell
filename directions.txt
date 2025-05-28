@@ -2,24 +2,20 @@
 - https://gitlab.com/madebypixel02/minishell
 
 #to do#
+- fix excecution part a bit
+- make error/exit codes propper "wheyy"
 
-- megashell>$ < infile cat > out doesnt work on ur push or mine
 
-- fix leaks
-- fix quotes
-- fix envoirement veriable ($ stuff)
+- fix norm errors which are all >5functions, linetoolong and >25lines
+- ask others for stuff that will break our program
 
-- make a bunch of error handling when inpropper stuff is parsed
-- at the end change this shit #include "../include/minishell.h" 
 
 - orhan bothered me and I forgot what I was putting here
-
-- stuff like "" " "" can happen? ask others for stuff that will break our program
-
 #rowan#
-- clean up new code (norm)
+- still fix header 
 
 #nils#
+- fix excecution part a bit
 - mald about rowan's dyslexia
 - be bored before raid and start on envoirement stuff
 
@@ -35,53 +31,3 @@ dup, dup2, pipe, opendir, readdir, closedir,
 strerror, perror, isatty, ttyname, ttyslot, ioctl,
 getenv, tcsetattr, tcgetattr, tgetent, tgetflag,
 tgetnum, tgetstr, tgoto, tputs
-
-pre
-==13961== LEAK SUMMARY:
-==13961==    definitely lost: 208 bytes in 5 blocks
-==13961==    indirectly lost: 364 bytes in 24 blocks
-==13961==      possibly lost: 0 bytes in 0 blocks
-==13961==    still reachable: 208,235 bytes in 226 blocks
-==13961==         suppressed: 0 bytes in 0 blocks
-
-cmd_to_path change with making an array to free up
-==14946== LEAK SUMMARY:
-==14946==    definitely lost: 104 bytes in 4 blocks
-==14946==    indirectly lost: 186 bytes in 12 blocks
-==14946==      possibly lost: 0 bytes in 0 blocks
-==14946==    still reachable: 208,235 bytes in 226 blocks
-==14946==         suppressed: 0 bytes in 0 blocks
-
-free_array(matrix) in init_list broke but
-not with node->txt = ft_strdup((char *)content); in ft_lstnew
-==17353== LEAK SUMMARY:
-==17353==    definitely lost: 72 bytes in 3 blocks
-==17353==    indirectly lost: 178 bytes in 9 blocks
-==17353==      possibly lost: 0 bytes in 0 blocks
-==17353==    still reachable: 208,235 bytes in 226 blocks
-==17353==         suppressed: 0 bytes in 0 blocks
-
-added lynch/shank at end of shelly 
-==29543== LEAK SUMMARY:
-==29543==    definitely lost: 72 bytes in 3 blocks
-==29543==    indirectly lost: 88 bytes in 5 blocks
-==29543==      possibly lost: 0 bytes in 0 blocks
-==29543==    still reachable: 208,235 bytes in 226 blocks
-==29543==         suppressed: 0 bytes in 0 blocks
-
-all above commands where used with cd | ls,
-this one was done with < infile cat > out
-==33381== LEAK SUMMARY:
-==33381==    definitely lost: 56 bytes in 2 blocks
-==33381==    indirectly lost: 93 bytes in 5 blocks
-==33381==      possibly lost: 0 bytes in 0 blocks
-==33381==    still reachable: 208,238 bytes in 225 blocks
-==33381==         suppressed: 0 bytes in 0 blocks
-
-Summary Table
-ls | cd does an invalid free triggered by lynch_exec
-Leak Source		Direct		Indirect	Function Path
-fill_exec		16 B		0 B			ft_calloc → fill_exec → tokens_to_exec
-matrix_to_list	40 B		93 B		ft_lstnew → matrix_to_list → init_list
-Total Leaked	56 B		93 B	
-Still Reachable	208 KB		—			Likely global structures not freed on shutdown

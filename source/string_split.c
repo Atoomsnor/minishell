@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   string_split.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:49:11 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/27 18:13:01 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/28 20:23:37 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,10 @@ static char	**ft_free(char **split_str)
 	return (NULL);
 }
 
-static char *another_one(char const *s, char c, int *i)
+static char	*another_one(char const *s, char c, int *i)
 {
-	char *ret;
-	int w_len;
+	char	*ret;
+	int		w_len;
 
 	ret = NULL;
 	w_len = 0;

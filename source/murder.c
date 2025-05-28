@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   murder.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:28:35 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/28 18:17:07 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/28 20:23:57 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 int	blast_error(t_error error, t_exec *exec)
 {
 	if (!exec || !exec->full_cmd || !exec->full_cmd[0])
-		return (0); 
+		return (0);
 	if (error == error_input_fail)
 		ft_putstr_fd("Error input fail", 2);
 	else if (error == error_cmd_to_path)

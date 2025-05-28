@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/28 18:13:21 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/28 20:25:44 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,7 @@ int	find_out(t_input *input)
 t_exec	*fill_exec(t_input **input)
 {
 	t_exec	*cmd;
+	int		pipe_fd[2];
 	int		count;
 	int		i;
 
@@ -170,6 +171,8 @@ t_exec	*fill_exec(t_input **input)
 		return (free(cmd), NULL);
 	cmd->in_fd = find_in(*input);
 	cmd->out_fd = find_out(*input);
+	cmd->pipe[0] = pipe_fd[0];
+	cmd->pipe[1] = pipe_fd[1];
 	while ((*input) && ((*input)->type == t_txt || (*input)->type == t_flag))
 	{
 		if ((*input)->type == t_txt || (*input)->type == t_flag)
@@ -224,8 +227,8 @@ char	*cmd_to_path(t_exec *cmd)
 
 t_exec	**tokens_to_exec(t_input **input, char **envp, int retval)
 {
-	t_input *head;
 	t_exec	**cmds;
+	t_input	*head;
 	int		count;
 	int		i;
 

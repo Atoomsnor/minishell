@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/28 19:01:36 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/28 20:27:02 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ t_exec **tokens_to_exec(t_input **input, char **envp, int retval);
 
 /* execute */
 void	run_builtin(t_exec *exec, int fd, char ***envp);
-void	child(t_exec *exec, char **envp);
+void	child(t_exec *exec, int prev_fd, int has_next, char **envp);
 int		execute(t_exec **exec, char **envp);
 
 /* builtins */
@@ -87,7 +87,7 @@ void	bi_exit(t_exec *exec);
 void	env(char **envp);
 
 /* quote */
-t_exec *dequote(t_exec *exec, char **env, int retval);
+t_exec	*dequote(t_exec *exec, char **env, int retval);
 void	print_strings_fd(int fd, ...);
 
 /* wildcard */

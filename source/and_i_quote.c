@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   and_i_quote.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:29:22 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/28 14:30:34 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/28 20:19:30 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,9 @@
 #include <stdio.h>
 #include <readline/readline.h>
 
-// char	*grok_is_this_true()
-// {
-
-// }
-
-int has_char(char *str, char c)
+int	has_char(char *str, char c)
 {
-	int i;
+	int	i;
 
 	if (!str)
 		return (-1);
@@ -36,9 +31,9 @@ int has_char(char *str, char c)
 	return (-1);
 }
 
-char find_first_quote(char *str)
+char	find_first_quote(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
@@ -52,9 +47,9 @@ char find_first_quote(char *str)
 	return (0);
 }
 
-char *trim_quotes(char *str, char quote, int start)
+char	*trim_quotes(char *str, char quote, int start)
 {
-	char *ret;
+	char	*ret;
 
 	if (!str)
 		return (NULL);
@@ -69,7 +64,7 @@ char *trim_quotes(char *str, char quote, int start)
 	return (ret);
 }
 
-void quotesiginthandyman(int signal)
+void	quotesiginthandyman(int signal)
 {
 	if (signal == SIGINT)
 	{
@@ -79,19 +74,19 @@ void quotesiginthandyman(int signal)
 	}
 }
 
-t_exec *dequote(t_exec *exec, char **env, int retval)
+t_exec	*dequote(t_exec *exec, char **env, int retval)
 {
-	int		i;
+	char	*quote;
+	char	quote_type;
 	int		len;
 	int		len2;
-	char	quote_type;
-	char	*quote;
+	int		i;
 
-	i = 0;
-	len = 0;
-	quote_type = 0;
-	len2 = 0;
 	quote = NULL;
+	quote_type = 0;
+	len = 0;
+	len2 = 0;
+	i = 0;
 	while (exec->full_cmd[i])
 	{
 		quote_type = find_first_quote(&exec->full_cmd[i][len]);
@@ -106,7 +101,7 @@ t_exec *dequote(t_exec *exec, char **env, int retval)
 				if (has_char(exec->full_cmd[i], '$') >= 0 && quote_type == '"')
 					exec->full_cmd[i] = handle_wildcard(exec->full_cmd[i], env, retval);
 			}
-			else 
+			else
 			{
 				signal(SIGINT, quotesiginthandyman);
 				while (!g_signalreceived && has_char(quote, quote_type) < 0)
@@ -126,7 +121,7 @@ t_exec *dequote(t_exec *exec, char **env, int retval)
 		else
 		{
 			if (has_char(exec->full_cmd[i], '$') >= 0)
-					exec->full_cmd[i] = handle_wildcard(exec->full_cmd[i], env, retval);
+				exec->full_cmd[i] = handle_wildcard(exec->full_cmd[i], env, retval);
 			i++;
 			len = 0;
 		}

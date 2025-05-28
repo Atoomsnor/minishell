@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/28 18:24:54 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/28 20:24:24 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ t_input	*parse_list(t_input *input)
 				i++;
 			if (i != -1)
 			{
-				ft_lstadd_next(&cpy, ft_lstnew(ft_substr(cpy->txt,  i, ft_strlen(cpy->txt) - i)));
+				ft_lstadd_next(&cpy, ft_lstnew(ft_substr(cpy->txt, i, ft_strlen(cpy->txt) - i)));
 				cpy->txt = ft_substr(cpy->txt, 0, i);
 				cpy->next->type = find_type(cpy->next->txt);
 				cpy->type = find_type(cpy->txt);

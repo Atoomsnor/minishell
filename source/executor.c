@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:33:44 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/28 19:10:40 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/28 20:22:28 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,56 +34,58 @@ void	run_builtin(t_exec *exec, int fd, char ***envp)
 		env(*envp);
 }
 
-void	child(t_exec *exec, char **envp)
+void	child(t_exec *exec, int prev_fd, int has_next, char **envp)
 {
+	if (prev_fd != -1)
+	{
+		dup2(prev_fd, STDIN_FILENO);
+		close(prev_fd);
+	}
+	if (has_next)
+	{
+		close(exec->pipe[0]);
+		dup2(exec->pipe[1], STDOUT_FILENO);
+		close(exec->pipe[1]);
+	}
 	if (exec->in_fd != STDIN_FILENO)
-	{
 		dup2(exec->in_fd, STDIN_FILENO);
-		close(exec->in_fd);
-	}
 	if (exec->out_fd != STDOUT_FILENO)
-	{
 		dup2(exec->out_fd, STDOUT_FILENO);
-		close(exec->out_fd);
-	}
-	if (exec->full_path[0] == '\0')
-		run_builtin(exec, exec->out_fd, &envp);
-	else
+	if (exec->full_path && exec->full_path[0] != '\0')
 		execve(exec->full_path, exec->full_cmd, envp);
-	exit (1);
+	exit(1);
 }
 
 int	execute(t_exec **exec, char **envp)
 {
 	pid_t	pid;
 	int		i;
-	int		pipe_fd[2];
 	int		prev_fd;
 
 	i = 0;
 	prev_fd = -1;
 	while (exec[i])
 	{
-		printf("i: %i\n", i);
-		if (pipe(pipe_fd) == -1)
+		if (exec[i + 1] && pipe(exec[i]->pipe) == -1)
 			return (0);
 		pid = fork();
 		if (pid == -1)
 			return (0);
-		if (exec[i]->out_fd == 1 && exec[i + 1])
-			exec[i]->out_fd = pipe_fd[1];
-		if (prev_fd != -1 && exec[i]->in_fd == 0)
-			exec[i]->in_fd = prev_fd;
-		printf("infd %i outfd  %i prevfd %i\nfullpath %s\n", exec[i]->in_fd, exec[i]->out_fd, prev_fd, exec[i]->full_path);
-		printf("%i\n", pid);
 		if (pid == 0 && !exec[i + 1] && exec[i]->full_path[0] == '\0')
-		{
-			run_builtin(exec[i], exec[i]->out_fd, &envp);
-			printf("ye\n");
-		}
+			run_builtin(exec[i], exec[i]->out_fd, &envp); //moved this from child as dup2 would override its outfd
+		//might have conflict with builtin+non buildin as < infile cat | echo hello > out2 makes me need to ctrl-d twice 
 		else if (pid == 0)
-			child(exec[i], envp);
-		prev_fd = exec[i]->out_fd;
+			child(exec[i], prev_fd, exec[i + 1] != NULL, envp);
+		else
+		{
+			if (prev_fd != -1)
+				close(prev_fd);
+			if (exec[i + 1])
+			{
+				close(exec[i]->pipe[1]);
+				prev_fd = exec[i]->pipe[0];
+			}
+		}
 		i++;
 	}
 	while (i--)
