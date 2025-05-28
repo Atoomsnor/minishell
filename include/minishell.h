@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/28 15:57:34 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/28 19:01:36 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int		echo(int fd, char **to_write);
 int		cd(char *path);
 char	**exporting(char *str, char **env);
 void	unset(char *name, char **env);
-void	bi_exit();
+void	bi_exit(t_exec *exec);
 void	env(char **envp);
 
 /* quote */

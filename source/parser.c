@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/28 17:44:08 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/28 18:13:21 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ t_exec	*fill_exec(t_input **input)
 	count = count_till_pipe(*input);
 	cmd->full_cmd = ft_calloc(count + 1, sizeof(char *));
 	if (!cmd->full_cmd)
-		return (NULL);
+		return (free(cmd), NULL);
 	cmd->in_fd = find_in(*input);
 	cmd->out_fd = find_out(*input);
 	while ((*input) && ((*input)->type == t_txt || (*input)->type == t_flag))

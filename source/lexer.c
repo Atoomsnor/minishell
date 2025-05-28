@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/28 17:15:10 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/28 18:24:54 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,10 +124,7 @@ t_input	**init_list(char *in)
 	t_input	**input;
 	char	**matrix;
 
-	ft_putstr_fd(in, open("out", O_WRONLY));
 	matrix = ft_string_split(in, ' ');
-	printf("lexer0: %s\n", matrix[0]);
-	printf("lexer1: %s\n", matrix[1]);
 	input = matrix_to_list(matrix);
 	free_array(matrix);
 	parse_list(input[0]);

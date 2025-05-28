@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/28 17:42:55 by roversch         ###   ########.fr       */
+/*   Updated: 2025/05/28 19:01:42 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ int	shelly(char ***envp, int retval)
 		exec = tokens_to_exec(input, *envp, retval);
 		if (!exec)
 			return (1);
-		printf("%s\n", (*input)->txt);
 		shank_input(input);
 		if (exec[1] || exec[0]->full_path[0] != '\0')
 			execute(exec, *envp);

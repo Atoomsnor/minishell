@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:15:06 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/28 16:41:09 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/28 18:23:38 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,16 @@ int	pwd(int fd)
 	return (1);
 }
 
+char *join_strings(char *s1, char *s2)
+{
+	char *ret;
+
+	ret = ft_strjoin(s1, s2);
+	if (s1)
+		free(s1);
+	return (ret);
+}
+
 int	echo(int fd, char **to_write)
 {
 	char	*out;
@@ -47,12 +57,13 @@ int	echo(int fd, char **to_write)
 		i = 1;
 	while (to_write[i])
 	{
-		out = ft_strjoin(out, to_write[i]);
-		out = ft_strjoin(out, " ");
+		out = join_strings(out, to_write[i]);
+		out = join_strings(out, " ");
 		i++;
 	}
 	if (cmp)
-		out = ft_strjoin(out, "\n");
+		out = join_strings(out, "\n");
+	printf("fd %i\n", fd);
 	ft_putstr_fd(out, fd);
 	if (out)
 		free(out);
@@ -142,9 +153,11 @@ void	unset(char *name, char **env)
 	}
 }
 
-void	bi_exit()
+void	bi_exit(t_exec *exec)
 {
-	//kill(getpid(), SIGTSTP);
+	if (&exec - 1 || &exec + 1)
+		return ;
+	exit(1);
 }
 
 void	env(char **envp)
