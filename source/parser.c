@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/28 17:18:41 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:44:08 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,6 +224,7 @@ char	*cmd_to_path(t_exec *cmd)
 
 t_exec	**tokens_to_exec(t_input **input, char **envp, int retval)
 {
+	t_input *head;
 	t_exec	**cmds;
 	int		count;
 	int		i;
@@ -232,6 +233,7 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int retval)
 	count = count_cmds(*input);
 	cmds = ft_calloc(count + 1, sizeof(t_exec *));
 	i = 0;
+	head = *input;
 	while (i < count)
 	{
 		while ((*input)->type != t_flag && (*input)->type != t_txt)
@@ -259,5 +261,6 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int retval)
 		}
 		i++;
 	}
+	*input = head;
 	return (cmds);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   murder.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:28:35 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/28 17:18:10 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:41:46 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,16 @@ void	shank_input(t_input **input)
 {
 	t_input	*next;
 
+	printf("ye\n");
 	if (!input)
 		return ;
 	next = NULL;
 	if (*input && *input != (*input)->head)
 		*input = (*input)->head;
+	printf("ye2\n");
 	while (*input)
 	{
+		printf("ye3\n");
 		if ((*input)->txt)
 			free((*input)->txt);
 		next = (*input)->next;
