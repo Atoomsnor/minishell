@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/27 18:04:00 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:15:10 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,9 @@ t_input	**matrix_to_list(char **matrix)
 	t_input	**input;
 	int		i;
 
-	input = ft_calloc(1, sizeof(struct t_input *)); //memcheck?
+	input = ft_calloc(1, sizeof(struct t_input *));
+	if (!input)
+		return (NULL);
 	(*input) = ft_lstnew(matrix[0]);
 	if (!(*input))
 		return (NULL);

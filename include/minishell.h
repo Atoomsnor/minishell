@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/27 19:38:06 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/28 15:57:34 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ extern volatile sig_atomic_t	g_signalreceived;
 
 /* main */
 int		sig_interrupted();
-int		shelly(char **envp);
+int		shelly(char ***envp, int retval);
 int		main(int argc, char **argv, char **envp);
 
 /* history */
@@ -70,10 +70,10 @@ int		find_out(t_input *input);
 t_exec	*fill_exec(t_input **input);
 int		is_buildin(char *cmd);
 char	*cmd_to_path(t_exec *cmd);
-t_exec **tokens_to_exec(t_input **input, char **envp);
+t_exec **tokens_to_exec(t_input **input, char **envp, int retval);
 
 /* execute */
-int		run_builtin(t_exec *exec, int fd, char **envp);
+void	run_builtin(t_exec *exec, int fd, char ***envp);
 void	child(t_exec *exec, char **envp);
 int		execute(t_exec **exec, char **envp);
 
@@ -81,14 +81,17 @@ int		execute(t_exec **exec, char **envp);
 int		pwd(int fd);
 int		echo(int fd, char **to_write);
 int		cd(char *path);
-t_var	*bi_export(char *var_name, char *str);
-void	unset(char *name);
+char	**exporting(char *str, char **env);
+void	unset(char *name, char **env);
 void	bi_exit();
 void	env(char **envp);
 
 /* quote */
-t_exec *dequote(t_exec *exec, char **env);
+t_exec *dequote(t_exec *exec, char **env, int retval);
 void	print_strings_fd(int fd, ...);
+
+/* wildcard */
+char	*handle_wildcard(char *str, char **env, int retval);
 
 /* pipe_parsing */
 // int		mat_count(char **mat);

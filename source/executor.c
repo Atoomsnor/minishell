@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:33:44 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/26 13:06:17 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/28 16:04:47 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <sys/wait.h>
 #include <stdio.h>
 
-int	run_builtin(t_exec *exec, int fd, char **envp)
+void	run_builtin(t_exec *exec, int fd, char ***envp)
 {
 	if (ft_strncmp(exec->full_cmd[0], "echo", 5) == 0)
 		echo(fd, &(exec->full_cmd[1]));
@@ -25,14 +25,13 @@ int	run_builtin(t_exec *exec, int fd, char **envp)
 	else if (ft_strncmp(exec->full_cmd[0], "cd", 3) == 0)
 		cd(exec->full_cmd[1]);
 	else if (ft_strncmp(exec->full_cmd[0], "export", 7) == 0)
-		bi_export(exec->full_cmd[0], exec->full_cmd[1]); //wrong needs to be fixed
+		*envp = exporting(exec->full_cmd[1], *envp);
 	else if (ft_strncmp(exec->full_cmd[0], "unset", 6) == 0)
-		unset(exec->full_cmd[1]);
+		unset(exec->full_cmd[1], *envp);
 	else if (ft_strncmp(exec->full_cmd[0], "exit", 5) == 0)
 		bi_exit();
 	else if (ft_strncmp(exec->full_cmd[0], "env", 4) == 0)
-		env(envp);
-	return (0);
+		env(*envp);
 }
 
 void	child(t_exec *exec, char **envp)
@@ -48,7 +47,7 @@ void	child(t_exec *exec, char **envp)
 		close(exec->out_fd);
 	}
 	if (exec->full_path[0] == '\0')
-		run_builtin(exec, exec->out_fd, envp);
+		run_builtin(exec, exec->out_fd, &envp);
 	else
 		execve(exec->full_path, exec->full_cmd, envp);
 	exit (1);
@@ -76,7 +75,7 @@ int	execute(t_exec **exec, char **envp)
 			exec[i]->in_fd = prev_fd;
 		// printf("infd %i outfd %i prevfd %i\nfullpath %s\n", exec[i]->in_fd, exec[i]->out_fd, prev_fd, exec[i]->full_path);
 		if (pid == 0 && !exec[i + 1] && exec[i]->full_path[0] == '\0')
-			run_builtin(exec[i], exec[i]->out_fd, envp);
+			run_builtin(exec[i], exec[i]->out_fd, &envp);
 		else if (pid == 0)
 			child(exec[i], envp);
 		prev_fd = exec[i]->out_fd;

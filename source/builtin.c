@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:15:06 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/24 00:57:09 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/28 16:41:09 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,28 +86,60 @@ int	cd(char *path)
 	return (1);
 }
 
-// different type? (struct?)
-// takes VAR name & str
-// VAR name can be called using a wildcard -> look for array of these vars?
-t_var	*bi_export(char *var_name, char *str)
+char	**exporting(char *str, char **env)
 {
-	t_var	*var;
-
-	if (!var_name || !str)
-		return (NULL);
-	var = malloc(sizeof(struct s_var));
-	if (!var)
-		return (NULL);
-	var->name = var_name;
-	var->content = str;
-	return (var);
+	int	i;
+	int	len;
+	char **new_env;
+	
+	if (str)
+	{
+		len = 0;
+		while (env[len])
+			len++;
+		new_env = ft_calloc(sizeof(char *), len + 2);
+		i = 0;
+		while (env[i] && i < len - 1)
+		{
+			new_env[i] = env[i];
+			i++;
+		}
+		new_env[i] = ft_strdup(str);
+		i++;
+		while (env[i - 1])
+		{
+			new_env[i] = env[i - 1];
+			i++;
+		}
+		printf("i: %i len: %i\n", i ,len);
+		return (new_env);
+	}
+	return (NULL);
 }
 
 // works in sync with export, destroys a saved var
-void	unset(char *name)
+void	unset(char *name, char **env)
 {
+	int i;
+	int len;
+
 	if (name)
-		unlink(name);
+	{
+		i = 0;
+		len = 0;
+		while(env[len])
+			len++;
+		while (env[i])
+		{
+			if (!ft_strncmp(name, env[i], ft_strlen(name)))
+			{
+				ft_memmove(&env[i], &env[i + 1], len - i);
+				env[len - 1] = NULL;
+				break ;
+			}
+			i++;
+		}
+	}
 }
 
 void	bi_exit()

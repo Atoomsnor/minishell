@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:29:22 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/27 18:35:36 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/28 14:30:34 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,28 +62,11 @@ char *trim_quotes(char *str, char quote, int start)
 	ft_memmove(&ret[start], &ret[start + 1], ft_strlen(&ret[start]));
 	while (str[start])
 	{
-		// printf("%c vs %c\n", str[start], quote);
 		if (str[start] == quote)
 			ft_memmove(&ret[start], &ret[start + 1], ft_strlen(&ret[start]));
 		start++;
 	}
 	return (ret);
-}
-
-void handle_wildcard(char *str)
-{
-	int i;
-	int wc;
-	char *var_name;
-
-	i = 0;
-	while(str[i] && str[i] != '$')
-		i++;
-	wc = i;
-	while (str[i] && str[i] != ' ')
-		i++;
-	var_name = ft_substr(str, wc + 1, i - wc);
-	(void)var_name;
 }
 
 void quotesiginthandyman(int signal)
@@ -96,7 +79,7 @@ void quotesiginthandyman(int signal)
 	}
 }
 
-t_exec *dequote(t_exec *exec, char **env)
+t_exec *dequote(t_exec *exec, char **env, int retval)
 {
 	int		i;
 	int		len;
@@ -109,8 +92,6 @@ t_exec *dequote(t_exec *exec, char **env)
 	quote_type = 0;
 	len2 = 0;
 	quote = NULL;
-	(void)env;
-	// printf("dequote\n");
 	while (exec->full_cmd[i])
 	{
 		quote_type = find_first_quote(&exec->full_cmd[i][len]);
@@ -122,8 +103,8 @@ t_exec *dequote(t_exec *exec, char **env)
 			{
 				exec->full_cmd[i] = trim_quotes(exec->full_cmd[i], quote_type, len);
 				len += len2 + 1;
-				if (has_char(exec->full_cmd[i], '$') && quote_type == '"')
-					handle_wildcard(exec->full_cmd[i]);
+				if (has_char(exec->full_cmd[i], '$') >= 0 && quote_type == '"')
+					exec->full_cmd[i] = handle_wildcard(exec->full_cmd[i], env, retval);
 			}
 			else 
 			{
@@ -144,6 +125,8 @@ t_exec *dequote(t_exec *exec, char **env)
 		}
 		else
 		{
+			if (has_char(exec->full_cmd[i], '$') >= 0)
+					exec->full_cmd[i] = handle_wildcard(exec->full_cmd[i], env, retval);
 			i++;
 			len = 0;
 		}

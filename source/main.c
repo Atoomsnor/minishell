@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/27 18:38:20 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/05/28 16:48:23 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,20 +51,18 @@ char *skip_spaces(char *in)
 	return (NULL);
 }
 
-int	shelly(char **envp)
+int	shelly(char ***envp, int retval)
 {
 	t_input	**input;
 	t_exec	**exec;
 	char	*in;
-	int		returnvalue;
 
 	exec = NULL;
-	returnvalue = 1;
 	in = readline("megashell>$ ");
 	if (g_signalreceived)
 	{
 		g_signalreceived = 0;
-		returnvalue = 130;
+		retval = 130;
 	}
 	if (in == NULL)
 		return (0);
@@ -76,30 +74,33 @@ int	shelly(char **envp)
 		input = init_list(in);
 		if (!input)
 			return (1);
-		exec = tokens_to_exec(input, envp);
+		exec = tokens_to_exec(input, *envp, retval);
 		if (!exec)
 			return (1);
 		shank_input(input);
 		if (exec[1] || exec[0]->full_path[0] != '\0')
-			execute(exec, envp);
+			execute(exec, *envp);
 		else
 			run_builtin(exec[0], exec[0]->out_fd, envp);
 		lynch_exec(exec);
 	}
-	return (returnvalue);
+	return (retval);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	char **environment;
+	char	**environment;
+	int		retval;
 
 	environment = envp;
 	(void)argc;
 	(void)argv;
+	retval = 1;
 	init_signals();
 	while (1)
 	{
-		if (!shelly(environment))
+		retval = shelly(&environment, retval);
+		if (!retval)
 			break ;
 	}
 	rl_clear_history();
