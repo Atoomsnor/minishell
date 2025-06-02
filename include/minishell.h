@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/28 20:27:02 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/02 17:14:40 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ char	*cmd_to_path(t_exec *cmd);
 t_exec **tokens_to_exec(t_input **input, char **envp, int retval);
 
 /* execute */
-void	run_builtin(t_exec *exec, int fd, char ***envp);
+void	run_builtin(t_exec *exec, int fd, char ***envp, int child);
 void	child(t_exec *exec, int prev_fd, int has_next, char **envp);
 int		execute(t_exec **exec, char **envp);
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/28 20:25:05 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/02 17:42:24 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	shelly(char ***envp, int retval)
 	}
 	if (in == NULL)
 		return (0);
-	if (in[0] == ' ')
+	if (in && in[0] == ' ')
 		in = skip_spaces(in);
 	if (in && in[0] != '\0')
 	{
@@ -81,7 +81,7 @@ int	shelly(char ***envp, int retval)
 		if (exec[1] || exec[0]->full_path[0] != '\0')
 			execute(exec, *envp);
 		else
-			run_builtin(exec[0], exec[0]->out_fd, envp);
+			run_builtin(exec[0], exec[0]->out_fd, envp, 0);
 		lynch_exec(exec);
 	}
 	return (retval);

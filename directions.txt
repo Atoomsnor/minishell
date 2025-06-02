@@ -2,9 +2,11 @@
 - https://gitlab.com/madebypixel02/minishell
 
 #to do#
-- fix excecution part a bit
 - make error/exit codes propper "wheyy"
 
+fix these:
+echo "123" >"out"".""txt"
+cat <out.txt >1 <out2.txt >2 <out3.txt >4
 
 - fix norm errors which are all >5functions, linetoolong and >25lines
 - ask others for stuff that will break our program
