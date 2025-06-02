@@ -17,7 +17,7 @@
 #nils#
 - fix excecution part a bit
 - mald about rowan's dyslexia
-- be bored before raid and start on envoirement stuff
+- be bored before raid and start on environment stuff
 
 #external functions#
 

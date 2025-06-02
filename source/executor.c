@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:33:44 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/28 20:22:28 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/02 15:23:54 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,25 @@ void	child(t_exec *exec, int prev_fd, int has_next, char **envp)
 	exit(1);
 }
 
+void	func_name_here(t_exec *exec, int *prev_fd, int pid, char **envp)
+{
+	if (pid == 0 && !*(&exec + 1) && exec->full_path[0] == '\0')
+		run_builtin(exec, exec->out_fd, &envp), exit(1); //moved this from child as dup2 would override its outfd
+	//might have conflict with builtin+non buildin as < infile cat | echo hello > out2 makes me need to ctrl-d twice 
+	else if (pid == 0)
+		child(exec, *prev_fd, exec != NULL, envp);
+	else
+	{
+		if (*prev_fd != -1)
+			close(*prev_fd);
+		if (exec)
+		{
+			close(exec->pipe[1]);
+			*prev_fd = exec->pipe[0];
+		}
+	}
+}
+
 int	execute(t_exec **exec, char **envp)
 {
 	pid_t	pid;
@@ -71,21 +90,8 @@ int	execute(t_exec **exec, char **envp)
 		pid = fork();
 		if (pid == -1)
 			return (0);
-		if (pid == 0 && !exec[i + 1] && exec[i]->full_path[0] == '\0')
-			run_builtin(exec[i], exec[i]->out_fd, &envp); //moved this from child as dup2 would override its outfd
-		//might have conflict with builtin+non buildin as < infile cat | echo hello > out2 makes me need to ctrl-d twice 
-		else if (pid == 0)
-			child(exec[i], prev_fd, exec[i + 1] != NULL, envp);
-		else
-		{
-			if (prev_fd != -1)
-				close(prev_fd);
-			if (exec[i + 1])
-			{
-				close(exec[i]->pipe[1]);
-				prev_fd = exec[i]->pipe[0];
-			}
-		}
+		else 
+			func_name_here(exec[i], &prev_fd, pid, envp);
 		i++;
 	}
 	while (i--)
