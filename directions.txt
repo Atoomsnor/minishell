@@ -3,9 +3,9 @@
 
 #to do#
 - make error/exit codes propper "wheyy"
+- fix < infile > out (hard coded rnrn);
 
 fix these:
-echo "123" >"out"".""txt"
 cat <out.txt >1 <out2.txt >2 <out3.txt >4
 
 - fix norm errors which are all >5functions, linetoolong and >25lines

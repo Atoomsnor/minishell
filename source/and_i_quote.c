@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   and_i_quote.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:29:22 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/28 20:19:30 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/03 13:58:48 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,32 +74,34 @@ void	quotesiginthandyman(int signal)
 	}
 }
 
-t_exec	*dequote(t_exec *exec, char **env, int retval)
+t_input	**dequote(char **env, int retval, t_input **input)
 {
 	char	*quote;
 	char	quote_type;
 	int		len;
 	int		len2;
 	int		i;
+	t_input *head;
 
 	quote = NULL;
 	quote_type = 0;
 	len = 0;
 	len2 = 0;
 	i = 0;
-	while (exec->full_cmd[i])
+	head = *input;
+	while (*input)
 	{
-		quote_type = find_first_quote(&exec->full_cmd[i][len]);
+		quote_type = find_first_quote(&(*input)->txt[len]);
 		if (quote_type)
 		{
-			len = has_char(exec->full_cmd[i], quote_type);
-			len2 = has_char(&exec->full_cmd[i][len + 1], quote_type);
+			len = has_char((*input)->txt, quote_type);
+			len2 = has_char(&(*input)->txt[len + 1], quote_type);
 			if (len2 != -1)
 			{
-				exec->full_cmd[i] = trim_quotes(exec->full_cmd[i], quote_type, len);
+				(*input)->txt = trim_quotes((*input)->txt, quote_type, len);
 				len += len2 + 1;
-				if (has_char(exec->full_cmd[i], '$') >= 0 && quote_type == '"')
-					exec->full_cmd[i] = handle_wildcard(exec->full_cmd[i], env, retval);
+				if (has_char((*input)->txt, '$') >= 0 && quote_type == '"')
+					(*input)->txt = handle_wildcard((*input)->txt, env, retval);
 			}
 			else
 			{
@@ -108,23 +110,24 @@ t_exec	*dequote(t_exec *exec, char **env, int retval)
 				{
 					quote = readline("dquote>");
 					if (quote[0] == '\0')
-						exec->full_cmd[i] = ft_strjoin(exec->full_cmd[i], "\\n");
+						(*input)->txt = ft_strjoin((*input)->txt, "\\n");
 					else
-						exec->full_cmd[i] = ft_strjoin(exec->full_cmd[i], quote);
+						(*input)->txt = ft_strjoin((*input)->txt, quote);
 				}
 				g_signalreceived = 0;
 				signal(SIGINT, sigint_handler);
-				i++;
+				*input = (*input)->next;
 				len = 0;
 			}
 		}
 		else
 		{
-			if (has_char(exec->full_cmd[i], '$') >= 0)
-				exec->full_cmd[i] = handle_wildcard(exec->full_cmd[i], env, retval);
-			i++;
+			if (has_char((*input)->txt, '$') >= 0)
+				(*input)->txt = handle_wildcard((*input)->txt, env, retval);
+			*input = (*input)->next;
 			len = 0;
 		}
 	}
-	return (exec);
+	*input = head;
+	return (input);
 }

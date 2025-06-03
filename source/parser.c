@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/28 20:25:44 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/03 20:14:40 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,11 @@ t_exec	*fill_exec(t_input **input)
 	if (!cmd->full_cmd)
 		return (free(cmd), NULL);
 	cmd->in_fd = find_in(*input);
+	if (cmd->in_fd < 0)
+		return (NULL);
 	cmd->out_fd = find_out(*input);
+	if (cmd->out_fd < 0)
+		return (NULL);
 	cmd->pipe[0] = pipe_fd[0];
 	cmd->pipe[1] = pipe_fd[1];
 	while ((*input) && ((*input)->type == t_txt || (*input)->type == t_flag))
@@ -211,12 +215,12 @@ char	*cmd_to_path(t_exec *cmd)
 	if (cmd->full_cmd[0][0] == '/')
 	{
 		if (access(cmd->full_cmd[0], F_OK | X_OK) == 0)
-			return (cmd->full_cmd[0]); //chat says ft_strdup(cmd->full_cmd[0]) on return
+			return (cmd->full_cmd[0]);
 		else
 			return (NULL);
 	}
 	if (is_buildin(cmd->full_cmd[0]))
-		return (""); //chat says ft_strdup("") on return
+		return ("");
 	paths = split_paths();
 	if (!paths)
 		return (NULL);
@@ -232,30 +236,35 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int retval)
 	int		count;
 	int		i;
 
-	(void)envp;
 	count = count_cmds(*input);
 	cmds = ft_calloc(count + 1, sizeof(t_exec *));
 	i = 0;
 	head = *input;
 	while (i < count)
 	{
-		while ((*input)->type != t_flag && (*input)->type != t_txt)
+		while (*input)
 		{
-			if ((*input) && (*input)->type == t_pipe)
-				*input = (*input)->next;
-			else if ((*input) && (*input)->next && ((*input)->type == t_left
-					|| (*input)->type == t_heredoc || (*input)->type == t_right
-					|| (*input)->type == t_append))
-				*input = (*input)->next->next;
+			if (((*input)->type == t_flag || (*input)->type == t_txt) && (*input)->prev && ((*input)->prev->type == t_left || (*input)->prev->type == t_heredoc) &&  (*input)->next && ((*input)->next->type != t_right || (*input)->next->type == t_append))
+				(*input) = (*input)->next;
+			else if (((*input)->type == t_flag || (*input)->type == t_txt) && (*input)->prev && ((*input)->prev->type == t_left || (*input)->prev->type == t_heredoc))
+			{
+				ft_lstadd_next(input, ft_lstnew("cat"));
+				(*input) = (*input)->next;
+				(*input)->type = t_txt;
+				printf("currge %s\n", (*input)->txt);
+			}
+			else if ((*input)->type == t_flag || (*input)->type == t_txt)
+				break ;
 			else
-				*input = (*input)->next;
+				(*input) = (*input)->next;
 		}
+		printf("outge %s\n", (*input)->txt);
 		if (!(*input))
 			return (die(cmds, input, error_fill_exec), NULL);
+		input = dequote(envp, retval, input);
 		cmds[i] = fill_exec(input);
 		if (!cmds[i])
 			return (die(cmds, input, error_fill_exec), NULL);
-		cmds[i] = dequote(cmds[i], envp, retval);
 		if (cmds[i]->full_cmd)
 		{
 			cmds[i]->full_path = cmd_to_path(cmds[i]);

@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/02 17:14:40 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/03 13:58:45 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	bi_exit(t_exec *exec);
 void	env(char **envp);
 
 /* quote */
-t_exec	*dequote(t_exec *exec, char **env, int retval);
+t_input	**dequote(char **env, int retval, t_input **input);
 void	print_strings_fd(int fd, ...);
 
 /* wildcard */
