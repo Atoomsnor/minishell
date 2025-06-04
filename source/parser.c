@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/03 20:14:40 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/04 19:34:14 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,6 +229,23 @@ char	*cmd_to_path(t_exec *cmd)
 	return (ret);
 }
 
+void check_heredoc(t_input *input)
+{
+	while (input)
+	{
+		if (input->type == t_heredoc)
+			// run_heredoc();
+		;
+		else if (input->type == t_pipe)
+			return ;
+		if (input->prev)
+			input = input->prev;
+		else
+			return ;
+	}
+	return ;
+}
+
 t_exec	**tokens_to_exec(t_input **input, char **envp, int retval)
 {
 	t_exec	**cmds;
@@ -246,21 +263,20 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int retval)
 		{
 			if (((*input)->type == t_flag || (*input)->type == t_txt) && (*input)->prev && ((*input)->prev->type == t_left || (*input)->prev->type == t_heredoc) &&  (*input)->next && ((*input)->next->type != t_right || (*input)->next->type == t_append))
 				(*input) = (*input)->next;
-			else if (((*input)->type == t_flag || (*input)->type == t_txt) && (*input)->prev && ((*input)->prev->type == t_left || (*input)->prev->type == t_heredoc))
+			else if ((*input) && (*input)->next && ((*input)->type == t_append || (*input)->type == t_right) && !(*input)->next->next)
 			{
-				ft_lstadd_next(input, ft_lstnew("cat"));
-				(*input) = (*input)->next;
-				(*input)->type = t_txt;
-				printf("currge %s\n", (*input)->txt);
+				if ((*input)->prev)
+					(*input) = (*input)->prev;
+				break ;
 			}
 			else if ((*input)->type == t_flag || (*input)->type == t_txt)
 				break ;
 			else
 				(*input) = (*input)->next;
 		}
-		printf("outge %s\n", (*input)->txt);
 		if (!(*input))
 			return (die(cmds, input, error_fill_exec), NULL);
+		check_heredoc(*input);
 		input = dequote(envp, retval, input);
 		cmds[i] = fill_exec(input);
 		if (!cmds[i])

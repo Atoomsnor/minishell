@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:29:22 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/03 13:58:48 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/04 20:00:42 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ t_input	**dequote(char **env, int retval, t_input **input)
 	len2 = 0;
 	i = 0;
 	head = *input;
-	while (*input)
+	while (*input && ((*input)->type == t_txt || (*input)->type == t_flag))
 	{
 		quote_type = find_first_quote(&(*input)->txt[len]);
 		if (quote_type)
@@ -108,15 +108,17 @@ t_input	**dequote(char **env, int retval, t_input **input)
 				signal(SIGINT, quotesiginthandyman);
 				while (!g_signalreceived && has_char(quote, quote_type) < 0)
 				{
-					quote = readline("dquote>");
-					if (quote[0] == '\0')
+					quote = readline("> ");
+					if (!quote)
+						return (die(NULL, input, error_), NULL);
+					else if (quote[0] == '\0')
 						(*input)->txt = ft_strjoin((*input)->txt, "\\n");
 					else
 						(*input)->txt = ft_strjoin((*input)->txt, quote);
 				}
 				g_signalreceived = 0;
 				signal(SIGINT, sigint_handler);
-				*input = (*input)->next;
+				// *input = (*input)->next;
 				len = 0;
 			}
 		}

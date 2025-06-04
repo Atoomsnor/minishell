@@ -3,7 +3,9 @@
 
 #to do#
 - make error/exit codes propper "wheyy"
-- fix < infile > out (hard coded rnrn);
+- fix < infile > out NEEDS TO NOT COPY SHIT
+- ls | 
+- re-enable heredocing
 
 fix these:
 cat <out.txt >1 <out2.txt >2 <out3.txt >4
