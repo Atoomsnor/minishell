@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:49:11 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/28 20:23:37 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/05 17:57:53 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,23 +38,6 @@ static int	ft_len(char const *s, char c)
 	while (s[i] && s[i] != c)
 		i++;
 	return (i);
-}
-
-static char	**ft_free(char **split_str)
-{
-	int	i;
-
-	i = 0;
-	if (split_str)
-	{
-		while (split_str[i])
-		{
-			free(split_str[i]);
-			i++;
-		}
-		free(split_str);
-	}
-	return (NULL);
 }
 
 static char	*another_one(char const *s, char c, int *i)
@@ -112,7 +95,7 @@ static char	**ft_bigsplit(char const *s, char c, char **n_str)
 		{
 			n_str[j] = another_one(s, c, &i);
 			if (!n_str[j])
-				return (ft_free(n_str));
+				return (free_array(n_str), NULL);
 			j++;
 		}
 	}

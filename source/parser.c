@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/04 19:34:14 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/05 17:41:04 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,8 @@ int	count_cmds(t_input *input)
 	count = 1;
 	while (input)
 	{
-		if (input->type == t_pipe && input->next && input->next->type != t_right && input->next->type != t_append)
+		if (input->type == t_pipe && input->next && input->next->type != t_right
+			&& input->next->type != t_append)
 			count++;
 		input = input->next;
 	}

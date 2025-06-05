@@ -2,6 +2,7 @@
 - https://gitlab.com/madebypixel02/minishell
 
 #to do#
+- add all the linkedlist stuff to libft? takes so much space
 - make error/exit codes propper "wheyy"
 - fix < infile > out NEEDS TO NOT COPY SHIT
 - ls | 
@@ -22,6 +23,36 @@ cat <out.txt >1 <out2.txt >2 <out3.txt >4
 - fix excecution part a bit
 - mald about rowan's dyslexia
 - be bored before raid and start on environment stuff
+
+
+norm changes,
+
+// made i++ in new_env =, instead of under line 38
+char	**exporting(char *str, char **env)
+
+// print_srings_fd doesnt excist?
+int	blast_error(t_error error, t_exec *exec)
+print_strings_fd(2, exec->full_cmd[0], ": ", "command not found\n", NULL);
+
+// removed from bottom of lynch exec, exec should alrdy be NULL at that pnt
+	if (exec)
+		free(exec);
+
+// split handle_wildcard into set_var_name, not tested so glhf
+// (can prob make it look nicer)
+
+//removed ft_free and makes it use free_array in string_split.c, 
+// free_array is in utils.c, shove more stuff to there but theyre stattic?
+
+
+
+
+
+
+
+
+
+
 
 #external functions#
 

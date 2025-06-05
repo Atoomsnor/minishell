@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:15:06 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/28 20:21:24 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/05 17:24:41 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,76 +97,9 @@ int	cd(char *path)
 	return (1);
 }
 
-char	**exporting(char *str, char **env)
-{
-	char	**new_env;
-	int		len;
-	int		i;
-
-	if (str)
-	{
-		len = 0;
-		while (env[len])
-			len++;
-		new_env = ft_calloc(sizeof(char *), len + 2);
-		i = 0;
-		while (env[i] && i < len - 1)
-		{
-			new_env[i] = env[i];
-			i++;
-		}
-		new_env[i] = ft_strdup(str);
-		i++;
-		while (env[i - 1])
-		{
-			new_env[i] = env[i - 1];
-			i++;
-		}
-		return (new_env);
-	}
-	return (NULL);
-}
-
-// works in sync with export, destroys a saved var
-void	unset(char *name, char **env)
-{
-	int	len;
-	int	i;
-
-	if (name)
-	{
-		i = 0;
-		len = 0;
-		while (env[len])
-			len++;
-		while (env[i])
-		{
-			if (!ft_strncmp(name, env[i], ft_strlen(name)))
-			{
-				ft_memmove(&env[i], &env[i + 1], len - i);
-				env[len - 1] = NULL;
-				break ;
-			}
-			i++;
-		}
-	}
-}
-
 void	bi_exit(t_exec *exec)
 {
 	if (&exec - 1 || &exec + 1)
 		return ;
 	exit(1);
-}
-
-void	env(char **envp)
-{
-	int	i;
-
-	i = 0;
-	while (envp[i])
-	{
-		printf("%s\n", envp[i]);
-		i++;
-	}
 }

@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/28 20:24:24 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/05 17:31:45 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,16 +72,16 @@ t_input	**matrix_to_list(char **matrix)
 	return (input);
 }
 
-void	printlist(t_input *c)
-{
-	printf("---START---\n");
-	while (c)
-	{
-		printf("%s\n", c->txt);
-		c = c->next;
-	}
-	printf("---END---\n");
-}
+// void	printlist(t_input *c)
+// {
+// 	printf("---START---\n");
+// 	while (c)
+// 	{
+// 		printf("%s\n", c->txt);
+// 		c = c->next;
+// 	}
+// 	printf("---END---\n");
+// }
 
 t_input	*parse_list(t_input *input)
 {

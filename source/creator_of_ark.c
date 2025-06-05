@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 12:48:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/28 20:17:45 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/05 17:52:25 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,33 @@ char	*trim_var_name(char *str)
 	return (NULL);
 }
 
+char	*set_var_name(char *str, char **env, int retval, int i)
+{
+	char	*var_name;
+	int		wc;
+
+	wc = i;
+	while (str[i] && str[i] != ' ')
+		i++;
+	if (str[i] == ' ')
+		i--;
+	var_name = ft_substr(str, wc + 1, i - wc);
+	if (!var_name)
+		return (NULL);
+	if (var_name[0] == '\0')
+		return (str);
+	if (!ft_strncmp(var_name, "?", 2))
+		var_name = ft_itoa(retval);
+	else
+	{
+		var_name = find_var_in_env(var_name, env);
+		if (!var_name)
+			return (NULL);
+		var_name = trim_var_name(var_name);
+	}
+	return (var_name);
+}
+
 char	*remove_wildcard(char *str, char *var, int start_pos, int end_pos)
 {
 	char	*out;
@@ -69,24 +96,7 @@ char	*handle_wildcard(char *str, char **env, int retval)
 	if (!str[i])
 		return (NULL);
 	wc = i;
-	while (str[i] && str[i] != ' ')
-		i++;
-	if (str[i] == ' ')
-		i--;
-	var_name = ft_substr(str, wc + 1, i - wc);
-	if (!var_name)
-		return (NULL);
-	if (var_name[0] == '\0')
-		return (str);
-	if (!ft_strncmp(var_name, "?", 2))
-		var_name = ft_itoa(retval);
-	else
-	{
-		var_name = find_var_in_env(var_name, env);
-		if (!var_name)
-			return (NULL);
-		var_name = trim_var_name(var_name);
-	}
+	var_name = set_var_name(str, env, retval, i);
 	printf("var_name %s\n", var_name);
 	str = remove_wildcard(str, var_name, wc, i);
 	return (str);

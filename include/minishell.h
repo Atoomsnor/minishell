@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/03 13:58:45 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/05 17:59:39 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,39 +93,5 @@ void	print_strings_fd(int fd, ...);
 /* wildcard */
 char	*handle_wildcard(char *str, char **env, int retval);
 
-/* pipe_parsing */
-// int		mat_count(char **mat);
-// void	move_list(char **input, int count);
-// void	check_io(char **input, int *count);
-// void	check_io_hd(char **input, int *count);
-// void	print_matrix(char **input);
-// void	pipe_parser(char *in, char **envp);
-
-/* pipex */
-// int		file_handler(t_shell *shell);
-// int		file_h(t_shell *shell);
-
-/* (ish) singlecmd */
-// void	singleparent(t_px *px, t_fd *fd, int start);
-// void	remove_path(t_px *px);
-// void	singlecmd(char *cmd, char **envp);
-
-// /* lists */
-// void	ft_lstsethead(t_input **lst, t_input *head);
-// int		ft_lstsize(t_input *lst);
-// t_input	*ft_lstnew(void *content);
-// t_input	*ft_lstlast(t_input *lst);
-// void	ft_lstadd_back(t_input **lst, t_input *new_lst);
-// void	ft_lstadd_front(t_input **lst, t_input *new_lst);
-// void	ft_lstdelone(t_input *lst);
-
-// void printlist(t_input *c);
-// int	open_outfiles(t_input *in);
-
-// t_cmd      *init_cmd(void);
-// void       add_argument(t_cmd *cmd, char *arg);
-// t_cmd      *parse_cmds(t_input *input);
-// // void       execute_cmds(t_shell *shell);
-// void       handle_error(const char *msg);
 
 #endif

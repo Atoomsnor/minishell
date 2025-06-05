@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:28:35 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/28 20:23:57 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/05 17:37:54 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ void	lynch_exec(t_exec **exec)
 				free(exec[i]->full_cmd[j]);
 				j++;
 			}
-			// free(exec[i]->full_cmd[j]);
 			free(exec[i]->full_cmd);
 		}
 		free(exec[i]);
@@ -67,8 +66,6 @@ void	lynch_exec(t_exec **exec)
 		i++;
 	}
 	free(exec[i]);
-	if (exec)
-		free(exec);
 }
 
 void	shank_input(t_input **input)
