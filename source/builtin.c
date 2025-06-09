@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:15:06 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/05 17:24:41 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/09 13:26:30 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,12 @@ int	echo(int fd, char **to_write)
 	while (to_write[i])
 	{
 		out = join_strings(out, to_write[i]);
-		out = join_strings(out, " ");
+		if (to_write[i + 1])
+			out = join_strings(out, " ");
 		i++;
 	}
 	if (cmp)
 		out = join_strings(out, "\n");
-	printf("fd %i\n", fd);
 	ft_putstr_fd(out, fd);
 	if (out)
 		free(out);

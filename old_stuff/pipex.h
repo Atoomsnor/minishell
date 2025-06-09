@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:28:58 by roversch          #+#    #+#             */
-/*   Updated: 2025/05/22 15:38:35 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/09 13:12:58 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	singleparent(t_px *px, t_fd *fd, int start);
 /* Path Handling */
 char	**split_paths(void);
 char	*find_path(char **paths, char *cmd);
-void	free_array(char **array);
+// void	free_array(char **array);
 
 /* Main Function */
 void	build_structs(t_px *px, t_fd *fd, int argc, t_input **input);

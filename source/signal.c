@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 13:33:15 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/22 15:36:01 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/09 15:45:39 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,13 @@ void	sigint_handler(int signal)
 // create signals that need to be handled
 void	init_signals(void)
 {
-	struct sigaction	sa;
+	// struct sigaction	sa;
 
-	sa.sa_handler = sigint_handler;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = SA_RESTART;
+	// sa.sa_handler = sigint_handler;
+	// sigemptyset(&sa.sa_mask);
+	// sa.sa_flags = SA_RESTART;
 	// sigaction(SIGINT, &sa, NULL);
+	rl_catch_signals  = 1;
 	signal(SIGINT, sighandler);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGUSR1, SIG_IGN);

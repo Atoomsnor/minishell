@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:29:22 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/04 20:00:42 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/09 15:45:28 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <signal.h>
 #include <stdio.h>
 #include <readline/readline.h>
+#include <unistd.h>
 
 int	has_char(char *str, char c)
 {
@@ -69,6 +70,7 @@ void	quotesiginthandyman(int signal)
 	if (signal == SIGINT)
 	{
 		g_signalreceived = signal;
+		rl_done = 1;
 		rl_replace_line("", 0);
 		printf("\n");
 	}
@@ -102,6 +104,7 @@ t_input	**dequote(char **env, int retval, t_input **input)
 				len += len2 + 1;
 				if (has_char((*input)->txt, '$') >= 0 && quote_type == '"')
 					(*input)->txt = handle_wildcard((*input)->txt, env, retval);
+				(*input) = (*input)->next;
 			}
 			else
 			{
@@ -110,15 +113,24 @@ t_input	**dequote(char **env, int retval, t_input **input)
 				{
 					quote = readline("> ");
 					if (!quote)
-						return (die(NULL, input, error_), NULL);
-					else if (quote[0] == '\0')
-						(*input)->txt = ft_strjoin((*input)->txt, "\\n");
-					else
-						(*input)->txt = ft_strjoin((*input)->txt, quote);
+					{
+						if (g_signalreceived)
+						{
+							g_signalreceived = 0;
+								return (die(NULL, input, error_), NULL);
+						}
+						else 
+							break ;
+					}
+					(*input)->txt = ft_strjoin((*input)->txt, "\n");
+					(*input)->txt = ft_strjoin((*input)->txt, quote);
 				}
-				g_signalreceived = 0;
+				if (g_signalreceived)
+				{
+					g_signalreceived = 0;
+					return (die(NULL, input, error_), NULL);
+				}
 				signal(SIGINT, sigint_handler);
-				// *input = (*input)->next;
 				len = 0;
 			}
 		}
