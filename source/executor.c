@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:33:44 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/02 17:32:34 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/09 17:46:48 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	run_builtin(t_exec *exec, int fd, char ***envp, int child)
 	else if (ft_strncmp(exec->full_cmd[0], "exit", 5) == 0)
 		bi_exit(exec);
 	else if (ft_strncmp(exec->full_cmd[0], "env", 4) == 0)
-		env(*envp);
+		env(*envp, fd);
 	if (child)
 		exit(1);
 }

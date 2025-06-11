@@ -2,10 +2,10 @@
 - https://gitlab.com/madebypixel02/minishell
 
 #to do#
-- add all the linkedlist stuff to libft? takes so much space
 - make error/exit codes propper "wheyy"
 - fix < infile > out NEEDS TO NOT COPY SHIT
-- ls | 
+- ls |  (also heredoc!!!!!)
+- history after heredocing
 - re-enable heredocing
 
 fix these:

@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:29:22 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/09 15:45:28 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/11 11:16:21 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,27 +65,15 @@ char	*trim_quotes(char *str, char quote, int start)
 	return (ret);
 }
 
-void	quotesiginthandyman(int signal)
-{
-	if (signal == SIGINT)
-	{
-		g_signalreceived = signal;
-		rl_done = 1;
-		rl_replace_line("", 0);
-		printf("\n");
-	}
-}
-
 t_input	**dequote(char **env, int retval, t_input **input)
 {
-	char	*quote;
+
 	char	quote_type;
 	int		len;
 	int		len2;
 	int		i;
 	t_input *head;
 
-	quote = NULL;
 	quote_type = 0;
 	len = 0;
 	len2 = 0;
@@ -107,32 +95,7 @@ t_input	**dequote(char **env, int retval, t_input **input)
 				(*input) = (*input)->next;
 			}
 			else
-			{
-				signal(SIGINT, quotesiginthandyman);
-				while (!g_signalreceived && has_char(quote, quote_type) < 0)
-				{
-					quote = readline("> ");
-					if (!quote)
-					{
-						if (g_signalreceived)
-						{
-							g_signalreceived = 0;
-								return (die(NULL, input, error_), NULL);
-						}
-						else 
-							break ;
-					}
-					(*input)->txt = ft_strjoin((*input)->txt, "\n");
-					(*input)->txt = ft_strjoin((*input)->txt, quote);
-				}
-				if (g_signalreceived)
-				{
-					g_signalreceived = 0;
-					return (die(NULL, input, error_), NULL);
-				}
-				signal(SIGINT, sigint_handler);
-				len = 0;
-			}
+				return (die(NULL, input, error_), NULL);
 		}
 		else
 		{

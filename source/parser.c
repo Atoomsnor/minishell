@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/09 13:13:07 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/09 17:46:55 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,6 +254,8 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int retval)
 					(*input) = (*input)->prev;
 				break ;
 			}
+			else if (((*input)->type == t_flag || (*input)->type == t_txt) && (*input)->prev && ((*input)->prev->type == t_left || (*input)->prev->type == t_heredoc))
+				return (free(cmds), NULL);
 			else if ((*input)->type == t_flag || (*input)->type == t_txt)
 				break ;
 			else

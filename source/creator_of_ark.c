@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 12:48:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/09 13:25:02 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/09 17:47:46 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,7 @@ char	*handle_wildcard(char *str, char **env, int retval)
 		return (NULL);
 	wc = i;
 	var_name = set_var_name(str, env, retval, &i);
-	printf("var_name %sspace?\n", var_name);
 	str = remove_wildcard(str, var_name, wc, i);
-	printf("wildcard str: %sspace?\n", str);
 	str[ft_strlen(str)] = '\0';
 	return (str);
 }

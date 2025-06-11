@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/09 13:26:54 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/09 17:50:23 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	shelly(char ***envp, int retval)
 		retval = 130;
 	}
 	if (in == NULL)
-		return (0);
+		return (-1);
 	if (in && in[0] == ' ')
 		in = skip_spaces(in);
 	if (in && in[0] != '\0')
@@ -82,7 +82,9 @@ int	shelly(char ***envp, int retval)
 			execute(exec, *envp);
 		else
 			run_builtin(exec[0], exec[0]->out_fd, envp, 0);
-		lynch_exec(exec);
+		if (exec)
+			lynch_exec(exec);
+		retval = 0;
 	}
 	return (retval);
 }
@@ -95,12 +97,12 @@ int	main(int argc, char **argv, char **envp)
 	environment = envp;
 	(void)argc;
 	(void)argv;
-	retval = 1;
+	retval = 0;
 	init_signals();
 	while (1)
 	{
 		retval = shelly(&environment, retval);
-		if (!retval)
+		if (retval == -1)
 			break ;
 	}
 	rl_clear_history();
