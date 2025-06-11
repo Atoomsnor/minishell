@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/09 17:50:23 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/11 15:09:37 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	shelly(char ***envp, int retval)
 		in = skip_spaces(in);
 	if (in && in[0] != '\0')
 	{
-		history(in);
+		save_history(in, 0);
 		input = init_list(in);
 		if (!input)
 			return (1);
@@ -85,6 +85,7 @@ int	shelly(char ***envp, int retval)
 		if (exec)
 			lynch_exec(exec);
 		retval = 0;
+		save_history(NULL, 1);
 	}
 	return (retval);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:36:55 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/28 19:31:58 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/11 13:05:30 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_input
 	struct s_input	*head;
 	char			*txt;
 	t_type			type;
+	int				hd_fd;
 }	t_input;
 
 typedef struct s_var

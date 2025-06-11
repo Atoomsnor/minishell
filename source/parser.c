@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/09 17:46:55 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/11 13:38:30 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int	find_in(t_input *input)
 		if (input->type == t_left)
 			return (open(input->next->txt, O_RDONLY));
 		else if (input->type == t_heredoc)
-			return (open("./minishell", O_RDONLY));
+			return (input->hd_fd);
 		else if (input->type == t_pipe)
 			return (0);
 		if (input->prev)
@@ -216,17 +216,19 @@ char	*cmd_to_path(t_exec *cmd)
 
 void check_heredoc(t_input *input)
 {
-	while (input)
+	t_input *curr;
+
+	curr = input;
+	while (input && input != input->head && input->type != t_pipe && input->prev)
+		input = input->prev;
+	while (input && input != curr)
 	{
-		if (input->type == t_heredoc)
-			// run_heredoc();
-		;
+		if (input->type == t_heredoc && input->hd_fd == 0)
+			input->hd_fd = run_here_doc(input->next->txt);
 		else if (input->type == t_pipe)
 			return ;
-		if (input->prev)
-			input = input->prev;
-		else
-			return ;
+		input = input->next;
+		printf("yoyo\n");
 	}
 	return ;
 }
@@ -265,6 +267,8 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int retval)
 			return (die(cmds, input, error_fill_exec), NULL);
 		check_heredoc(*input);
 		input = dequote(envp, retval, input);
+		if (!input)
+			return (free(cmds), NULL);
 		cmds[i] = fill_exec(input);
 		if (!cmds[i])
 			return (die(cmds, input, error_fill_exec), NULL);

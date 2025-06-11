@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:28:35 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/09 17:47:21 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/11 11:27:01 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void	shoot_error(t_error error)
 		perror("Command not found");
 	else if (error == error_fill_exec)
 		perror("Error fill_exec");
+	else if (error == 5)
+		printf("error 0\n");
 }
 
 void	lynch_exec(t_exec **exec)

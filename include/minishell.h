@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/09 17:25:49 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/11 15:09:27 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@ int		shelly(char ***envp, int retval);
 int		main(int argc, char **argv, char **envp);
 
 /* history */
-void	history(char *in); //maybe add into main?
+void	history(char *in);
+void	save_history(char *in, int send);
+void	add_heredoc_hist(int fd);
 
 /* signals */
 void	sighandler(int signal);
@@ -95,7 +97,6 @@ int		has_char(char *str, char c);
 char	*handle_wildcard(char *str, char **env, int retval);
 
 /* heredoc */
-void	*run_here_doc(t_input **input, char *delimiter);
-void	*run_quote_doc(t_input **input, char quote_type);
+int	run_here_doc(char *delimiter);
 
 #endif

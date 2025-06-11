@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   linked_list.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 12:08:29 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/28 17:46:13 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/11 13:34:17 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ t_input	*ft_lstnew(void *content)
 	node->head = node;
 	node->next = NULL;
 	node->prev = NULL;
+	node->hd_fd = 0;
 	return (node);
 }
 
