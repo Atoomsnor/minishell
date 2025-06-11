@@ -3,22 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 14:29:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/11 15:28:05 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/11 19:28:04 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <limits.h>
 #include <readline/history.h>
 #include <readline/readline.h>
 #include <stdlib.h>
+#include <unistd.h>
 
-void	history(char *in)
+void	history(char *in, char **hist)
 {
-	static char	*hist[HISTORY_SIZE];
-	static int	hist_count;
+	int	hist_count;
 	int			i;
 
 	i = 1;
@@ -42,16 +43,15 @@ void	history(char *in)
 	}
 }
 
-void	 save_history(char *in, int send)
+void	 save_history(char *in, int send, char **hist)
 {
-	static char *hist = NULL;
+	// static char *hist = NULL;
 
 	if (in)
-		hist = ft_strjoin(hist, in);
-	printf("history! %s\n", hist);
+		*hist = ft_strjoin(*hist, in);
 	if (send == 1)
 	{
-		history(hist);
+		history(in, hist);
 		free(hist);
 		hist = NULL;
 	}
@@ -62,20 +62,11 @@ void	 save_history(char *in, int send)
 	}
 }
 
-void	add_heredoc_hist(int fd)
+void	add_heredoc_hist(int fd, char **hist)
 {
 	char	*in;
 
-	printf("a\n");
-	in = get_next_line(fd);
-	printf("e %s\n", in);
-	while (in)
-	{
-		printf("b\n");
-		save_history(ft_strjoin("\n", in), 0);
-		free(in);
-		printf("c\n");
-		in = get_next_line(fd);
-		printf("d %s\n", in);
-	}
+	read(fd, in, INT_MAX);
+	printf("%s\n", in);
+	save_history(in, 0, hist);
 }

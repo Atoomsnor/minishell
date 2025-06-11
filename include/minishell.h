@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/11 15:09:27 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/11 19:26:13 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ extern volatile sig_atomic_t	g_signalreceived;
 
 /* main */
 int		sig_interrupted();
-int		shelly(char ***envp, int retval);
+int		shelly(char ***envp, int retval, char **hist);
 int		main(int argc, char **argv, char **envp);
 
 /* history */
-void	history(char *in);
-void	save_history(char *in, int send);
-void	add_heredoc_hist(int fd);
+void	history(char *in, char **hist);
+void	save_history(char *in, int send, char **hist);
+void	add_heredoc_hist(int fd, char **hist);
 
 /* signals */
 void	sighandler(int signal);
@@ -72,7 +72,7 @@ int		find_out(t_input *input);
 t_exec	*fill_exec(t_input **input);
 int		is_buildin(char *cmd);
 char	*cmd_to_path(t_exec *cmd);
-t_exec **tokens_to_exec(t_input **input, char **envp, int retval);
+t_exec **tokens_to_exec(t_input **input, char **envp, int retval, char **hist);
 
 /* execute */
 void	run_builtin(t_exec *exec, int fd, char ***envp, int child);
@@ -97,6 +97,6 @@ int		has_char(char *str, char c);
 char	*handle_wildcard(char *str, char **env, int retval);
 
 /* heredoc */
-int	run_here_doc(char *delimiter);
+int	run_here_doc(char *delimiter, char **hist);
 
 #endif

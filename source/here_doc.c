@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 16:16:34 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/11 15:10:22 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/11 19:19:31 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void *here_child(char *delimiter, int fd)
 	return (NULL);
 }
 
-int		run_here_doc(char *delimiter)
+int		run_here_doc(char *delimiter, char **hist)
 {
 	pid_t	pid;
 	int		pipefd[2];
@@ -90,7 +90,7 @@ int		run_here_doc(char *delimiter)
 	if (g_signalreceived)
 		g_signalreceived = 0;
 	else
-		add_heredoc_hist(pipefd[0]);
+		add_heredoc_hist(pipefd[0], hist);
 	signal(SIGINT, sigint_handler);
 	close(pipefd[1]);
 	return (pipefd[0]);

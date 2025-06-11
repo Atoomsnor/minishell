@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/11 15:09:37 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/11 19:24:51 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*skip_spaces(char *in)
 	return (NULL);
 }
 
-int	shelly(char ***envp, int retval)
+int	shelly(char ***envp, int retval, char **hist)
 {
 	t_input	**input;
 	t_exec	**exec;
@@ -70,11 +70,11 @@ int	shelly(char ***envp, int retval)
 		in = skip_spaces(in);
 	if (in && in[0] != '\0')
 	{
-		save_history(in, 0);
+		save_history(in, 0, hist);
 		input = init_list(in);
 		if (!input)
 			return (1);
-		exec = tokens_to_exec(input, *envp, retval);
+		exec = tokens_to_exec(input, *envp, retval, hist);
 		if (!exec)
 			return (1);
 		shank_input(input);
@@ -85,24 +85,26 @@ int	shelly(char ***envp, int retval)
 		if (exec)
 			lynch_exec(exec);
 		retval = 0;
-		save_history(NULL, 1);
+		save_history(NULL, 1, hist);
 	}
 	return (retval);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
+	char	*hist[HISTORY_SIZE];
 	char	**environment;
 	int		retval;
 
-	environment = envp;
+
+	environment = envp; //matrix copy function
 	(void)argc;
 	(void)argv;
 	retval = 0;
 	init_signals();
 	while (1)
 	{
-		retval = shelly(&environment, retval);
+		retval = shelly(&environment, retval, hist);
 		if (retval == -1)
 			break ;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/11 13:38:30 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/11 19:20:49 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,7 +214,7 @@ char	*cmd_to_path(t_exec *cmd)
 	return (ret);
 }
 
-void check_heredoc(t_input *input)
+void check_heredoc(t_input *input, char **hist)
 {
 	t_input *curr;
 
@@ -224,7 +224,7 @@ void check_heredoc(t_input *input)
 	while (input && input != curr)
 	{
 		if (input->type == t_heredoc && input->hd_fd == 0)
-			input->hd_fd = run_here_doc(input->next->txt);
+			input->hd_fd = run_here_doc(input->next->txt, hist);
 		else if (input->type == t_pipe)
 			return ;
 		input = input->next;
@@ -233,7 +233,7 @@ void check_heredoc(t_input *input)
 	return ;
 }
 
-t_exec	**tokens_to_exec(t_input **input, char **envp, int retval)
+t_exec	**tokens_to_exec(t_input **input, char **envp, int retval, char **hist)
 {
 	t_exec	**cmds;
 	t_input	*head;
@@ -265,7 +265,7 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int retval)
 		}
 		if (!(*input))
 			return (die(cmds, input, error_fill_exec), NULL);
-		check_heredoc(*input);
+		check_heredoc(*input, hist);
 		input = dequote(envp, retval, input);
 		if (!input)
 			return (free(cmds), NULL);
