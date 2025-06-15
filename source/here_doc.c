@@ -26,6 +26,7 @@ void	heredocsig(int signal)
 	{
 		g_signalreceived = signal;
 		// rl_replace_line("", 0);
+		
 		printf("\n");
 		exit(1);
 	}
@@ -70,7 +71,6 @@ int		run_here_doc(char *delimiter, char **hist)
 	pid_t	pid;
 	int		pipefd[2];
 
-	printf("DELIMITER: %s\n", delimiter);
 	if (g_signalreceived)
 		g_signalreceived = 0;
 	if (pipe(pipefd) == -1)

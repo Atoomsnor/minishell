@@ -29,7 +29,7 @@ void	run_builtin(t_exec *exec, int fd, char ***envp, int child)
 	else if (ft_strncmp(exec->full_cmd[0], "unset", 6) == 0)
 		unset(exec->full_cmd[1], *envp);
 	else if (ft_strncmp(exec->full_cmd[0], "exit", 5) == 0)
-		bi_exit(exec);
+		bi_exit(exec, child);
 	else if (ft_strncmp(exec->full_cmd[0], "env", 4) == 0)
 		env(*envp, fd);
 	if (child)

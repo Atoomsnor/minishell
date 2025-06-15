@@ -70,7 +70,7 @@ int	shelly(char ***envp, int retval, char **hist)
 		in = skip_spaces(in);
 	if (in && in[0] != '\0')
 	{
-		save_history(in, 0, hist);
+		//save_history(in, 0, hist);
 		input = init_list(in);
 		if (!input)
 			return (1);
@@ -85,10 +85,11 @@ int	shelly(char ***envp, int retval, char **hist)
 		if (exec)
 			lynch_exec(exec);
 		retval = 0;
-		save_history(NULL, 1, hist);
+		//save_history(NULL, 1, hist);
 	}
 	return (retval);
 }
+
 
 int	main(int argc, char **argv, char **envp)
 {

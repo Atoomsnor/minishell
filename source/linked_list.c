@@ -37,6 +37,7 @@ t_input	*ft_lstnew(void *content)
 	node->head = node;
 	node->next = NULL;
 	node->prev = NULL;
+	node->type = t_none;
 	node->hd_fd = 0;
 	return (node);
 }

@@ -92,7 +92,8 @@ t_input	*parse_list(t_input *input)
 	cpy = input;
 	while (cpy)
 	{
-		cpy->type = find_type(cpy->txt);
+		if (cpy->type == t_none)
+			cpy->type = find_type(cpy->txt);
 		cpy = cpy->next;
 	}
 	cpy = input;
@@ -123,10 +124,17 @@ t_input	**init_list(char *in)
 {
 	t_input	**input;
 	char	**matrix;
+	char	**hist;
 
 	matrix = ft_string_split(in, ' ');
 	input = matrix_to_list(matrix);
 	free_array(matrix);
 	parse_list(input[0]);
+	hist = NULL;
+	while (ft_lstlast(*input)->type == t_pipe)
+	{
+		run_here_doc("\0", hist);
+		parse_list(input[0]);
+	}
 	return (input);
 }

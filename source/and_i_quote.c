@@ -71,13 +71,11 @@ t_input	**dequote(char **env, int retval, t_input **input)
 	char	quote_type;
 	int		len;
 	int		len2;
-	int		i;
 	t_input *head;
 
 	quote_type = 0;
 	len = 0;
 	len2 = 0;
-	i = 0;
 	head = *input;
 	while (*input && ((*input)->type == t_txt || (*input)->type == t_flag))
 	{

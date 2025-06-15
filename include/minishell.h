@@ -85,7 +85,7 @@ int		echo(int fd, char **to_write);
 int		cd(char *path);
 char	**exporting(char *str, char **env);
 void	unset(char *name, char **env);
-void	bi_exit(t_exec *exec);
+void	bi_exit(t_exec *exec, int child);
 void	env(char **envp, int fd);
 
 /* quote */

@@ -142,7 +142,6 @@ int	find_out(t_input *input)
 t_exec	*fill_exec(t_input **input)
 {
 	t_exec	*cmd;
-	int		pipe_fd[2];
 	int		count;
 	int		i;
 
@@ -160,8 +159,6 @@ t_exec	*fill_exec(t_input **input)
 	cmd->out_fd = find_out(*input);
 	if (cmd->out_fd < 0)
 		return (NULL);
-	cmd->pipe[0] = pipe_fd[0];
-	cmd->pipe[1] = pipe_fd[1];
 	while ((*input) && ((*input)->type == t_txt || (*input)->type == t_flag))
 	{
 		if ((*input)->type == t_txt || (*input)->type == t_flag)

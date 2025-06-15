@@ -19,7 +19,7 @@
 
 void	history(char *in, char **hist)
 {
-	int	hist_count;
+	static int	hist_count = 0;
 	int			i;
 
 	i = 1;
@@ -66,6 +66,7 @@ void	add_heredoc_hist(int fd, char **hist)
 {
 	char	*in;
 
+	in = NULL;
 	read(fd, in, INT_MAX);
 	printf("%s\n", in);
 	save_history(in, 0, hist);

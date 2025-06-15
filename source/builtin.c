@@ -97,9 +97,11 @@ int	cd(char *path)
 	return (1);
 }
 
-void	bi_exit(t_exec *exec)
+void	bi_exit(t_exec *exec, int child)
 {
-	if (&exec - 1 || &exec + 1)
+	if (child)
 		return ;
+	(void)exec;
+	printf("exit\n");
 	exit(1);
 }
