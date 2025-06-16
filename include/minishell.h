@@ -97,6 +97,6 @@ int		has_char(char *str, char c);
 char	*handle_wildcard(char *str, char **env, int retval);
 
 /* heredoc */
-int	run_here_doc(char *delimiter, char **hist);
+int		run_here_doc(t_input **input, char *delimiter);
 
 #endif

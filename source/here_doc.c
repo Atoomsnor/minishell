@@ -25,75 +25,44 @@ void	heredocsig(int signal)
 	if (signal == SIGINT)
 	{
 		g_signalreceived = signal;
-		// rl_replace_line("", 0);
-		
-		printf("\n");
-		exit(1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+		write(STDOUT_FILENO, "\n", 1);
+		//rl_done = 1;
 	}
 }
 
-void *here_child(char *delimiter, int fd)
+void *here_child(t_input **input, char *delimiter)
 {
 	char	*quote;
 
 	quote = NULL;
-	while (!g_signalreceived)
+	while (!g_signalreceived && ft_strncmp(quote, delimiter, ft_strlen(delimiter)))
 	{
 		quote = readline("> ");
 		if (!quote)
 		{
 			if (g_signalreceived)
-			{
 				g_signalreceived = 0;
-				close(fd);
-				exit(1);
-			}
 			else 
 				break ;
 		}
-		if (!ft_strncmp(quote, delimiter, ft_strlen(delimiter)))
-			break ;
-		ft_putendl_fd(quote, fd);
+		(*input)->txt = ft_strjoin((*input)->txt, "\n");
+		(*input)->txt = ft_strjoin((*input)->txt, quote);
 	}
 	if (g_signalreceived)
-	{
 		g_signalreceived = 0;
-		close(fd);
-		exit(1);
-	}
-	close(fd);
-	exit(1);
 	return (NULL);
 }
 
-int		run_here_doc(char *delimiter, char **hist)
+int	run_here_doc(t_input **input, char *delimiter)
 {
-	pid_t	pid;
-	int		pipefd[2];
-
-	if (g_signalreceived)
-		g_signalreceived = 0;
-	if (pipe(pipefd) == -1)
-		return (-1);
-	pid = fork();
-	if (pid == -1)
-		return (-1);
-	else if (pid == 0)
-	{
-		close(pipefd[0]);
-		signal(SIGINT, heredocsig);
-		here_child(delimiter, pipefd[1]);
-	}
-	else 
-		signal(SIGINT, SIG_IGN);
-	wait(NULL);
-	if (g_signalreceived)
-		g_signalreceived = 0;
-	else
-		add_heredoc_hist(pipefd[0], hist);
+	signal(SIGINT, heredocsig);
+	printf("here\n");
+	here_child(input, delimiter);
 	signal(SIGINT, sigint_handler);
-	close(pipefd[1]);
-	return (pipefd[0]);
+	return (0);
 }
 
 // void *quote_child(t_input **input, char quote_type)

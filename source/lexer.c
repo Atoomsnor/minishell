@@ -133,7 +133,7 @@ t_input	**init_list(char *in)
 	hist = NULL;
 	while (ft_lstlast(*input)->type == t_pipe)
 	{
-		run_here_doc("\0", hist);
+		run_here_doc("\0", hist); // single doc
 		parse_list(input[0]);
 	}
 	return (input);

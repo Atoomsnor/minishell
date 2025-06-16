@@ -216,16 +216,16 @@ void check_heredoc(t_input *input, char **hist)
 	t_input *curr;
 
 	curr = input;
+	(void)hist;
 	while (input && input != input->head && input->type != t_pipe && input->prev)
 		input = input->prev;
 	while (input && input != curr)
 	{
 		if (input->type == t_heredoc && input->hd_fd == 0)
-			input->hd_fd = run_here_doc(input->next->txt, hist);
+			input->hd_fd = run_here_doc(&input, input->next->txt);
 		else if (input->type == t_pipe)
 			return ;
 		input = input->next;
-		printf("yoyo\n");
 	}
 	return ;
 }
