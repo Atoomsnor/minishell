@@ -6,11 +6,12 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:29:22 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/17 16:05:18 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/17 18:31:20 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <complex.h>
 #include <signal.h>
 #include <stdio.h>
 #include <readline/readline.h>
@@ -94,7 +95,7 @@ t_input	**dequote(char **env, int retval, t_input **input)
 				(*input) = (*input)->next;
 			}
 			else
-				return (die(NULL, input, "Invalid input, unclosed quote", 0), NULL);
+				return (die(NULL, input, "Invalid input, unclosed quote"), NULL);
 		}
 		else
 		{

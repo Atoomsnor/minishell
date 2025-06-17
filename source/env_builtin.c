@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:23:46 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/17 17:00:12 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/17 18:29:59 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ char	**exporting(char *str, char **env)
 
 	if (str)
 	{
-		if (!export_validity())
-			return (NULL);
+		// if (!export_validity())
+			// return (NULL);
 		len = 0;
 		while (env[len])
 			len++;

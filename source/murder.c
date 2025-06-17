@@ -6,30 +6,19 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:28:35 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/17 13:45:51 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/17 18:33:36 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include <stdarg.h>
 #include <stdlib.h>
 #include <signal.h>
 #include <stdio.h>
 #include <unistd.h>
 
-void	shoot_error(va_list *ptr)
+void	shoot_error(char *error)
 {
-	char *error;
-
-	while (1)
-	{
-		error = va_arg(*ptr, char *);
-		if (error == NULL)
-			break ;
-		ft_putstr_fd(error, 2);
-	}
-	ft_putstr_fd("\n", 2);
-	va_end(*ptr);
+	(void)error;
 }
 
 void	lynch_exec(t_exec **exec)
@@ -82,12 +71,13 @@ void	shank_input(t_input **input)
 	free(input);
 }
 
-void	die(t_exec **exec, t_input **input, ...)
+void	die(t_exec **exec, t_input **input, char *error)
 {
-	va_list ptr;
-
-	va_start(ptr, input);
-	shoot_error(&ptr);
+	if (error)
+	{
+		ft_putstr_fd(error, 2);
+		free(error);
+	}
 	if (exec)
 		lynch_exec(exec);
 	if (input)
