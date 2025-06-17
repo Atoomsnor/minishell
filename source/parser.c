@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/11 19:20:49 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/17 12:54:25 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,20 +241,23 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int retval, char **hist)
 	cmds = ft_calloc(count + 1, sizeof(t_exec *));
 	i = 0;
 	head = *input;
+	// printlist(*input, 1);
 	while (i < count)
 	{
 		while (*input)
 		{
-			if (((*input)->type == t_flag || (*input)->type == t_txt) && (*input)->prev && ((*input)->prev->type == t_left || (*input)->prev->type == t_heredoc) &&  (*input)->next && ((*input)->next->type != t_right || (*input)->next->type == t_append))
-				(*input) = (*input)->next;
-			else if ((*input) && (*input)->next && ((*input)->type == t_append || (*input)->type == t_right) && !(*input)->next->next)
+			// if (((*input)->type == t_flag || (*input)->type == t_txt) && (((*input)->prev && ((*input)->prev->type == t_left || (*input)->prev->type == t_heredoc)) && ((*input)->next && ((*input)->next->type == t_right || (*input)->next->type == t_append))))
+			// 	(*input) = (*input)->next;
+			if ((*input) && (*input)->next && ((*input)->type == t_append || (*input)->type == t_right) && !(*input)->next->next)
 			{
 				if ((*input)->prev)
 					(*input) = (*input)->prev;
 				break ;
 			}
 			else if (((*input)->type == t_flag || (*input)->type == t_txt) && (*input)->prev && ((*input)->prev->type == t_left || (*input)->prev->type == t_heredoc))
-				return (free(cmds), NULL);
+				(*input) = (*input)->next;
+			else if (((*input)->type == t_flag || (*input)->type == t_txt) && (*input)->prev && ((*input)->prev->type == t_right || (*input)->prev->type == t_append))
+				(*input) = (*input)->next;
 			else if ((*input)->type == t_flag || (*input)->type == t_txt)
 				break ;
 			else
@@ -273,7 +276,7 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int retval, char **hist)
 		{
 			cmds[i]->full_path = cmd_to_path(cmds[i]);
 			if (!cmds[i]->full_path)
-				return (die(cmds, input, error_cmd_to_path), NULL);
+				return (die(cmds, input, print_strings_fd(2, cmds[i], " : command not found\n", NULL)), NULL); // fix so die prints correct error
 		}
 		i++;
 	}

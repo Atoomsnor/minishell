@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:28:35 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/11 11:27:01 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/17 12:53:18 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,22 @@ int	blast_error(t_error error, t_exec *exec)
 	if (!exec || !exec->full_cmd || !exec->full_cmd[0])
 		return (0);
 	if (error == error_input_fail)
-		ft_putstr_fd("Error input fail", 2);
+		ft_putstr_fd("Error input fail\n", 2);
 	else if (error == error_cmd_to_path)
 		print_strings_fd(2, exec->full_cmd[0], ": ", "command not found\n", NULL);
 	else if (error == error_fill_exec)
-		perror("Error fill_exec");
+		perror("Error fill_exec\n");
 	return (1);
 }
 
 void	shoot_error(t_error error)
 {
 	if (error == error_input_fail)
-		ft_putstr_fd("Error input fail", 2);
+		ft_putstr_fd("Error input fail\n", 2);
 	else if (error == error_cmd_to_path)
-		perror("Command not found");
+		perror("Command not found\n");
 	else if (error == error_fill_exec)
-		perror("Error fill_exec");
+		perror("Error fill_exec\n");
 	else if (error == 5)
 		printf("error 0\n");
 }

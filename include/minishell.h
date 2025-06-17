@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/11 19:26:13 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/17 12:52:00 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	env(char **envp, int fd);
 
 /* quote */
 t_input	**dequote(char **env, int retval, t_input **input);
-void	print_strings_fd(int fd, ...);
+int		print_strings_fd(int fd, ...);
 int		has_char(char *str, char c);
 
 /* wildcard */
@@ -98,5 +98,6 @@ char	*handle_wildcard(char *str, char **env, int retval);
 
 /* heredoc */
 int		run_here_doc(t_input **input, char *delimiter);
+void	printlist(t_input *c, int i);
 
 #endif

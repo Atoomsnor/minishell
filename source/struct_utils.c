@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 16:11:18 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/28 20:24:37 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/17 12:51:45 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	has_type(t_input *input, ...)
 	return (0);
 }
 
-void	print_strings_fd(int fd, ...)
+int	print_strings_fd(int fd, ...)
 {
 	va_list	ptr;
 	char	*curr;
@@ -57,4 +57,5 @@ void	print_strings_fd(int fd, ...)
 		ft_putstr_fd(curr, fd);
 	}
 	va_end(ptr);
+	return (0);
 }

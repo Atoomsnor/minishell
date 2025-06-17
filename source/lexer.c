@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/05 17:31:45 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/17 11:54:50 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <readline/readline.h>
 
 t_type	find_type(char *in)
 {
@@ -72,16 +73,21 @@ t_input	**matrix_to_list(char **matrix)
 	return (input);
 }
 
-// void	printlist(t_input *c)
-// {
-// 	printf("---START---\n");
-// 	while (c)
-// 	{
-// 		printf("%s\n", c->txt);
-// 		c = c->next;
-// 	}
-// 	printf("---END---\n");
-// }
+void	printlist(t_input *c, int i)
+{
+	int fd;
+	if (i)
+		fd = open("outtest", O_RDWR);
+	else
+		fd = 1;
+	printf("---START LIST---\n");
+	while (c)
+	{
+		ft_putendl_fd(c->txt, fd);
+		c = c->next;
+	}
+	printf("---LIST END---\n");
+}
 
 t_input	*parse_list(t_input *input)
 {
@@ -124,16 +130,19 @@ t_input	**init_list(char *in)
 {
 	t_input	**input;
 	char	**matrix;
-	char	**hist;
+	char	*readl;
 
 	matrix = ft_string_split(in, ' ');
 	input = matrix_to_list(matrix);
 	free_array(matrix);
 	parse_list(input[0]);
-	hist = NULL;
+	readl = NULL;
 	while (ft_lstlast(*input)->type == t_pipe)
 	{
-		run_here_doc("\0", hist); // single doc
+		readl = readline("> ");
+		matrix = ft_string_split(readl, ' ');
+		while (*matrix)
+			ft_lstadd_back(input, ft_lstnew(*matrix++));
 		parse_list(input[0]);
 	}
 	return (input);
