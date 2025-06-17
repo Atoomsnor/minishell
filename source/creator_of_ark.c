@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 12:48:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/09 17:47:46 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/17 16:58:13 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,14 @@ char	*set_var_name(char *str, char **env, int retval, int *i)
 	if (!var_name)
 		return (NULL);
 	if (var_name[0] == '\0')
-		return (str);
-	if (!ft_strncmp(var_name, "?", 2))
-		var_name = ft_itoa(retval);
+		return (NULL);
+	if (!ft_strncmp(var_name, "?", 1))
+	{
+		if (var_name[1] != '\0')
+			var_name = ft_strjoin(ft_itoa(retval), ft_substr(var_name, 1, ft_strlen(var_name) - 1));
+		else
+			var_name = ft_itoa(retval);
+	}
 	else
 	{
 		var_name = find_var_in_env(var_name, env);
@@ -97,7 +102,11 @@ char	*handle_wildcard(char *str, char **env, int retval)
 		return (NULL);
 	wc = i;
 	var_name = set_var_name(str, env, retval, &i);
-	str = remove_wildcard(str, var_name, wc, i);
+	if (!var_name)
+		return (str);
+	str = remove_wildcard(str, var_name, wc, i + 1);
 	str[ft_strlen(str)] = '\0';
+	if (has_char(&str[i + 1], '$') >= 0)
+		str = ft_strjoin(ft_substr(str, 0, &str[i + 1] - str),handle_wildcard(&str[i + 1], env, retval));
 	return (str);
 }

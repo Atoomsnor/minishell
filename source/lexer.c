@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/17 11:54:50 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/17 16:42:03 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ t_input	*parse_list(t_input *input)
 	while (cpy)
 	{
 		i = -1;
-		if (cpy->type == t_txt || cpy->type == t_flag)
+		if ((cpy->type == t_txt || cpy->type == t_flag) && has_char(cpy->txt, '\'') < 0 && has_char(cpy->txt, '\"') < 0)
 		{
 			len = ft_strlen(cpy->txt);
 			while (len-- > 0 && i == -1)
@@ -134,8 +134,10 @@ t_input	**init_list(char *in)
 
 	matrix = ft_string_split(in, ' ');
 	input = matrix_to_list(matrix);
+	// printlist(*input, 0);
 	free_array(matrix);
 	parse_list(input[0]);
+	// printlist(*input, 0);
 	readl = NULL;
 	while (ft_lstlast(*input)->type == t_pipe)
 	{

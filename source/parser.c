@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/17 12:54:25 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/17 13:43:40 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,19 +264,19 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int retval, char **hist)
 				(*input) = (*input)->next;
 		}
 		if (!(*input))
-			return (die(cmds, input, error_fill_exec), NULL);
+			return (die(cmds, input, "error fill exec", 0), NULL);
 		check_heredoc(*input, hist);
 		input = dequote(envp, retval, input);
 		if (!input)
 			return (free(cmds), NULL);
 		cmds[i] = fill_exec(input);
 		if (!cmds[i])
-			return (die(cmds, input, error_fill_exec), NULL);
+			return (die(cmds, input, "error fill exec", 0), NULL);
 		if (cmds[i]->full_cmd)
 		{
 			cmds[i]->full_path = cmd_to_path(cmds[i]);
 			if (!cmds[i]->full_path)
-				return (die(cmds, input, print_strings_fd(2, cmds[i], " : command not found\n", NULL)), NULL); // fix so die prints correct error
+				return (die(cmds, input, cmds[i]->full_cmd[0], " : command not found", 0), NULL); // fix so die prints correct error
 		}
 		i++;
 	}

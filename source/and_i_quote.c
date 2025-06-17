@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:29:22 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/11 11:24:36 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/17 16:05:18 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ t_input	**dequote(char **env, int retval, t_input **input)
 		quote_type = find_first_quote(&(*input)->txt[len]);
 		if (quote_type)
 		{
+			// printf("cur (*input)->txt: %s\n", (*input)->txt);
 			len = has_char((*input)->txt, quote_type);
 			len2 = has_char(&(*input)->txt[len + 1], quote_type);
 			if (len2 != -1)
@@ -93,7 +94,7 @@ t_input	**dequote(char **env, int retval, t_input **input)
 				(*input) = (*input)->next;
 			}
 			else
-				return (die(NULL, input, error_), NULL);
+				return (die(NULL, input, "Invalid input, unclosed quote", 0), NULL);
 		}
 		else
 		{

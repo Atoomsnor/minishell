@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/17 12:52:00 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/17 13:35:08 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 #include <signal.h>
+#include <stdarg.h>
 #include "../libft/libft.h"
 #include "struct.h"
 
@@ -56,10 +57,10 @@ t_input	*parse_list(t_input *input);
 t_input	**init_list(char *in);
 
 /* murder */
-void	shoot_error(t_error error);
+void	shoot_error(va_list *ptr);
 void	lynch_exec(t_exec **exec);
 void	shank_input(t_input **input);
-void	die(t_exec **exec, t_input **input, t_error error);
+void	die(t_exec **exec, t_input **input, ...);
 
 /* parser */
 void	free_array(char **array);

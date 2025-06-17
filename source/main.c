@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/17 11:30:25 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/17 14:42:57 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	shelly(char ***envp, int retval, char **hist)
 		exec = tokens_to_exec(input, *envp, retval, hist);
 		if (!exec)
 			return (1);
-		print_exec(exec[0]);
+		// print_exec(exec[0]);
 		// print_exec(exec[1]);
 		// print_exec(exec[2]);
 		shank_input(input);

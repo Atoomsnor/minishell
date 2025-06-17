@@ -6,39 +6,30 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:28:35 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/17 12:53:18 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/17 13:45:51 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <stdarg.h>
 #include <stdlib.h>
 #include <signal.h>
 #include <stdio.h>
 #include <unistd.h>
 
-int	blast_error(t_error error, t_exec *exec)
+void	shoot_error(va_list *ptr)
 {
-	if (!exec || !exec->full_cmd || !exec->full_cmd[0])
-		return (0);
-	if (error == error_input_fail)
-		ft_putstr_fd("Error input fail\n", 2);
-	else if (error == error_cmd_to_path)
-		print_strings_fd(2, exec->full_cmd[0], ": ", "command not found\n", NULL);
-	else if (error == error_fill_exec)
-		perror("Error fill_exec\n");
-	return (1);
-}
+	char *error;
 
-void	shoot_error(t_error error)
-{
-	if (error == error_input_fail)
-		ft_putstr_fd("Error input fail\n", 2);
-	else if (error == error_cmd_to_path)
-		perror("Command not found\n");
-	else if (error == error_fill_exec)
-		perror("Error fill_exec\n");
-	else if (error == 5)
-		printf("error 0\n");
+	while (1)
+	{
+		error = va_arg(*ptr, char *);
+		if (error == NULL)
+			break ;
+		ft_putstr_fd(error, 2);
+	}
+	ft_putstr_fd("\n", 2);
+	va_end(*ptr);
 }
 
 void	lynch_exec(t_exec **exec)
@@ -68,6 +59,7 @@ void	lynch_exec(t_exec **exec)
 		i++;
 	}
 	free(exec[i]);
+	free(exec);
 }
 
 void	shank_input(t_input **input)
@@ -90,16 +82,14 @@ void	shank_input(t_input **input)
 	free(input);
 }
 
-void	die(t_exec **exec, t_input **input, t_error error)
+void	die(t_exec **exec, t_input **input, ...)
 {
+	va_list ptr;
+
+	va_start(ptr, input);
+	shoot_error(&ptr);
 	if (exec)
-	{
-		if (!blast_error(error, *exec))
-			shoot_error(error);
 		lynch_exec(exec);
-	}
-	else
-		shoot_error(error);
 	if (input)
 		shank_input(input);
 }

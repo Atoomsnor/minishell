@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:36:55 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/11 13:05:30 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/17 13:43:09 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #include "../libft/libft.h"
 
-#define HISTORY_SIZE 5
+#define HISTORY_SIZE 500
 
 typedef enum e_type
 {
@@ -45,15 +45,15 @@ typedef struct s_exec
 	int		out_fd;
 }	t_exec;
 
-typedef enum e_error
-{
-	error_input_fail,
-	error_read_file_fail,
-	error_write_fail,
-	error_fill_exec,
-	error_cmd_to_path,
-	error_
-}	t_error;
+// typedef enum e_error
+// {
+// 	error_input_fail,
+// 	error_read_file_fail,
+// 	error_write_fail,
+// 	error_fill_exec,
+// 	error_cmd_to_path,
+// 	error_
+// }	t_error;
 
 typedef struct s_input
 {
