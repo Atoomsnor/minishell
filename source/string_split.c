@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   string_split.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:49:11 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/05 17:57:53 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/18 22:37:58 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,14 @@ static int	ft_len(char const *s, char c)
 
 	i = 0;
 	while (s[i] && s[i] != c)
-		i++;
+	{
+		if (s[i] == '\'' && c != '"' && s[i] != c)
+			i += ft_len(&s[i + 1], '\'') + 1;
+		else if (s[i] == '\"' && c != '\'' && s[i] != c)
+			i += ft_len(&s[i + 1], '"') + 1;
+		else
+			i++;
+	}
 	return (i);
 }
 
@@ -46,35 +53,11 @@ static char	*another_one(char const *s, char c, int *i)
 	int		w_len;
 
 	ret = NULL;
-	w_len = 0;
-	if (s[*i] == '"')
-	{
-		w_len = ft_len(&s[*i + 1], '"');
-		ret = ft_substr(s, *i, w_len + 2);
-		if (!ret)
-			return (free(ret), NULL);
-		*i += w_len + 2;
-		if (s[*i] != c)
-			ret = ft_strjoin(ret, another_one(s, c, i));
-	}
-	else if (s[*i] == '\'')
-	{
-		w_len = ft_len(&s[*i + 1], '\'');
-		ret = ft_substr(s, *i, w_len + 2);
-		if (!ret)
-			return (free(ret), NULL);
-		*i += w_len + 2;
-		if (s[*i] != c)
-			ret = ft_strjoin(ret, another_one(s, c, i));
-	}
-	else
-	{
-		w_len = ft_len(&s[*i], c);
-		ret = ft_substr(s, *i, w_len);
-		if (!ret)
-			return (free(ret), NULL);
-		*i += w_len;
-	}
+	w_len = ft_len(&s[*i], c);
+	ret = ft_substr(s, *i, w_len);
+	if (!ret)
+		return (free(ret), NULL);
+	*i += w_len;
 	return (ret);
 }
 

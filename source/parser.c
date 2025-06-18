@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/17 18:31:03 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/18 18:46:21 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ t_exec	*fill_exec(t_input **input)
 		return (free(cmd), NULL);
 	cmd->in_fd = find_in(*input);
 	if (cmd->in_fd < 0)
-		return (NULL);
+		return (die(&cmd, input, "No such file or directory\n"), NULL);
 	cmd->out_fd = find_out(*input);
 	if (cmd->out_fd < 0)
 		return (NULL);
@@ -222,7 +222,7 @@ void check_heredoc(t_input *input, char **hist)
 	while (input && input != curr)
 	{
 		if (input->type == t_heredoc && input->hd_fd == 0)
-			input->hd_fd = run_here_doc(&input, input->next->txt);
+			input->hd_fd = run_here_doc(&input, input->next->txt, hist);
 		else if (input->type == t_pipe)
 			return ;
 		input = input->next;
@@ -271,7 +271,7 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int retval, char **hist)
 			return (free(cmds), NULL);
 		cmds[i] = fill_exec(input);
 		if (!cmds[i])
-			return (die(cmds, input, "error fill exec\n"), NULL);
+			return (die(cmds, input, NULL), NULL);
 		if (cmds[i]->full_cmd)
 		{
 			cmds[i]->full_path = cmd_to_path(cmds[i]);

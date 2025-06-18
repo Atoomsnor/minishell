@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 16:16:34 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/11 19:19:31 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:50:44 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,15 @@ void	heredocsig(int signal)
 	}
 }
 
-void *here_child(t_input **input, char *delimiter)
+int	here_child(char *delimiter)
 {
 	char	*quote;
+	int		pipefd[2];
 
 	quote = NULL;
-	while (!g_signalreceived && ft_strncmp(quote, delimiter, ft_strlen(delimiter)))
+	if (pipe(pipefd) == -1)
+		return (-1);
+	while (!g_signalreceived)
 	{
 		quote = readline("> ");
 		if (!quote)
@@ -48,21 +51,28 @@ void *here_child(t_input **input, char *delimiter)
 			else 
 				break ;
 		}
-		(*input)->txt = ft_strjoin((*input)->txt, "\n");
-		(*input)->txt = ft_strjoin((*input)->txt, quote);
+		write(pipefd[1], "\n", 1);
+		write(pipefd[1], quote, ft_strlen(quote));
+		if (!ft_strncmp(quote, delimiter, ft_strlen(delimiter)))
+			break ;
 	}
+	close(pipefd[1]);
 	if (g_signalreceived)
 		g_signalreceived = 0;
-	return (NULL);
+	return (pipefd[0]);
 }
 
-int	run_here_doc(t_input **input, char *delimiter)
+int	run_here_doc(t_input **input, char *delimiter, char **hist)
 {
 	signal(SIGINT, heredocsig);
 	printf("here\n");
-	here_child(input, delimiter);
+	(*input)->hd_fd = here_child(delimiter);
+	if ((*input)->hd_fd < 0)
+		return (-1);
+	printf("outofheredoc %i\n", (*input)->hd_fd);
+	add_heredoc_hist((*input)->hd_fd, hist);
 	signal(SIGINT, sigint_handler);
-	return (0);
+	return ((*input)->hd_fd);
 }
 
 // void *quote_child(t_input **input, char quote_type)

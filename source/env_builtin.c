@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:23:46 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/17 18:29:59 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/18 22:57:24 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,11 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
+
+static int export_validity(char *str, char **env)
+{
+	
+}
 
 char	**exporting(char *str, char **env)
 {

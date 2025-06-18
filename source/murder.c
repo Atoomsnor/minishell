@@ -6,13 +6,12 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:28:35 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/17 18:33:36 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/18 18:46:28 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include <stdlib.h>
-#include <signal.h>
 #include <stdio.h>
 #include <unistd.h>
 

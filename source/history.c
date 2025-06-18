@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 14:29:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/11 19:28:04 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:50:07 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,31 +43,16 @@ void	history(char *in, char **hist)
 	}
 }
 
-void	 save_history(char *in, int send, char **hist)
-{
-	// static char *hist = NULL;
-
-	if (in)
-		*hist = ft_strjoin(*hist, in);
-	if (send == 1)
-	{
-		history(in, hist);
-		free(hist);
-		hist = NULL;
-	}
-	if (send == -1)
-	{
-		free(hist);
-		hist = NULL;
-	}
-}
-
 void	add_heredoc_hist(int fd, char **hist)
 {
 	char	*in;
 
 	in = NULL;
 	read(fd, in, INT_MAX);
-	printf("%s\n", in);
-	save_history(in, 0, hist);
+	if (fd < 0)
+		return ;
+	printf("HISTORY: %s\n", in);
+	history(in, hist);
+	if (in)
+		free(in);
 }
