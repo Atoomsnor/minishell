@@ -70,38 +70,64 @@ int	echo(int fd, char **to_write)
 	return (1);
 }
 
-int	cd(char *path)
+int	cd(char **path, char ***env)
 {
 	char	*cwd;
 	char	*joined_path;
 
-	if (!path)
+	if (!path || !path[1])
 		return (0);
+	if (path[2])
+		return (ft_putstr_fd(" too many arguments\n", 2), 0);
+	(void)env;
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 		return (0);
-	if (ft_strncmp(cwd, path, ft_strlen(cwd)) && path[0] != '/')
+	if (ft_strncmp(cwd, path[1], ft_strlen(cwd)) && path[1][0] != '/')
 	{
 		joined_path = ft_strjoin(cwd, "/");
 		if (cwd)
 			free(cwd);
-		joined_path = ft_strjoin(joined_path, path);
-		if (!chdir(joined_path))
-			return (free(joined_path), 0);
+		joined_path = ft_strjoin(joined_path, path[1]);
+		if (chdir(joined_path) == -1)
+			return (ft_putstr_fd(" No such file or directory\n", 2), free(joined_path), 0);
 	}
 	else
 	{
-		if (!chdir(path))
-			return (free(cwd), 0);
+		if (chdir(path[1]) == -1)
+			return (ft_putstr_fd(" No such file or directory\n", 2), free(cwd), 0);
 	}
 	return (1);
 }
 
 void	bi_exit(t_exec *exec, int child)
 {
+	int	ret;
+	int	i;
+
 	if (child)
 		return ;
-	(void)exec;
+	ret = 1;
+	if (exec->full_cmd[2])
+	{
+		ft_putstr_fd(" too many arguments\n", 2);
+		exit (1);
+	}
+	if (exec->full_cmd[1])
+	{
+		i = 0;
+		while (exec->full_cmd[1][i])
+		{
+			if (!ft_isdigit(exec->full_cmd[1][i]) && exec->full_cmd[1][i] != '+' && exec->full_cmd[1][i] != '-')
+			{
+				ft_putstr_fd(" numeric argument required\n", 2);
+				exit(2);
+			}
+			i++;
+		}
+		if (i > 0 && !exec->full_cmd[1][i])
+			ret = ft_atoi(exec->full_cmd[1]);
+	}
 	printf("exit\n");
-	exit(1);
+	exit(ret);
 }

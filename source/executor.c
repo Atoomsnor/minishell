@@ -16,16 +16,32 @@
 #include <sys/wait.h>
 #include <stdio.h>
 
-void	run_builtin(t_exec *exec, int fd, char ***envp, int child)
+int	run_builtin(t_exec *exec, int fd, char ***envp, int child)
 {
 	if (ft_strncmp(exec->full_cmd[0], "echo", 5) == 0)
 		echo(fd, &(exec->full_cmd[1]));
 	else if (ft_strncmp(exec->full_cmd[0], "pwd", 4) == 0)
 		pwd(fd);
 	else if (ft_strncmp(exec->full_cmd[0], "cd", 3) == 0)
-		cd(exec->full_cmd[1]);
+	{
+		if (!cd(exec->full_cmd, envp))
+		{
+			if (child)
+				exit(1);
+			return (0);
+		}
+	}
 	else if (ft_strncmp(exec->full_cmd[0], "export", 7) == 0)
-		*envp = exporting(exec->full_cmd[1], *envp);
+	{
+		
+		if (!exporting(exec->full_cmd[1], envp))
+		{
+			if (child)
+				exit(1);
+			ft_putstr_fd(" not a valid identifier\n", 2);
+			return (0);
+		}
+	}
 	else if (ft_strncmp(exec->full_cmd[0], "unset", 6) == 0)
 		unset(exec->full_cmd[1], *envp);
 	else if (ft_strncmp(exec->full_cmd[0], "exit", 5) == 0)
@@ -34,6 +50,7 @@ void	run_builtin(t_exec *exec, int fd, char ***envp, int child)
 		env(*envp, fd);
 	if (child)
 		exit(1);
+	return (1);
 }
 
 void	child(t_exec *exec, int prev_fd, int has_next, char **envp)

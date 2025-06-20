@@ -73,15 +73,15 @@ char	*cmd_to_path(t_exec *cmd);
 t_exec **tokens_to_exec(t_input **input, char **envp, int retval, char **hist);
 
 /* execute */
-void	run_builtin(t_exec *exec, int fd, char ***envp, int child);
+int		run_builtin(t_exec *exec, int fd, char ***envp, int child);
 void	child(t_exec *exec, int prev_fd, int has_next, char **envp);
 int		execute(t_exec **exec, char **envp);
 
 /* builtins */
 int		pwd(int fd);
 int		echo(int fd, char **to_write);
-int		cd(char *path);
-char	**exporting(char *str, char **env);
+int		cd(char **path, char ***env);
+int		exporting(char *str, char ***env);
 void	unset(char *name, char **env);
 void	bi_exit(t_exec *exec, int child);
 void	env(char **envp, int fd);

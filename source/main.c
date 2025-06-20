@@ -77,14 +77,15 @@ int	shelly(char ***envp, int retval, char **hist)
 		exec = tokens_to_exec(input, *envp, retval, hist);
 		if (!exec)
 			return (0);
-		// print_exec(exec[0]);
-		// print_exec(exec[1]);
-		// print_exec(exec[2]);
 		shank_input(input);
 		if (exec[1] || exec[0]->full_path[0] != '\0')
 			execute(exec, *envp);
 		else
-			run_builtin(exec[0], exec[0]->out_fd, envp, 0);
+		{
+			if (!run_builtin(exec[0], exec[0]->out_fd, envp, 0))
+				return (die(exec, NULL, NULL), 1);
+		}
+			
 		if (exec)
 			lynch_exec(exec);
 		retval = 0;
@@ -101,7 +102,7 @@ int	main(int argc, char **argv, char **envp)
 	int		retval;
 
 
-	environment = envp; //matrix copy function
+	environment = envp; //TODO matrix copy function
 	(void)argc;
 	(void)argv;
 	retval = 0;
