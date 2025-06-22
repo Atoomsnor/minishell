@@ -100,7 +100,7 @@ int	cd(char **path, char ***env)
 	return (1);
 }
 
-void	bi_exit(t_exec *exec, int child)
+void	bi_exit(t_exec *exec, int child) // TODO needs to change ret_value in main and not actually exit when error ?
 {
 	int	ret;
 	int	i;

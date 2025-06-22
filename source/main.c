@@ -79,13 +79,15 @@ int	shelly(char ***envp, int retval, char **hist)
 			return (0);
 		shank_input(input);
 		if (exec[1] || exec[0]->full_path[0] != '\0')
-			execute(exec, *envp);
+		{
+			if (!execute(exec, *envp))
+				return (die(exec, NULL, NULL), 1);
+		}
 		else
 		{
 			if (!run_builtin(exec[0], exec[0]->out_fd, envp, 0))
 				return (die(exec, NULL, NULL), 1);
 		}
-			
 		if (exec)
 			lynch_exec(exec);
 		retval = 0;
@@ -94,6 +96,25 @@ int	shelly(char ***envp, int retval, char **hist)
 	return (retval);
 }
 
+char	**ft_matdup(char **mat)
+{
+	char	**cpy;
+	int		len;
+
+	if (!mat)
+		return (NULL);
+	len = 0;
+	while (mat[len])
+		len++;
+	cpy = ft_calloc(len, sizeof(char *));
+	len = 0;
+	while(mat[len])
+	{
+		cpy[len] = ft_strdup(mat[len]);
+		len++;
+	}
+	return (cpy);
+}
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -102,7 +123,7 @@ int	main(int argc, char **argv, char **envp)
 	int		retval;
 
 
-	environment = envp; //TODO matrix copy function
+	environment = ft_matdup(envp);
 	(void)argc;
 	(void)argv;
 	retval = 0;
