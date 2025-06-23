@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:33:44 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/18 16:31:26 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/23 16:58:47 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,15 @@ int	run_builtin(t_exec *exec, int fd, char ***envp, int child)
 	else if (ft_strncmp(exec->full_cmd[0], "env", 4) == 0)
 		env(*envp, fd);
 	if (child)
-		exit(1);
+		exit(0);
 	return (1);
 }
 
 void	child(t_exec *exec, int prev_fd, int has_next, char **envp)
 {
+	int	ret;
+
+	ret = 1;
 	if (prev_fd != -1)
 	{
 		dup2(prev_fd, STDIN_FILENO);
@@ -61,8 +64,8 @@ void	child(t_exec *exec, int prev_fd, int has_next, char **envp)
 	if (exec->out_fd != STDOUT_FILENO)
 		dup2(exec->out_fd, STDOUT_FILENO);
 	if (exec->full_path && exec->full_path[0] != '\0')
-		execve(exec->full_path, exec->full_cmd, envp);
-	exit(1);
+		ret = execve(exec->full_path, exec->full_cmd, envp);
+	exit(ret);
 }
 
 void	set_fds(t_exec *exec, int *prev_fd, t_exec *next)
@@ -93,12 +96,12 @@ int	execute(t_exec **exec, char **envp)
 		if (pid == -1)
 			return (0);
 		if (pid == 0 && exec[i]->full_path[0] == '\0')
-			run_builtin(exec[i], exec[i]->out_fd, &envp, 1);
+			run_builtin(exec[i], exec[i]->pipe[1], &envp, 1);
 		else if (pid == 0)
 			child(exec[i], prev_fd, exec[i + 1] != NULL, envp);
 		else
 			set_fds(exec[i], &prev_fd, exec[i + 1]);
-		//printf("%s in: %i out: %i\n", exec[i]->full_cmd[0], exec[i]->in_fd, exec[i]->out_fd);
+		// printf("%s in: %i out: %i\n", exec[i]->full_cmd[0], exec[i]->in_fd, exec[i]->out_fd);
 		//if (exec[i + 1])
 		//	printf("%s in: %i out: %i\n", exec[i + 1]->full_cmd[0], exec[i + 1]->in_fd, exec[i + 1]->out_fd);
 		i++;
@@ -106,8 +109,8 @@ int	execute(t_exec **exec, char **envp)
 	while (i--)
 	{
 		wait(&status);
-		if (status == 256)
-			return (0);
+		if (status >= 256)
+			return (status >> 8);
 	}
 	return (1);
 }

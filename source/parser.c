@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/18 18:46:21 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/23 16:59:54 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,30 +87,53 @@ int	count_till_pipe(t_input *input)
 
 	count = 0;
 	cpy = input;
-	while (cpy && (cpy->type == t_txt || cpy->type == t_flag))
+	while (cpy && (cpy->type != t_pipe))
 	{
-		count++;
-		cpy = cpy->next;
+		if ((cpy->type == t_append || cpy->type == t_right || cpy->type == t_heredoc || cpy->type == t_left) && cpy->next && cpy->next->next)
+			cpy = cpy->next->next;
+		else if (cpy->type == t_txt || cpy->type == t_flag)
+		{
+			count++;
+			cpy = cpy->next;
+		}
+		else
+			return (count);
 	}
 	return (count);
 }
 
 int	find_in(t_input *input)
 {
+	int	fd;
+	fd = 0;
 	while (input)
 	{
 		if (input->type == t_left)
-			return (open(input->next->txt, O_RDONLY));
+			fd = open(input->next->txt, O_RDONLY);
 		else if (input->type == t_heredoc)
-			return (input->hd_fd);
+			fd = input->hd_fd;
 		else if (input->type == t_pipe)
-			return (0);
+			break;
 		if (input->prev)
 			input = input->prev;
 		else
-			return (0);
+			break;
+		if (fd < 0)
+			return (-1);
 	}
-	return (0);
+	while (input)
+	{
+		if (input->type == t_left)
+			fd = open(input->next->txt, O_RDONLY);
+		else if (input->type == t_heredoc)
+			fd = input->hd_fd;
+		else if (input->type == t_pipe)
+			break;
+		if (fd < 0)
+			return (-1);
+		input = input->next;
+	}
+	return (fd);
 }
 
 int	find_out(t_input *input)
@@ -159,11 +182,18 @@ t_exec	*fill_exec(t_input **input)
 	cmd->out_fd = find_out(*input);
 	if (cmd->out_fd < 0)
 		return (NULL);
-	while ((*input) && ((*input)->type == t_txt || (*input)->type == t_flag))
+	while ((*input) && (*input)->type != t_pipe && i < count)
 	{
 		if ((*input)->type == t_txt || (*input)->type == t_flag)
-			cmd->full_cmd[i] = ft_strdup((*input)->txt);
-		i++;
+		{
+			if ((*input)->prev && i != 0)
+			{
+				if ((*input)->prev->type == t_txt || (*input)->prev->type == t_flag)
+					cmd->full_cmd[i++] = ft_strdup((*input)->txt);
+			}
+			else
+				cmd->full_cmd[i++] = ft_strdup((*input)->txt);
+		}
 		*input = (*input)->next;
 	}
 	return (cmd);

@@ -46,6 +46,10 @@ print_strings_fd(2, exec->full_cmd[0], ": ", "command not found\n", NULL);
 // free_array is in utils.c, shove more stuff to there but theyre stattic?
 
 
+// sometimes breaks kekw
+Test  27: ❌ export HELLO=123 A 
+mini exit code = 0($
+bash exit code = 0
 
 
 

@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/18 18:47:24 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/23 17:01:15 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int	shelly(char ***envp, int retval, char **hist)
 		input = init_list(in);
 		if (!input)
 			return (1);
+		// printlist(*input, 0);
 		exec = tokens_to_exec(input, *envp, retval, hist);
 		if (!exec)
 			return (0);
@@ -86,7 +87,7 @@ int	shelly(char ***envp, int retval, char **hist)
 		else
 		{
 			if (!run_builtin(exec[0], exec[0]->out_fd, envp, 0))
-				return (die(exec, NULL, NULL), 1);
+				return (printf("error\n"), die(exec, NULL, NULL), 1);
 		}
 		if (exec)
 			lynch_exec(exec);

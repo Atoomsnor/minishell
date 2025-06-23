@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:49:11 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/18 22:37:58 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/23 17:05:42 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,23 @@ static int	ft_count(char const *s, char c)
 {
 	int	nb;
 	int	i;
+	int quote;
 
 	nb = 0;
 	i = 0;
+	quote = 0;
 	while (s[i])
 	{
-		if (s[i] != c && (i == 0 || s[i - 1] == c))
+		if (!quote && s[i] == '\'')
+			quote = '\'';
+		else if (!quote && s[i] == '"')
+			quote = '"';
+		else if (s[i] == quote)
+		{
+			nb++;
+			quote = 0;
+		}
+		else if (s[i] != c && (i == 0 || s[i - 1] == c) && !quote)
 			nb++;
 		i++;
 	}
@@ -38,9 +49,9 @@ static int	ft_len(char const *s, char c)
 	while (s[i] && s[i] != c)
 	{
 		if (s[i] == '\'' && c != '"' && s[i] != c)
-			i += ft_len(&s[i + 1], '\'') + 1;
+			i += ft_len(&s[i + 1], '\'') + 2;
 		else if (s[i] == '\"' && c != '\'' && s[i] != c)
-			i += ft_len(&s[i + 1], '"') + 1;
+			i += ft_len(&s[i + 1], '"') + 2;
 		else
 			i++;
 	}
@@ -53,11 +64,24 @@ static char	*another_one(char const *s, char c, int *i)
 	int		w_len;
 
 	ret = NULL;
-	w_len = ft_len(&s[*i], c);
-	ret = ft_substr(s, *i, w_len);
-	if (!ret)
-		return (free(ret), NULL);
-	*i += w_len;
+	w_len = *i;
+	if ((has_char((char *)&s[*i], '\'') >= 0 && s[*i] != '\'') || (s[*i] != '"' && has_char((char *)&s[*i], '"') >= 0))
+	{
+		while (s[w_len] && s[w_len] != '\'' && s[w_len] != '"')
+			w_len++;
+		ret = ft_substr(s, *i, w_len);
+		if (!ret)
+			return (free(ret), NULL);
+		*i += w_len;
+	}
+	else
+	{
+		w_len = ft_len(&s[*i], c);
+		ret = ft_substr(s, *i, w_len);
+		if (!ret)
+			return (free(ret), NULL);
+		*i += w_len;
+	}
 	return (ret);
 }
 
