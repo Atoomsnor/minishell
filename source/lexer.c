@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/23 16:57:22 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/23 17:28:57 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,12 +140,12 @@ t_input	**init_list(char *in)
 	char	*readl;
 
 	matrix = ft_string_split(in, ' ');
-	print_matrix(matrix);
+	// print_matrix(matrix);
 	input = matrix_to_list(matrix);
 	// printlist(*input, 0);
 	free_array(matrix);
 	parse_list(input[0]);
-	printlist(*input, 0);
+	// printlist(*input, 0);
 	readl = NULL;
 	while (ft_lstlast(*input)->type == t_pipe)
 	{

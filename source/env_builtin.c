@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:23:46 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/23 17:02:56 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/23 17:29:44 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,5 +117,4 @@ void	env(char **envp, int fd)
 		ft_putendl_fd(envp[i], fd);
 		i++;
 	}
-	printf("ERROR\n");
 }

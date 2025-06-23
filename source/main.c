@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/23 17:01:15 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/23 17:26:27 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ char	**ft_matdup(char **mat)
 	len = 0;
 	while (mat[len])
 		len++;
-	cpy = ft_calloc(len, sizeof(char *));
+	cpy = ft_calloc(len + 1, sizeof(char *));
 	len = 0;
 	while(mat[len])
 	{
