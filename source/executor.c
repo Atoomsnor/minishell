@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:33:44 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/23 16:58:47 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/24 10:55:22 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ int	run_builtin(t_exec *exec, int fd, char ***envp, int child)
 	else if (ft_strncmp(exec->full_cmd[0], "cd", 3) == 0)
 	{
 		if (!cd(exec->full_cmd, envp))
-			return (0);
+			return (1);
 	}
 	else if (ft_strncmp(exec->full_cmd[0], "export", 7) == 0)
 	{
 		if (!exporting(exec->full_cmd[1], envp))
-			return (ft_putstr_fd(" not a valid identifier\n", 2), 0);
+			return (ft_putstr_fd(" not a valid identifier\n", 2), 1);
 	}
 	else if (ft_strncmp(exec->full_cmd[0], "unset", 6) == 0)
 		unset(exec->full_cmd[1], *envp);
@@ -40,7 +40,7 @@ int	run_builtin(t_exec *exec, int fd, char ***envp, int child)
 		env(*envp, fd);
 	if (child)
 		exit(0);
-	return (1);
+	return (0);
 }
 
 void	child(t_exec *exec, int prev_fd, int has_next, char **envp)
@@ -112,5 +112,5 @@ int	execute(t_exec **exec, char **envp)
 		if (status >= 256)
 			return (status >> 8);
 	}
-	return (1);
+	return (0);
 }
