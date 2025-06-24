@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/24 12:05:00 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/24 17:04:54 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ int	count_till_pipe(t_input *input)
 int	find_in(t_input *input)
 {
 	int	fd;
+
 	fd = 0;
 	while (input)
 	{
@@ -112,9 +113,7 @@ int	find_in(t_input *input)
 			fd = open(input->next->txt, O_RDONLY);
 		else if (input->type == t_heredoc)
 			fd = input->hd_fd;
-		else if (input->type == t_pipe)
-			break;
-		if (input->prev)
+		if (input->prev && input->prev->type != t_pipe)
 			input = input->prev;
 		else
 			break;
@@ -178,7 +177,7 @@ t_exec	*fill_exec(t_input **input)
 		return (free(cmd), NULL);
 	cmd->in_fd = find_in(*input);
 	if (cmd->in_fd < 0)
-		return (die(NULL, NULL, "No such file or directory\n"), NULL);
+		return (die(NULL, NULL, " No such file or directory\n"), NULL);
 	cmd->out_fd = find_out(*input);
 	if (cmd->out_fd < 0)
 		return (NULL);
@@ -260,7 +259,7 @@ void check_heredoc(t_input *input, char **hist)
 	return ;
 }
 
-t_exec	**tokens_to_exec(t_input **input, char **envp, int retval, char **hist)
+t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval, char **hist)
 {
 	t_exec	**cmds;
 	t_input	*head;
@@ -296,12 +295,16 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int retval, char **hist)
 		if (!(*input))
 			return (die(cmds, input, "error fill exec\n"), NULL);
 		check_heredoc(*input, hist);
-		input = dequote(envp, retval, input);
+		input = dequote(envp, *retval, input);
+		// printlist(*input, 0);
 		if (!input)
 			return (free(cmds), NULL);
 		cmds[i] = fill_exec(input);
 		if (!cmds[i])
+		{
+			*retval = 1;
 			return (die(cmds, input, NULL), NULL);
+		}
 		if (cmds[i]->full_cmd)
 		{
 			cmds[i]->full_path = cmd_to_path(cmds[i]);

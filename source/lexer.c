@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/24 11:40:06 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/24 13:29:55 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	check_txt(t_input *input, int i)
 	int	len;
 
 	len = find_first_quote_len(input->txt) - 1;
-	if (len == -1)
+	if (len == -2)
 		len = ft_strlen(input->txt) - 1;
 	if (!ft_strncmp(&input->txt[len - i], ">>", 2))
 		return (len - i);

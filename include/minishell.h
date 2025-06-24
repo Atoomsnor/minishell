@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/24 11:14:30 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/24 17:02:03 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int		find_out(t_input *input);
 t_exec	*fill_exec(t_input **input);
 int		is_buildin(char *cmd);
 char	*cmd_to_path(t_exec *cmd);
-t_exec **tokens_to_exec(t_input **input, char **envp, int retval, char **hist);
+t_exec **tokens_to_exec(t_input **input, char **envp, int *retval, char **hist);
 
 /* execute */
 int		run_builtin(t_exec *exec, int fd, char ***envp, int child);

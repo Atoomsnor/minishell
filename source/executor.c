@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:33:44 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/24 10:55:22 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/24 16:40:04 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,10 @@ int	execute(t_exec **exec, char **envp)
 		pid = fork();
 		if (pid == -1)
 			return (0);
-		if (pid == 0 && exec[i]->full_path[0] == '\0')
+		if (pid == 0 && exec[i]->full_path[0] == '\0' && exec[i]->out_fd == 1)
 			run_builtin(exec[i], exec[i]->pipe[1], &envp, 1);
+		else if (pid == 0 && exec[i]->full_path[0] == '\0')
+			run_builtin(exec[i], exec[i]->out_fd, &envp, 1);
 		else if (pid == 0)
 			child(exec[i], prev_fd, exec[i + 1] != NULL, envp);
 		else

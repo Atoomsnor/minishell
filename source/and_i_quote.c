@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:29:22 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/18 22:39:13 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/24 16:18:47 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,23 +78,24 @@ t_input	**dequote(char **env, int retval, t_input **input)
 	len = 0;
 	len2 = 0;
 	head = *input;
-	while (*input && ((*input)->type == t_txt || (*input)->type == t_flag))
+	while (*input && ((*input)->type != t_pipe))
 	{
 		quote_type = find_first_quote(&(*input)->txt[len]);
 		if (quote_type)
 		{
-			// printf("cur (*input)->txt: %s\n", (*input)->txt);
-			// if ((*input)->next)
-			// 	printf("next (*input)->next->txt: %s\n", (*input)->next->txt);
-			len = has_char((*input)->txt, quote_type);
+			len = has_char((*input)->txt, quote_type) + len;
 			len2 = has_char(&(*input)->txt[len + 1], quote_type);
 			if (len2 != -1)
 			{
 				(*input)->txt = trim_quotes((*input)->txt, quote_type, len);
-				len += len2 + 1;
+				len += len2;
 				if (has_char((*input)->txt, '$') >= 0 && quote_type == '"')
 					(*input)->txt = handle_wildcard((*input)->txt, env, retval);
-				(*input) = (*input)->next;
+				if (has_char(&(*input)->txt[len], '\'') < 0 && has_char(&(*input)->txt[len], '"') < 0)
+				{
+					(*input) = (*input)->next;
+					len = 0;
+				}
 			}
 			else
 				return (die(NULL, input, "Invalid input, unclosed quote\n"), NULL);
