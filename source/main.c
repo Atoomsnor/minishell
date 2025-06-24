@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/24 17:03:57 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/24 18:31:21 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,17 +85,16 @@ int	shelly(char ***envp, int retval, char **hist)
 		if (exec[1] || exec[0]->full_path[0] != '\0')
 		{
 			retval = execute(exec, *envp);
-			if (!retval)
-				return (die(exec, NULL, NULL), retval);
+			return (die(exec, NULL, NULL), retval);
 		}
 		else
 		{
 			retval = run_builtin(exec[0], exec[0]->out_fd, envp, 0);
-			if (!retval)
-				return (die(exec, NULL, NULL), retval);
+			return (die(exec, NULL, NULL), retval);
 		}
 		if (exec)
 			lynch_exec(exec);
+		retval = 0;
 		//save_history(NULL, 1, hist);
 	}
 	return (retval);

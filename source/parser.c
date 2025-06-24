@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/24 17:04:54 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/24 18:36:21 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,6 +259,20 @@ void check_heredoc(t_input *input, char **hist)
 	return ;
 }
 
+int	has_type(t_input *input, t_type type)
+{
+	t_input	*cpy;
+
+	cpy = input;
+	while	(cpy)
+	{
+		if (cpy->type == type)
+			return (1);
+		cpy = cpy->next;
+	}
+	return (0);
+}
+
 t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval, char **hist)
 {
 	t_exec	**cmds;
@@ -300,7 +314,7 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval, char **hist)
 		if (!input)
 			return (free(cmds), NULL);
 		cmds[i] = fill_exec(input);
-		if (!cmds[i])
+		if (!cmds[i] && !has_type(*input, t_pipe))
 		{
 			*retval = 1;
 			return (die(cmds, input, NULL), NULL);

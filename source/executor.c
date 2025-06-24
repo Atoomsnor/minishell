@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:33:44 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/24 16:40:04 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/24 18:01:15 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ void	child(t_exec *exec, int prev_fd, int has_next, char **envp)
 		dup2(exec->out_fd, STDOUT_FILENO);
 	if (exec->full_path && exec->full_path[0] != '\0')
 		ret = execve(exec->full_path, exec->full_cmd, envp);
+	else
+		run_builtin(exec, exec->out_fd, &envp, 1);
 	exit(ret);
 }
 
@@ -95,11 +97,11 @@ int	execute(t_exec **exec, char **envp)
 		pid = fork();
 		if (pid == -1)
 			return (0);
-		if (pid == 0 && exec[i]->full_path[0] == '\0' && exec[i]->out_fd == 1)
-			run_builtin(exec[i], exec[i]->pipe[1], &envp, 1);
-		else if (pid == 0 && exec[i]->full_path[0] == '\0')
-			run_builtin(exec[i], exec[i]->out_fd, &envp, 1);
-		else if (pid == 0)
+		// if (pid == 0 && exec[i]->full_path[0] == '\0' && exec[i]->out_fd == 1)
+		// 	run_builtin(exec[i], exec[i]->pipe[1], &envp, 1);
+		// else if (pid == 0 && exec[i]->full_path[0] == '\0')
+		// 	run_builtin(exec[i], exec[i]->out_fd, &envp, 1);
+		if (pid == 0)
 			child(exec[i], prev_fd, exec[i + 1] != NULL, envp);
 		else
 			set_fds(exec[i], &prev_fd, exec[i + 1]);

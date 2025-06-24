@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:36:55 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/17 13:43:09 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/24 18:32:21 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,5 @@ typedef struct s_var
 } t_var;
 
 /* struct utils*/
-int has_type(t_input *input, ...);
 
 #endif
