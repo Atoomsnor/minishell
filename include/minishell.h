@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/18 16:33:19 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/24 11:14:30 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ void	env(char **envp, int fd);
 /* quote */
 t_input	**dequote(char **env, int retval, t_input **input);
 // int		print_strings_fd(int fd, ...);
+char	find_first_quote(char *str);
 int		has_char(char *str, char c);
 
 /* wildcard */

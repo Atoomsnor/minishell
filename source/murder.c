@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:28:35 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/18 18:46:28 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/24 12:04:23 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ void	lynch_exec(t_exec **exec)
 			}
 			free(exec[i]->full_cmd);
 		}
-		free(exec[i]);
+		if (exec[i])
+			free(exec[i]);
 		exec[i] = NULL;
 		i++;
 	}
@@ -57,7 +58,7 @@ void	shank_input(t_input **input)
 	if (!input)
 		return ;
 	next = NULL;
-	if (*input && *input != (*input)->head)
+	if (*input && (*input)->head &&  *input != (*input)->head)
 		*input = (*input)->head;
 	while (*input)
 	{
@@ -65,18 +66,17 @@ void	shank_input(t_input **input)
 			free((*input)->txt);
 		next = (*input)->next;
 		free((*input));
+		*input = NULL;
 		(*input) = next;
 	}
 	free(input);
+	input = NULL;
 }
 
 void	die(t_exec **exec, t_input **input, char *error)
 {
-	if (error)
-	{
+	if (error != NULL)
 		ft_putstr_fd(error, 2);
-		free(error);
-	}
 	if (exec)
 		lynch_exec(exec);
 	if (input)

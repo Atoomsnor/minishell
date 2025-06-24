@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/23 16:59:54 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/24 12:05:00 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ t_exec	*fill_exec(t_input **input)
 		return (free(cmd), NULL);
 	cmd->in_fd = find_in(*input);
 	if (cmd->in_fd < 0)
-		return (die(&cmd, input, "No such file or directory\n"), NULL);
+		return (die(NULL, NULL, "No such file or directory\n"), NULL);
 	cmd->out_fd = find_out(*input);
 	if (cmd->out_fd < 0)
 		return (NULL);

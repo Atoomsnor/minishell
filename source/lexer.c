@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/23 17:28:57 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/24 11:40:06 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,29 @@ t_type	find_type(char *in)
 		return (t_txt);
 }
 
+char	find_first_quote_len(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\'')
+			return (i + 1);
+		if (str[i] == '"')
+			return (i + 1);
+		i++;
+	}
+	return (-1);
+}
+
 int	check_txt(t_input *input, int i)
 {
 	int	len;
 
-	len = ft_strlen(input->txt) - 1;
+	len = find_first_quote_len(input->txt) - 1;
+	if (len == -1)
+		len = ft_strlen(input->txt) - 1;
 	if (!ft_strncmp(&input->txt[len - i], ">>", 2))
 		return (len - i);
 	else if (!ft_strncmp(&input->txt[len - i], "<<", 2))
@@ -89,6 +107,8 @@ void	printlist(t_input *c, int i)
 	printf("---LIST END---\n");
 }
 
+
+
 t_input	*parse_list(t_input *input)
 {
 	t_input	*cpy;
@@ -106,9 +126,11 @@ t_input	*parse_list(t_input *input)
 	while (cpy)
 	{
 		i = -1;
-		if ((cpy->type == t_txt || cpy->type == t_flag) && has_char(cpy->txt, '\'') < 0 && has_char(cpy->txt, '\"') < 0)
+		if ((cpy->type == t_txt || cpy->type == t_flag))
 		{
-			len = ft_strlen(cpy->txt);
+			len = find_first_quote_len(cpy->txt);
+			if (len == -1)
+				len = ft_strlen(cpy->txt);
 			while (len-- > 0 && i == -1)
 				i = check_txt(cpy, len);
 			if (i == 0)
