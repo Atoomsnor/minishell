@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/25 18:33:19 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/25 19:09:48 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,39 +295,44 @@ int	has_type(t_input *input, t_type type)
 	return (0);
 }
 
+void	rotate_input(t_input **input)
+{
+	while (*input)
+	{
+		// if (((*input)->type == t_flag || (*input)->type == t_txt) && (((*input)->prev && ((*input)->prev->type == t_left || (*input)->prev->type == t_heredoc)) && ((*input)->next && ((*input)->next->type == t_right || (*input)->next->type == t_append))))
+		// 	(*input) = (*input)->next;
+		if ((*input) && (*input)->next && ((*input)->type == t_append || (*input)->type == t_right) && !(*input)->next->next)
+		{
+			if ((*input)->prev)
+				(*input) = (*input)->prev;
+			return ;
+		}
+		else if (((*input)->type == t_flag || (*input)->type == t_txt) && (*input)->prev && ((*input)->prev->type == t_left || (*input)->prev->type == t_heredoc))
+			(*input) = (*input)->next;
+		else if (((*input)->type == t_flag || (*input)->type == t_txt) && (*input)->prev && ((*input)->prev->type == t_right || (*input)->prev->type == t_append))
+			(*input) = (*input)->next;
+		else if ((*input)->type == t_flag || (*input)->type == t_txt)
+			return ;
+		else
+			(*input) = (*input)->next;
+	}
+}
+
 t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval, char **hist)
 {
 	t_exec	**cmds;
-	t_input	*head;
+	char	*error_msg;
 	int		count;
 	int		i;
 
 	count = count_cmds(*input);
 	cmds = ft_calloc(count + 1, sizeof(t_exec *));
 	i = 0;
-	head = *input;
+	// head = *input;
 	// printlist(*input, 1);
 	while (i < count)
 	{
-		while (*input)
-		{
-			// if (((*input)->type == t_flag || (*input)->type == t_txt) && (((*input)->prev && ((*input)->prev->type == t_left || (*input)->prev->type == t_heredoc)) && ((*input)->next && ((*input)->next->type == t_right || (*input)->next->type == t_append))))
-			// 	(*input) = (*input)->next;
-			if ((*input) && (*input)->next && ((*input)->type == t_append || (*input)->type == t_right) && !(*input)->next->next)
-			{
-				if ((*input)->prev)
-					(*input) = (*input)->prev;
-				break ;
-			}
-			else if (((*input)->type == t_flag || (*input)->type == t_txt) && (*input)->prev && ((*input)->prev->type == t_left || (*input)->prev->type == t_heredoc))
-				(*input) = (*input)->next;
-			else if (((*input)->type == t_flag || (*input)->type == t_txt) && (*input)->prev && ((*input)->prev->type == t_right || (*input)->prev->type == t_append))
-				(*input) = (*input)->next;
-			else if ((*input)->type == t_flag || (*input)->type == t_txt)
-				break ;
-			else
-				(*input) = (*input)->next;
-		}
+		rotate_input(input);
 		if (!(*input))
 			return (die(cmds, input, "error fill exec\n"), NULL);
 		check_heredoc(*input, hist);
@@ -341,7 +346,9 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval, char **hist)
 			*retval = 1;
 			return (die(cmds, input, NULL), NULL);
 		}
-		if (cmds[i]->full_cmd)
+		else if (!cmds[i])
+			
+		if (cmds[i] && cmds[i]->full_cmd)
 		{
 			cmds[i]->full_path = cmd_to_path(cmds[i]);
 			if (!cmds[i]->full_path)
@@ -349,6 +356,5 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval, char **hist)
 		}
 		i++;
 	}
-	*input = head;
 	return (cmds);
 }

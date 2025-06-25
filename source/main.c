@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/24 18:31:21 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/25 19:08:16 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int	shelly(char ***envp, int retval, char **hist)
 {
 	t_input	**input;
 	t_exec	**exec;
+	t_input	*head;
 	char	*in;
 
 	exec = NULL;
@@ -75,9 +76,11 @@ int	shelly(char ***envp, int retval, char **hist)
 		if (!input)
 			return (1);
 		// printlist(*input, 0);
+		head = *input;
 		exec = tokens_to_exec(input, *envp, &retval, hist);
 		if (!exec)
 			return (retval);
+		*input = head;
 		shank_input(input);
 		// print_exec(exec[0]);
 		// if (exec[1])
