@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:36:55 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/24 18:32:21 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/25 20:41:17 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct s_exec
 {
 	char	**full_cmd;
 	char	*full_path;
+	char	*err_msg;
 	int		pipe[2];
 	int		in_fd;
 	int		out_fd;

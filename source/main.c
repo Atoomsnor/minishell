@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/25 19:08:16 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/25 20:53:03 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,19 @@ char	*skip_spaces(char *in)
 	return (NULL);
 }
 
+void check_write_error(t_exec **exec)
+{
+	int	i;
+
+	i = 0;
+	while (exec[i])
+	{
+		if (exec[i]->err_msg)
+			ft_putstr_fd(exec[i]->err_msg, 2);
+		i++;
+	}
+}
+
 int	shelly(char ***envp, int retval, char **hist)
 {
 	t_input	**input;
@@ -88,11 +101,13 @@ int	shelly(char ***envp, int retval, char **hist)
 		if (exec[1] || exec[0]->full_path[0] != '\0')
 		{
 			retval = execute(exec, *envp);
+			check_write_error(exec);
 			return (die(exec, NULL, NULL), retval);
 		}
 		else
 		{
 			retval = run_builtin(exec[0], exec[0]->out_fd, envp, 0);
+			check_write_error(exec);
 			return (die(exec, NULL, NULL), retval);
 		}
 		if (exec)

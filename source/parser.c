@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/25 19:09:48 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/25 20:52:38 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,7 @@ int	find_out(t_input *input)
 	return (fd);
 }
 
-t_exec	*fill_exec(t_input **input)
+t_exec	*fill_exec(t_input **input, char **error_msg)
 {
 	t_exec	*cmd;
 	int		count;
@@ -195,7 +195,7 @@ t_exec	*fill_exec(t_input **input)
 		return (free(cmd), NULL);
 	cmd->in_fd = find_in(*input);
 	if (cmd->in_fd == -1)
-		return (die(NULL, NULL, " No such file or directory\n"), NULL);
+		return (ft_strmcpy(error_msg, " No such file or directory\n"), NULL);
 	else if (cmd->in_fd == -2)
 		return (die(NULL, NULL, " Permission denied\n"), NULL);
 	cmd->out_fd = find_out(*input);
@@ -318,6 +318,15 @@ void	rotate_input(t_input **input)
 	}
 }
 
+int	rotate_past_pipe(t_input **input, int count)
+{
+	while (*input && (*input)->type != t_pipe)
+		*input = (*input)->next;
+	if (*input && (*input)->type == t_pipe)
+		*input = (*input)->next;
+	return (count - 1);
+}
+
 t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval, char **hist)
 {
 	t_exec	**cmds;
@@ -328,8 +337,7 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval, char **hist)
 	count = count_cmds(*input);
 	cmds = ft_calloc(count + 1, sizeof(t_exec *));
 	i = 0;
-	// head = *input;
-	// printlist(*input, 1);
+	error_msg = NULL;
 	while (i < count)
 	{
 		rotate_input(input);
@@ -337,24 +345,25 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval, char **hist)
 			return (die(cmds, input, "error fill exec\n"), NULL);
 		check_heredoc(*input, hist);
 		input = dequote(envp, *retval, input);
-		// printlist(*input, 0);
 		if (!input)
 			return (free(cmds), NULL);
-		cmds[i] = fill_exec(input);
+		cmds[i] = fill_exec(input, &error_msg);
 		if (!cmds[i] && !has_type(*input, t_pipe))
 		{
 			*retval = 1;
-			return (die(cmds, input, NULL), NULL);
+			return (die(cmds, input, error_msg), NULL);
 		}
 		else if (!cmds[i])
-			
-		if (cmds[i] && cmds[i]->full_cmd)
+			count = rotate_past_pipe(input, count);
+		else
 		{
 			cmds[i]->full_path = cmd_to_path(cmds[i]);
 			if (!cmds[i]->full_path)
 				return (die(cmds, input, ft_strjoin(cmds[i]->full_cmd[0], " : command not found\n")), NULL); // fix so die prints correct error
+			if (error_msg)
+				cmds[i]->err_msg = error_msg;
+			i++;
 		}
-		i++;
 	}
 	return (cmds);
 }

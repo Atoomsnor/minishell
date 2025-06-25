@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/24 17:02:03 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/25 20:51:34 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int		count_cmds(t_input *input);
 int		count_till_pipe(t_input *input);
 int		find_in(t_input *input);
 int		find_out(t_input *input);
-t_exec	*fill_exec(t_input **input);
+t_exec	*fill_exec(t_input **input, char **error_msg);
 int		is_buildin(char *cmd);
 char	*cmd_to_path(t_exec *cmd);
 t_exec **tokens_to_exec(t_input **input, char **envp, int *retval, char **hist);
@@ -88,7 +88,6 @@ void	env(char **envp, int fd);
 
 /* quote */
 t_input	**dequote(char **env, int retval, t_input **input);
-// int		print_strings_fd(int fd, ...);
 char	find_first_quote(char *str);
 int		has_char(char *str, char c);
 
@@ -98,5 +97,9 @@ char	*handle_wildcard(char *str, char **env, int retval);
 /* heredoc */
 int		run_here_doc(t_input **input, char *delimiter, char **hist);
 void	printlist(t_input *c, int i);
+
+/* utils */
+size_t	ft_strmcpy(char **dest, const char *src);
+void	free_str(char *str);
 
 #endif
