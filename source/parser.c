@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/24 18:36:21 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:33:19 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,13 @@ int	find_in(t_input *input)
 	while (input)
 	{
 		if (input->type == t_left)
+		{
+			if (access(input->next->txt, F_OK) != 0)
+				return (-1);
+			if (access(input->next->txt, R_OK) != 0)
+				return (-2);
 			fd = open(input->next->txt, O_RDONLY);
+		}
 		else if (input->type == t_heredoc)
 			fd = input->hd_fd;
 		if (input->prev && input->prev->type != t_pipe)
@@ -123,7 +129,13 @@ int	find_in(t_input *input)
 	while (input)
 	{
 		if (input->type == t_left)
+		{
+			if (access(input->next->txt, F_OK) != 0)
+				return (-1);
+			if (access(input->next->txt, R_OK) != 0)
+				return (-2);
 			fd = open(input->next->txt, O_RDONLY);
+		}
 		else if (input->type == t_heredoc)
 			fd = input->hd_fd;
 		else if (input->type == t_pipe)
@@ -146,12 +158,18 @@ int	find_out(t_input *input)
 		{
 			if (fd > 1)
 				close(fd);
+			if (access(input->next->txt, F_OK) == 0)
+				if (access(input->next->txt, W_OK) != 0)
+					return (-2);
 			fd = open(input->next->txt, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		}
 		else if (input->type == t_append)
 		{
 			if (fd > 1)
 				close(fd);
+			if (access(input->next->txt, F_OK) == 0)
+				if (access(input->next->txt, W_OK) != 0)
+					return (-2);
 			fd = open(input->next->txt, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		}
 		else if (input->type == t_pipe)
@@ -176,11 +194,15 @@ t_exec	*fill_exec(t_input **input)
 	if (!cmd->full_cmd)
 		return (free(cmd), NULL);
 	cmd->in_fd = find_in(*input);
-	if (cmd->in_fd < 0)
+	if (cmd->in_fd == -1)
 		return (die(NULL, NULL, " No such file or directory\n"), NULL);
+	else if (cmd->in_fd == -2)
+		return (die(NULL, NULL, " Permission denied\n"), NULL);
 	cmd->out_fd = find_out(*input);
-	if (cmd->out_fd < 0)
+	if (cmd->out_fd < 0 && cmd->out_fd != -2)
 		return (NULL);
+	else if (cmd->out_fd == -2)
+		return ((die(NULL, NULL, " Permission denied\n"), NULL));
 	while ((*input) && (*input)->type != t_pipe && i < count)
 	{
 		if ((*input)->type == t_txt || (*input)->type == t_flag)

@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:29:22 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/24 16:18:47 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:17:00 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,14 @@ char	*trim_quotes(char *str, char quote, int start)
 		return (NULL);
 	ret = str;
 	ft_memmove(&ret[start], &ret[start + 1], ft_strlen(&ret[start]));
+	(void)quote;
 	while (str[start])
 	{
 		if (str[start] == quote)
+		{
 			ft_memmove(&ret[start], &ret[start + 1], ft_strlen(&ret[start]));
+			break;
+		}
 		start++;
 	}
 	return (ret);
@@ -83,7 +87,7 @@ t_input	**dequote(char **env, int retval, t_input **input)
 		quote_type = find_first_quote(&(*input)->txt[len]);
 		if (quote_type)
 		{
-			len = has_char((*input)->txt, quote_type) + len;
+			len = has_char(&(*input)->txt[len], quote_type) + len;
 			len2 = has_char(&(*input)->txt[len + 1], quote_type);
 			if (len2 != -1)
 			{
