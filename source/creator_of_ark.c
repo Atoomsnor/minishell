@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   creator_of_ark.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 12:48:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/23 12:11:46 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/27 13:25:08 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,6 @@ char	*handle_wildcard(char *str, char **env, int retval)
 	str = remove_wildcard(str, var_name, wc, i + 1);
 	str[ft_strlen(str)] = '\0';
 	if (has_char(&str[i + 1], '$') >= 0)
-		str = ft_strjoin(ft_substr(str, 0, &str[i + 1] - str),handle_wildcard(&str[i + 1], env, retval));
+		str = ft_strjoin(ft_substr(str, 0, &str[i + 1] - str), handle_wildcard(&str[i + 1], env, retval));
 	return (str);
 }

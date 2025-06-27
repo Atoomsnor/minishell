@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/25 20:53:03 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/27 13:27:10 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*skip_spaces(char *in)
 	return (NULL);
 }
 
-void check_write_error(t_exec **exec)
+void	check_write_error(t_exec **exec)
 {
 	int	i;
 
@@ -130,7 +130,7 @@ char	**ft_matdup(char **mat)
 		len++;
 	cpy = ft_calloc(len + 1, sizeof(char *));
 	len = 0;
-	while(mat[len])
+	while (mat[len])
 	{
 		cpy[len] = ft_strdup(mat[len]);
 		len++;
@@ -143,7 +143,6 @@ int	main(int argc, char **argv, char **envp)
 	char	*hist[HISTORY_SIZE];
 	char	**environment;
 	int		retval;
-
 
 	environment = ft_matdup(envp);
 	(void)argc;

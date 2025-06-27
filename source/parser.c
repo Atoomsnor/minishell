@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/25 20:52:38 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/27 13:36:38 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,9 @@ int	count_till_pipe(t_input *input)
 	cpy = input;
 	while (cpy && (cpy->type != t_pipe))
 	{
-		if ((cpy->type == t_append || cpy->type == t_right || cpy->type == t_heredoc || cpy->type == t_left) && cpy->next && cpy->next->next)
+		if ((cpy->type == t_append || cpy->type == t_right
+				|| cpy->type == t_heredoc || cpy->type == t_left)
+					&& cpy->next && cpy->next->next)
 			cpy = cpy->next->next;
 		else if (cpy->type == t_txt || cpy->type == t_flag)
 		{
@@ -122,7 +124,7 @@ int	find_in(t_input *input)
 		if (input->prev && input->prev->type != t_pipe)
 			input = input->prev;
 		else
-			break;
+			break ;
 		if (fd < 0)
 			return (-1);
 	}
@@ -139,7 +141,7 @@ int	find_in(t_input *input)
 		else if (input->type == t_heredoc)
 			fd = input->hd_fd;
 		else if (input->type == t_pipe)
-			break;
+			break ;
 		if (fd < 0)
 			return (-1);
 		input = input->next;
@@ -262,13 +264,14 @@ char	*cmd_to_path(t_exec *cmd)
 	return (ret);
 }
 
-void check_heredoc(t_input *input, char **hist)
+void	check_heredoc(t_input *input, char **hist)
 {
-	t_input *curr;
+	t_input	*curr;
 
 	curr = input;
 	(void)hist;
-	while (input && input != input->head && input->type != t_pipe && input->prev)
+	while (input && input != input->head
+		&& input->type != t_pipe && input->prev)
 		input = input->prev;
 	while (input && input != curr)
 	{
@@ -286,7 +289,7 @@ int	has_type(t_input *input, t_type type)
 	t_input	*cpy;
 
 	cpy = input;
-	while	(cpy)
+	while (cpy)
 	{
 		if (cpy->type == type)
 			return (1);
@@ -301,15 +304,20 @@ void	rotate_input(t_input **input)
 	{
 		// if (((*input)->type == t_flag || (*input)->type == t_txt) && (((*input)->prev && ((*input)->prev->type == t_left || (*input)->prev->type == t_heredoc)) && ((*input)->next && ((*input)->next->type == t_right || (*input)->next->type == t_append))))
 		// 	(*input) = (*input)->next;
-		if ((*input) && (*input)->next && ((*input)->type == t_append || (*input)->type == t_right) && !(*input)->next->next)
+		if ((*input) && (*input)->next && ((*input)->type == t_append
+				|| (*input)->type == t_right) && !(*input)->next->next)
 		{
 			if ((*input)->prev)
 				(*input) = (*input)->prev;
 			return ;
 		}
-		else if (((*input)->type == t_flag || (*input)->type == t_txt) && (*input)->prev && ((*input)->prev->type == t_left || (*input)->prev->type == t_heredoc))
+		else if (((*input)->type == t_flag || (*input)->type == t_txt)
+			&& (*input)->prev && ((*input)->prev->type == t_left
+				|| (*input)->prev->type == t_heredoc))
 			(*input) = (*input)->next;
-		else if (((*input)->type == t_flag || (*input)->type == t_txt) && (*input)->prev && ((*input)->prev->type == t_right || (*input)->prev->type == t_append))
+		else if (((*input)->type == t_flag || (*input)->type == t_txt)
+			&& (*input)->prev && ((*input)->prev->type == t_right
+				|| (*input)->prev->type == t_append))
 			(*input) = (*input)->next;
 		else if ((*input)->type == t_flag || (*input)->type == t_txt)
 			return ;

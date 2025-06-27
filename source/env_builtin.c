@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_builtin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:23:46 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/23 17:29:44 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/27 13:17:58 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-static int export_validity(char *str, char **env)
+static int	export_validity(char *str, char **env)
 {
 	int	len;
 	int	i;
@@ -31,7 +31,8 @@ static int export_validity(char *str, char **env)
 	{
 		if (!ft_isalpha(str[i]))
 		{
-			if (!has_alpha || !(has_alpha && (ft_isdigit(str[i]) || str[i] == '_')))
+			if (!has_alpha || !(has_alpha
+				&& (ft_isdigit(str[i]) || str[i] == '_')))
 				return (0);
 		}
 		else

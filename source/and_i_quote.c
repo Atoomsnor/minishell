@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   and_i_quote.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:29:22 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/25 18:17:00 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/27 13:22:27 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ char	*trim_quotes(char *str, char quote, int start)
 		if (str[start] == quote)
 		{
 			ft_memmove(&ret[start], &ret[start + 1], ft_strlen(&ret[start]));
-			break;
+			break ;
 		}
 		start++;
 	}
@@ -72,11 +72,10 @@ char	*trim_quotes(char *str, char quote, int start)
 
 t_input	**dequote(char **env, int retval, t_input **input)
 {
-
 	char	quote_type;
 	int		len;
 	int		len2;
-	t_input *head;
+	t_input	*head;
 
 	quote_type = 0;
 	len = 0;
@@ -95,7 +94,8 @@ t_input	**dequote(char **env, int retval, t_input **input)
 				len += len2;
 				if (has_char((*input)->txt, '$') >= 0 && quote_type == '"')
 					(*input)->txt = handle_wildcard((*input)->txt, env, retval);
-				if (has_char(&(*input)->txt[len], '\'') < 0 && has_char(&(*input)->txt[len], '"') < 0)
+				if (has_char(&(*input)->txt[len], '\'') < 0
+					&& has_char(&(*input)->txt[len], '"') < 0)
 				{
 					(*input) = (*input)->next;
 					len = 0;
