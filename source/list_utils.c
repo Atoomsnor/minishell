@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:13:12 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/05/22 15:32:58 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/27 16:33:08 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void	ft_lstdelone(t_input *lst)
 	if (lst->txt)
 		free(lst->txt);
 	free(lst);
+	lst = NULL;
 }
 
 void	ft_lstadd_next(t_input **lst, t_input *new_lst)

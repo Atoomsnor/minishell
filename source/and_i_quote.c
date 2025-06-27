@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   and_i_quote.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:29:22 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/27 13:22:27 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/27 16:05:39 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ t_input	**dequote(char **env, int retval, t_input **input)
 				}
 			}
 			else
-				return (die(NULL, input, "Invalid input, unclosed quote\n"), NULL);
+				return (die(NULL, input, "Invalid input, unclosed quote\n", NULL), NULL);
 		}
 		else
 		{

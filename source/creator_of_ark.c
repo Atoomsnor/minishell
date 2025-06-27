@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   creator_of_ark.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 12:48:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/27 13:25:08 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/27 16:02:02 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 
 char	*find_var_in_env(char *var_name, char **env)
 {
@@ -72,7 +74,7 @@ char	*set_var_name(char *str, char **env, int retval, int *i)
 	{
 		var_name = find_var_in_env(var_name, env);
 		if (!var_name)
-			return (NULL);
+			return ("");
 		var_name = trim_var_name(var_name);
 	}
 	return (var_name);
@@ -104,6 +106,8 @@ char	*handle_wildcard(char *str, char **env, int retval)
 	var_name = set_var_name(str, env, retval, &i);
 	if (!var_name)
 		return (str);
+	if (var_name[0] == '\0')
+		return (ft_strdup(""));
 	str = remove_wildcard(str, var_name, wc, i + 1);
 	str[ft_strlen(str)] = '\0';
 	if (has_char(&str[i + 1], '$') >= 0)

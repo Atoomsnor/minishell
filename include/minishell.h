@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/25 20:51:34 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/27 14:36:48 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ t_input	**init_list(char *in);
 /* murder */
 void	lynch_exec(t_exec **exec);
 void	shank_input(t_input **input);
-void	die(t_exec **exec, t_input **input, char *error);
+void	*die(t_exec **exec, t_input **input, char *error, void *ret);
 
 /* parser */
 void	free_array(char **array);
@@ -69,7 +69,7 @@ int		find_in(t_input *input);
 int		find_out(t_input *input);
 t_exec	*fill_exec(t_input **input, char **error_msg);
 int		is_buildin(char *cmd);
-char	*cmd_to_path(t_exec *cmd);
+char	*cmd_to_path(t_exec *cmd, char **error_msg);
 t_exec **tokens_to_exec(t_input **input, char **envp, int *retval, char **hist);
 
 /* execute */

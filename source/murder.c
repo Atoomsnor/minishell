@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:28:35 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/24 12:04:23 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/27 14:38:02 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,14 @@ void	shank_input(t_input **input)
 	input = NULL;
 }
 
-void	die(t_exec **exec, t_input **input, char *error)
+void	*die(t_exec **exec, t_input **input, char *error, void *ret)
 {
+	(void)ret;
 	if (error != NULL)
 		ft_putstr_fd(error, 2);
 	if (exec)
 		lynch_exec(exec);
 	if (input)
 		shank_input(input);
+	return (NULL);
 }

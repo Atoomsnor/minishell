@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/27 13:36:38 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/27 17:08:22 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <dirent.h>
 
 char	**split_paths(void)
 {
@@ -199,12 +200,12 @@ t_exec	*fill_exec(t_input **input, char **error_msg)
 	if (cmd->in_fd == -1)
 		return (ft_strmcpy(error_msg, " No such file or directory\n"), NULL);
 	else if (cmd->in_fd == -2)
-		return (die(NULL, NULL, " Permission denied\n"), NULL);
+		return (die(NULL, NULL, " Permission denied\n", NULL), NULL);
 	cmd->out_fd = find_out(*input);
 	if (cmd->out_fd < 0 && cmd->out_fd != -2)
 		return (NULL);
 	else if (cmd->out_fd == -2)
-		return ((die(NULL, NULL, " Permission denied\n"), NULL));
+		return ((die(NULL, NULL, " Permission denied\n", NULL), NULL));
 	while ((*input) && (*input)->type != t_pipe && i < count)
 	{
 		if ((*input)->type == t_txt || (*input)->type == t_flag)
@@ -241,7 +242,16 @@ int	is_buildin(char *cmd)
 	return (0);
 }
 
-char	*cmd_to_path(t_exec *cmd)
+void *adjust_error(char **error_msg, char *err1, char *err2)
+{
+	if (err1)
+		*error_msg = ft_strjoin(*error_msg, err1);
+	if (err2)
+		*error_msg = ft_strjoin(*error_msg, err2);
+	return (NULL);
+}
+
+char	*cmd_to_path(t_exec *cmd, char **error_msg)
 {
 	char	**paths;
 	char	*ret;
@@ -252,15 +262,17 @@ char	*cmd_to_path(t_exec *cmd)
 		if (access(cmd->full_cmd[0], F_OK | X_OK) == 0)
 			return (cmd->full_cmd[0]);
 		else
-			return (NULL);
+			return (adjust_error(error_msg, cmd->full_cmd[0], ": command not found\n"));
 	}
 	if (is_buildin(cmd->full_cmd[0]))
 		return ("");
 	paths = split_paths();
 	if (!paths)
-		return (NULL);
+		return (adjust_error(error_msg, cmd->full_cmd[0], ": command not found\n"));
 	ret = find_path(paths, cmd->full_cmd[0]);
 	free_array(paths);
+	if (!ret)
+		adjust_error(error_msg, cmd->full_cmd[0], ": command not found\n");
 	return (ret);
 }
 
@@ -335,6 +347,82 @@ int	rotate_past_pipe(t_input **input, int count)
 	return (count - 1);
 }
 
+void *set_retval(int *retval, int val)
+{
+	*retval = val;
+	return (NULL);
+}
+
+int	check_dir(char *str, char **error_msg)
+{
+	DIR *dir;
+
+	if (!str)
+		return (0);
+	if (str[0] == '/')
+	{
+		dir = opendir(str);
+		if (dir)
+		{
+			closedir(dir);
+			*error_msg = ft_strjoin(str, ": Is a directory\n");
+			return (0);
+		}
+	}
+	return (1);
+}
+
+void ft_lstcopy(t_input *input, t_input *next)
+{
+	input->next = next->next;
+	printf("%p %p %p\n", input->next , input->next->next, next->next);
+	input->hd_fd = next->hd_fd;
+	if (input->txt)
+		free(input->txt);
+	input->txt = ft_strdup(next->txt);
+	input->type = next->type;
+}
+
+t_input	**check_empty_txt(t_input **input)
+{
+	t_input *head;
+	t_input *next;
+
+	head = *input;
+	printf("%p %p\n", (*input)->next, (*input)->next->next);
+	while (*input)
+	{
+		next = (*input)->next;
+		printf("str %s\n", (*input)->txt);
+		if ((*input)->txt && (*input)->txt[0] == '\0')
+		{
+			printf("pr %s\n", (*input)->txt);
+			if (*input == head && next)
+			{
+				ft_lstcopy(*input, (*input)->next);
+				printf("%p %p\n", (*input)->next, (*input)->next->next);
+				next = *input;
+				ft_lstdelone((*input)->next);
+			}
+			else if (*input == head && !next)
+			{
+				shank_input(input);
+				return (NULL);
+			}
+			else
+				ft_lstdelone(*input);
+			printf("gogogoo\n");
+		}
+		printf("segging %s\n", (*input)->txt);
+		*input = next;
+	}
+	*input = head;
+	printf("seg\n");
+	if (!input || !(*input))
+		return (NULL);
+	return (input);
+}
+
 t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval, char **hist)
 {
 	t_exec	**cmds;
@@ -344,34 +432,51 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval, char **hist)
 
 	count = count_cmds(*input);
 	cmds = ft_calloc(count + 1, sizeof(t_exec *));
+	printlist(*input, 0);
 	i = 0;
 	error_msg = NULL;
 	while (i < count)
 	{
+		printf("8\n");
 		rotate_input(input);
 		if (!(*input))
-			return (die(cmds, input, "error fill exec\n"), NULL);
+			return (die(cmds, input, "rotation error\n", NULL));
+		printf("9\n");
 		check_heredoc(*input, hist);
+		printf("10\n");
 		input = dequote(envp, *retval, input);
+		printf("11\n");
 		if (!input)
 			return (free(cmds), NULL);
+		printlist(*input, 0);
+		input = check_empty_txt(input);
+		if (!input)
+			return (free(cmds), NULL);
+		printf("1\n");
 		cmds[i] = fill_exec(input, &error_msg);
+		printf("2\n");
 		if (!cmds[i] && !has_type(*input, t_pipe))
-		{
-			*retval = 1;
-			return (die(cmds, input, error_msg), NULL);
-		}
+			return (die(cmds, input, error_msg, set_retval(retval, 1)));
 		else if (!cmds[i])
 			count = rotate_past_pipe(input, count);
 		else
 		{
-			cmds[i]->full_path = cmd_to_path(cmds[i]);
+			printf("3\n");
+			if (!check_dir(cmds[i]->full_cmd[0], &error_msg))
+				return (die(cmds, input, error_msg, set_retval(retval, 126)));
+			printf("4\n");
+			cmds[i]->full_path = cmd_to_path(cmds[i], &error_msg);
+			printf("5\n");
 			if (!cmds[i]->full_path)
-				return (die(cmds, input, ft_strjoin(cmds[i]->full_cmd[0], " : command not found\n")), NULL); // fix so die prints correct error
+				return (die(cmds, input, error_msg, set_retval(retval, 127))); // fix so die prints correct error	
+			printf("6\n");
 			if (error_msg)
 				cmds[i]->err_msg = error_msg;
 			i++;
 		}
+		printf("7\n");
 	}
+	if (!cmds[0])
+		return (free(cmds), NULL);
 	return (cmds);
 }

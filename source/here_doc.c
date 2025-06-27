@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 16:16:34 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/23 17:29:37 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/27 13:43:48 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,9 @@ int	here_child(char *delimiter)
 int	run_here_doc(t_input **input, char *delimiter, char **hist)
 {
 	signal(SIGINT, heredocsig);
-	// printf("here\n");
 	(*input)->hd_fd = here_child(delimiter);
 	if ((*input)->hd_fd < 0)
 		return (-1);
-	// printf("outofheredoc %i\n", (*input)->hd_fd);
 	add_heredoc_hist((*input)->hd_fd, hist);
 	signal(SIGINT, sigint_handler);
 	return ((*input)->hd_fd);
