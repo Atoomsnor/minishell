@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:33:44 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/24 18:01:15 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/27 18:00:08 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ void	child(t_exec *exec, int prev_fd, int has_next, char **envp)
 	int	ret;
 
 	ret = 1;
+	if (exec->in_fd == -1)
+		exit(0);
 	if (prev_fd != -1)
 	{
 		dup2(prev_fd, STDIN_FILENO);
@@ -92,7 +94,7 @@ int	execute(t_exec **exec, char **envp)
 	prev_fd = -1;
 	while (exec[i])
 	{
-		if (exec[i + 1] && pipe(exec[i]->pipe) == -1)
+		if ((exec[i + 1] || exec[i]->err_msg) && pipe(exec[i]->pipe) == -1)
 			return (0);
 		pid = fork();
 		if (pid == -1)
@@ -102,7 +104,11 @@ int	execute(t_exec **exec, char **envp)
 		// else if (pid == 0 && exec[i]->full_path[0] == '\0')
 		// 	run_builtin(exec[i], exec[i]->out_fd, &envp, 1);
 		if (pid == 0)
+		{
+			if (exec[i]->err_msg)
+				exec[i]->in_fd = -1;
 			child(exec[i], prev_fd, exec[i + 1] != NULL, envp);
+		}
 		else
 			set_fds(exec[i], &prev_fd, exec[i + 1]);
 		// printf("%s in: %i out: %i\n", exec[i]->full_cmd[0], exec[i]->in_fd, exec[i]->out_fd);

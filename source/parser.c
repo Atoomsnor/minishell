@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/27 17:08:22 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/27 17:43:26 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,26 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <dirent.h>
+
+int	check_dir(char *str, char **error_msg, int i)
+{
+	DIR *dir;
+
+	if (!str)
+		return (0);
+	if (i || str[0] == '/' || !ft_strncmp(str, "./", 2))
+	{
+		dir = opendir(str);
+		if (dir)
+		{
+			closedir(dir);
+			if (error_msg)
+				*error_msg = ft_strjoin(str, ": Is a directory\n");
+			return (0);
+		}
+	}
+	return (1);
+}
 
 char	**split_paths(void)
 {
@@ -49,6 +69,8 @@ char	*find_path(char **paths, char *cmd)
 	int		i;
 
 	if (!cmd || !paths)
+		return (NULL);
+	if (!check_dir(cmd, NULL, 1))
 		return (NULL);
 	if (access(cmd, F_OK | X_OK) == 0)
 		return (cmd);
@@ -262,7 +284,7 @@ char	*cmd_to_path(t_exec *cmd, char **error_msg)
 		if (access(cmd->full_cmd[0], F_OK | X_OK) == 0)
 			return (cmd->full_cmd[0]);
 		else
-			return (adjust_error(error_msg, cmd->full_cmd[0], ": command not found\n"));
+			return (adjust_error(error_msg, cmd->full_cmd[0], ": No such file or directory\n"));
 	}
 	if (is_buildin(cmd->full_cmd[0]))
 		return ("");
@@ -353,29 +375,8 @@ void *set_retval(int *retval, int val)
 	return (NULL);
 }
 
-int	check_dir(char *str, char **error_msg)
-{
-	DIR *dir;
-
-	if (!str)
-		return (0);
-	if (str[0] == '/')
-	{
-		dir = opendir(str);
-		if (dir)
-		{
-			closedir(dir);
-			*error_msg = ft_strjoin(str, ": Is a directory\n");
-			return (0);
-		}
-	}
-	return (1);
-}
-
 void ft_lstcopy(t_input *input, t_input *next)
 {
-	input->next = next->next;
-	printf("%p %p %p\n", input->next , input->next->next, next->next);
 	input->hd_fd = next->hd_fd;
 	if (input->txt)
 		free(input->txt);
@@ -389,20 +390,17 @@ t_input	**check_empty_txt(t_input **input)
 	t_input *next;
 
 	head = *input;
-	printf("%p %p\n", (*input)->next, (*input)->next->next);
 	while (*input)
 	{
 		next = (*input)->next;
-		printf("str %s\n", (*input)->txt);
 		if ((*input)->txt && (*input)->txt[0] == '\0')
 		{
-			printf("pr %s\n", (*input)->txt);
 			if (*input == head && next)
 			{
 				ft_lstcopy(*input, (*input)->next);
-				printf("%p %p\n", (*input)->next, (*input)->next->next);
 				next = *input;
 				ft_lstdelone((*input)->next);
+				
 			}
 			else if (*input == head && !next)
 			{
@@ -411,13 +409,10 @@ t_input	**check_empty_txt(t_input **input)
 			}
 			else
 				ft_lstdelone(*input);
-			printf("gogogoo\n");
 		}
-		printf("segging %s\n", (*input)->txt);
 		*input = next;
 	}
 	*input = head;
-	printf("seg\n");
 	if (!input || !(*input))
 		return (NULL);
 	return (input);
@@ -432,49 +427,36 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval, char **hist)
 
 	count = count_cmds(*input);
 	cmds = ft_calloc(count + 1, sizeof(t_exec *));
-	printlist(*input, 0);
 	i = 0;
 	error_msg = NULL;
 	while (i < count)
 	{
-		printf("8\n");
 		rotate_input(input);
 		if (!(*input))
 			return (die(cmds, input, "rotation error\n", NULL));
-		printf("9\n");
 		check_heredoc(*input, hist);
-		printf("10\n");
 		input = dequote(envp, *retval, input);
-		printf("11\n");
 		if (!input)
 			return (free(cmds), NULL);
-		printlist(*input, 0);
 		input = check_empty_txt(input);
 		if (!input)
 			return (free(cmds), NULL);
-		printf("1\n");
 		cmds[i] = fill_exec(input, &error_msg);
-		printf("2\n");
 		if (!cmds[i] && !has_type(*input, t_pipe))
 			return (die(cmds, input, error_msg, set_retval(retval, 1)));
 		else if (!cmds[i])
 			count = rotate_past_pipe(input, count);
 		else
 		{
-			printf("3\n");
-			if (!check_dir(cmds[i]->full_cmd[0], &error_msg))
+			if (!check_dir(cmds[i]->full_cmd[0], &error_msg, 0))
 				return (die(cmds, input, error_msg, set_retval(retval, 126)));
-			printf("4\n");
 			cmds[i]->full_path = cmd_to_path(cmds[i], &error_msg);
-			printf("5\n");
 			if (!cmds[i]->full_path)
-				return (die(cmds, input, error_msg, set_retval(retval, 127))); // fix so die prints correct error	
-			printf("6\n");
+				return (die(cmds, input, error_msg, set_retval(retval, 127))); // fix so die prints correct error
 			if (error_msg)
 				cmds[i]->err_msg = error_msg;
 			i++;
 		}
-		printf("7\n");
 	}
 	if (!cmds[0])
 		return (free(cmds), NULL);
