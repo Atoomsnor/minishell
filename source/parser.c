@@ -273,6 +273,38 @@ void *adjust_error(char **error_msg, char *err1, char *err2)
 	return (NULL);
 }
 
+//int has_extension(char *path)
+//{
+//	int i;
+
+//	if (!path)
+//		return (-1);
+//	i = 0;
+//	while (path[i])
+//	{
+//		if (i != 0 && path[i] == '.' && )
+//			return (1);
+//		i++;
+//	}
+//}
+
+int is_executable_script(char *path)
+{
+	char	buff[4];
+	int		fd;
+
+	fd = open(path, O_RDONLY);
+	if (fd < 0)
+		return (0);
+	if (read(fd, buff, 4) < 4)
+		return (close(fd), 0);
+	close(fd);
+	if (!ft_strncmp(buff, "#!", 2) || (buff[0] == 0x7f && !ft_strncmp(&buff[1], "ELF", 3)))
+		return (1);
+	else
+		return (0);
+}
+
 char	*cmd_to_path(t_exec *cmd, char **error_msg)
 {
 	char	**paths;
@@ -293,8 +325,8 @@ char	*cmd_to_path(t_exec *cmd, char **error_msg)
 		return (adjust_error(error_msg, cmd->full_cmd[0], ": command not found\n"));
 	ret = find_path(paths, cmd->full_cmd[0]);
 	free_array(paths);
-	if (!ret)
-		adjust_error(error_msg, cmd->full_cmd[0], ": command not found\n");
+	if (!ret || !is_executable_script(ret))
+		return (adjust_error(error_msg, cmd->full_cmd[0], ": command not found\n"));
 	return (ret);
 }
 

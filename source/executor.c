@@ -48,7 +48,7 @@ void	child(t_exec *exec, int prev_fd, int has_next, char **envp)
 	int	ret;
 
 	ret = 1;
-	if (exec->in_fd == -1)
+	if (exec->err_msg && exec->in_fd == 0 && !ft_strncmp(exec->full_cmd[0], "cat", 4))
 		exit(0);
 	if (prev_fd != -1)
 	{
@@ -104,11 +104,7 @@ int	execute(t_exec **exec, char **envp)
 		// else if (pid == 0 && exec[i]->full_path[0] == '\0')
 		// 	run_builtin(exec[i], exec[i]->out_fd, &envp, 1);
 		if (pid == 0)
-		{
-			if (exec[i]->err_msg)
-				exec[i]->in_fd = -1;
 			child(exec[i], prev_fd, exec[i + 1] != NULL, envp);
-		}
 		else
 			set_fds(exec[i], &prev_fd, exec[i + 1]);
 		// printf("%s in: %i out: %i\n", exec[i]->full_cmd[0], exec[i]->in_fd, exec[i]->out_fd);
