@@ -273,21 +273,6 @@ void *adjust_error(char **error_msg, char *err1, char *err2)
 	return (NULL);
 }
 
-//int has_extension(char *path)
-//{
-//	int i;
-
-//	if (!path)
-//		return (-1);
-//	i = 0;
-//	while (path[i])
-//	{
-//		if (i != 0 && path[i] == '.' && )
-//			return (1);
-//		i++;
-//	}
-//}
-
 int is_executable_script(char *path)
 {
 	char	buff[4];
@@ -297,7 +282,7 @@ int is_executable_script(char *path)
 	if (fd < 0)
 		return (0);
 	if (read(fd, buff, 4) < 4)
-		return (close(fd), 0);
+		return (close(fd), 1);
 	close(fd);
 	if (!ft_strncmp(buff, "#!", 2) || (buff[0] == 0x7f && !ft_strncmp(&buff[1], "ELF", 3)))
 		return (1);
@@ -450,6 +435,22 @@ t_input	**check_empty_txt(t_input **input)
 	return (input);
 }
 
+int file_is_empty(char *path)
+{
+	int	fd;
+	char buff[2];
+
+	if (!path)
+		return (1);
+	fd = open(path, O_RDONLY);
+	if (fd < 0)
+		return (1);
+	if (read(fd, buff, 2) == 0)
+		return (close(fd), 1);
+	close(fd);
+	return (0);
+}
+
 t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval, char **hist)
 {
 	t_exec	**cmds;
@@ -485,6 +486,8 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval, char **hist)
 			cmds[i]->full_path = cmd_to_path(cmds[i], &error_msg);
 			if (!cmds[i]->full_path)
 				return (die(cmds, input, error_msg, set_retval(retval, 127))); // fix so die prints correct error
+			if (file_is_empty(cmds[i]->full_path))
+				return (printf("pure death\n"), die(cmds, input, NULL, set_retval(retval, 0)));
 			if (error_msg)
 				cmds[i]->err_msg = error_msg;
 			i++;

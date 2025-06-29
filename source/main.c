@@ -90,11 +90,14 @@ int	shelly(char ***envp, int retval, char **hist)
 			return (1);
 		head = *input;
 		exec = tokens_to_exec(input, *envp, &retval, hist);
+		printf("b\n");
 		if (!exec)
 			return (retval);
 		*input = head;
+		printf("a\n");
 		if (input && *input)
 			shank_input(input);
+		printf("here\n");
 		if (exec[1] || exec[0]->full_path[0] != '\0')
 		{
 			retval = execute(exec, *envp);

@@ -30,24 +30,31 @@ void	lynch_exec(t_exec **exec)
 		return ;
 	while (exec[i])
 	{
+		printf("e\n");
 		if (exec[i]->full_path && exec[i]->full_path[0] != '\0')
 			free(exec[i]->full_path);
+		printf ("f\n");
 		if (exec[i]->full_cmd)
 		{
 			j = 0;
+			printf("how\n");
 			while (exec[i]->full_cmd[j])
 			{
+				printf ("is this segging %s\n", exec[i]->full_cmd[j]);
 				free(exec[i]->full_cmd[j]);
 				j++;
 			}
+			printf ("I dont understand\n");
 			free(exec[i]->full_cmd);
 		}
+		printf("death c\n");
 		if (exec[i])
 			free(exec[i]);
 		exec[i] = NULL;
 		i++;
 	}
-	free(exec[i]);
+	printf("death d\n");
+	//free(exec[i]);
 	free(exec);
 }
 
@@ -78,8 +85,10 @@ void	*die(t_exec **exec, t_input **input, char *error, void *ret)
 	(void)ret;
 	if (error != NULL)
 		ft_putstr_fd(error, 2);
+	printf("death a\n");
 	if (exec)
 		lynch_exec(exec);
+	printf("death n\n");
 	if (input)
 		shank_input(input);
 	return (NULL);
