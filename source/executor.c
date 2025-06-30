@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:33:44 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/27 18:00:08 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/30 19:41:39 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,22 @@ void	set_fds(t_exec *exec, int *prev_fd, t_exec *next)
 	}
 }
 
+void check_pipe(int *pipe, int prev_fd)
+{
+	char buff[2];
+
+	if (prev_fd == -1)
+		return ;
+	if (read(pipe[0], buff, 1) < 1)
+	{
+		write(2, " Broken pipe\n", 13);
+	}
+	else if (buff[0] == '\0')
+	{
+		write(2, " Broken pipe\n", 13);
+	}
+}
+
 int	execute(t_exec **exec, char **envp)
 {
 	pid_t	pid;
@@ -99,17 +115,10 @@ int	execute(t_exec **exec, char **envp)
 		pid = fork();
 		if (pid == -1)
 			return (0);
-		// if (pid == 0 && exec[i]->full_path[0] == '\0' && exec[i]->out_fd == 1)
-		// 	run_builtin(exec[i], exec[i]->pipe[1], &envp, 1);
-		// else if (pid == 0 && exec[i]->full_path[0] == '\0')
-		// 	run_builtin(exec[i], exec[i]->out_fd, &envp, 1);
 		if (pid == 0)
 			child(exec[i], prev_fd, exec[i + 1] != NULL, envp);
 		else
 			set_fds(exec[i], &prev_fd, exec[i + 1]);
-		// printf("%s in: %i out: %i\n", exec[i]->full_cmd[0], exec[i]->in_fd, exec[i]->out_fd);
-		//if (exec[i + 1])
-		//	printf("%s in: %i out: %i\n", exec[i + 1]->full_cmd[0], exec[i + 1]->in_fd, exec[i + 1]->out_fd);
 		i++;
 	}
 	while (i--)

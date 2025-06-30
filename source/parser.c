@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/27 17:43:26 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/06/30 19:05:14 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,8 @@ int	count_cmds(t_input *input)
 	count = 1;
 	while (input)
 	{
-		if (input->type == t_pipe && input->next && input->next->type != t_right
-			&& input->next->type != t_append)
+		
+		if (input->type == t_pipe && input->next)
 			count++;
 		input = input->next;
 	}
@@ -127,81 +127,125 @@ int	count_till_pipe(t_input *input)
 	return (count);
 }
 
-int	find_in(t_input *input)
-{
-	int	fd;
+// int	find_in(t_input *input)
+// {
+// 	int	fd;
 
-	fd = 0;
-	while (input)
+// 	fd = 0;
+// 	while (input && input->type != t_pipe)
+// 	{
+// 		if (input->prev && input->prev->type != t_pipe)
+// 			input = input->prev;
+// 		else
+// 			break ;
+// 	}
+// 	while (input)
+// 	{
+// 		if (input->type == t_left)
+// 		{
+// 			if (access(input->next->txt, F_OK) != 0)
+// 				return (-1);
+// 			if (access(input->next->txt, R_OK) != 0)
+// 				return (-2);
+// 			fd = open(input->next->txt, O_RDONLY);
+// 		}
+// 		else if (input->type == t_heredoc)
+// 			fd = input->hd_fd;
+// 		else if (input->type == t_pipe)
+// 			break ;
+// 		if (fd < 0)
+// 			return (-1);
+// 		input = input->next;
+// 	}
+// 	return (fd);
+// }
+
+// int	find_out(t_input *input)
+// {
+// 	int	fd;
+
+// 	fd = 1;
+// 	while (input)
+// 	{
+// 		if (input->type == t_right)
+// 		{
+// 			if (fd > 1)
+// 				close(fd);
+// 			if (access(input->next->txt, F_OK) == 0)
+// 				if (access(input->next->txt, W_OK) != 0)
+// 					return (-2);
+// 			fd = open(input->next->txt, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+// 		}
+// 		else if (input->type == t_append)
+// 		{
+// 			if (fd > 1)
+// 				close(fd);
+// 			if (access(input->next->txt, F_OK) == 0)
+// 				if (access(input->next->txt, W_OK) != 0)
+// 					return (-2);
+// 			fd = open(input->next->txt, O_WRONLY | O_CREAT | O_APPEND, 0644);
+// 		}
+// 		else if (input->type == t_pipe)
+// 			return (fd);
+// 		input = input->next;
+// 	}
+// 	return (fd);
+// }
+
+static int find_out(char *path, int *fd, t_type type)
+{
+	if (*fd > 1)
+		close(*fd);
+	if (access(path, F_OK) == 0)
+		if (access(path, W_OK) != 0)
+			return (-2);
+	if (type == t_right)
+		*fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	else if (type == t_append)
+		*fd = open(path, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	return (*fd);
+}
+
+static int find_in(char *path, int *fd)
+{
+	if (*fd > 1)
+		close(*fd);
+	if (access(path, F_OK) != 0)
+		return (-1);
+	if (access(path, R_OK) != 0)
+		return (-2);
+	*fd = open(path, O_RDONLY);
+	return (*fd);
+}
+
+int find_in_out(t_input *input, int *in_fd, int *out_fd)
+{
+	*in_fd = 0;
+	*out_fd = 1;
+	while (input && input->type != t_pipe)
 	{
-		if (input->type == t_left)
-		{
-			if (access(input->next->txt, F_OK) != 0)
-				return (-1);
-			if (access(input->next->txt, R_OK) != 0)
-				return (-2);
-			fd = open(input->next->txt, O_RDONLY);
-		}
-		else if (input->type == t_heredoc)
-			fd = input->hd_fd;
 		if (input->prev && input->prev->type != t_pipe)
 			input = input->prev;
 		else
 			break ;
-		if (fd < 0)
-			return (-1);
 	}
-	while (input)
+	if (input->type == t_pipe)
+		input = input->next;
+	while (input && input->type != t_pipe)
 	{
-		if (input->type == t_left)
-		{
-			if (access(input->next->txt, F_OK) != 0)
-				return (-1);
-			if (access(input->next->txt, R_OK) != 0)
-				return (-2);
-			fd = open(input->next->txt, O_RDONLY);
-		}
+		if ((input->type == t_right || input->type == t_append) && input->next)
+			*out_fd = find_out(input->next->txt, out_fd, input->type);
+		else if (input->type == t_left)
+			*in_fd = find_in(input->next->txt, in_fd);
 		else if (input->type == t_heredoc)
-			fd = input->hd_fd;
-		else if (input->type == t_pipe)
-			break ;
-		if (fd < 0)
-			return (-1);
+			*in_fd = input->hd_fd;
+		if (*out_fd < 0)
+			return (*out_fd);
+		if (*in_fd < 0)
+			return (*in_fd);
 		input = input->next;
 	}
-	return (fd);
-}
-
-int	find_out(t_input *input)
-{
-	int	fd;
-
-	fd = 1;
-	while (input)
-	{
-		if (input->type == t_right)
-		{
-			if (fd > 1)
-				close(fd);
-			if (access(input->next->txt, F_OK) == 0)
-				if (access(input->next->txt, W_OK) != 0)
-					return (-2);
-			fd = open(input->next->txt, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		}
-		else if (input->type == t_append)
-		{
-			if (fd > 1)
-				close(fd);
-			if (access(input->next->txt, F_OK) == 0)
-				if (access(input->next->txt, W_OK) != 0)
-					return (-2);
-			fd = open(input->next->txt, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		}
-		else if (input->type == t_pipe)
-			return (fd);
-		input = input->next;
-	}
-	return (fd);
+	return (0);
 }
 
 t_exec	*fill_exec(t_input **input, char **error_msg)
@@ -210,7 +254,6 @@ t_exec	*fill_exec(t_input **input, char **error_msg)
 	int		count;
 	int		i;
 
-	i = 0;
 	cmd = ft_calloc(1, sizeof(t_exec));
 	if (!cmd)
 		return (NULL);
@@ -218,16 +261,13 @@ t_exec	*fill_exec(t_input **input, char **error_msg)
 	cmd->full_cmd = ft_calloc(count + 1, sizeof(char *));
 	if (!cmd->full_cmd)
 		return (free(cmd), NULL);
-	cmd->in_fd = find_in(*input);
-	if (cmd->in_fd == -1)
+	i = find_in_out(*input, &cmd->in_fd, &cmd->out_fd);
+	if (i == -1)
 		return (ft_strmcpy(error_msg, " No such file or directory\n"), NULL);
-	else if (cmd->in_fd == -2)
-		return (die(NULL, NULL, " Permission denied\n", NULL), NULL);
-	cmd->out_fd = find_out(*input);
-	if (cmd->out_fd < 0 && cmd->out_fd != -2)
+	else if (i == -2)
+		return (ft_strmcpy(error_msg, " Permission denied\n"), NULL);
+	else if (i < 0)
 		return (NULL);
-	else if (cmd->out_fd == -2)
-		return ((die(NULL, NULL, " Permission denied\n", NULL), NULL));
 	while ((*input) && (*input)->type != t_pipe && i < count)
 	{
 		if ((*input)->type == t_txt || (*input)->type == t_flag)
@@ -284,7 +324,8 @@ int is_executable_script(char *path)
 	if (read(fd, buff, 4) < 4)
 		return (close(fd), 1);
 	close(fd);
-	if (!ft_strncmp(buff, "#!", 2) || (buff[0] == 0x7f && !ft_strncmp(&buff[1], "ELF", 3)))
+	if (!ft_strncmp(buff, "#!", 2)
+		|| (buff[0] == 0x7f && !ft_strncmp(&buff[1], "ELF", 3)))
 		return (1);
 	else
 		return (0);
@@ -296,7 +337,7 @@ char	*cmd_to_path(t_exec *cmd, char **error_msg)
 	char	*ret;
 
 	ret = NULL;
-	if (cmd->full_cmd[0][0] == '/')
+	if (cmd->full_cmd[0][0] == '/' || !ft_strncmp(cmd->full_cmd[0], "./", 2))
 	{
 		if (access(cmd->full_cmd[0], F_OK | X_OK) == 0)
 			return (cmd->full_cmd[0]);
@@ -351,6 +392,8 @@ int	has_type(t_input *input, t_type type)
 
 void	rotate_input(t_input **input)
 {
+	if ((*input)->type == t_pipe)
+		*input = (*input)->next;
 	while (*input)
 	{
 		// if (((*input)->type == t_flag || (*input)->type == t_txt) && (((*input)->prev && ((*input)->prev->type == t_left || (*input)->prev->type == t_heredoc)) && ((*input)->next && ((*input)->next->type == t_right || (*input)->next->type == t_append))))
@@ -451,6 +494,26 @@ int file_is_empty(char *path)
 	return (0);
 }
 
+int check_access(char *path, char **error_msg)
+{
+	if (access(path, F_OK) == 0)
+	{
+		if (access(path, X_OK) != 0 && !ft_strncmp(path, "./", 2))
+		{
+			if (*error_msg)
+			{
+				free(error_msg);
+				error_msg = NULL;
+			}
+			*error_msg = ft_strdup(" Permission denied");
+			return (0);
+		}
+		else
+			return (1);
+	}
+	return (1);
+}
+
 t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval, char **hist)
 {
 	t_exec	**cmds;
@@ -474,20 +537,23 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval, char **hist)
 		input = check_empty_txt(input);
 		if (!input)
 			return (free(cmds), NULL);
-		cmds[i] = fill_exec(input, &error_msg);
+		cmds[i] = fill_exec(input, &error_msg); // NULL
 		if (!cmds[i] && !has_type(*input, t_pipe))
 			return (die(cmds, input, error_msg, set_retval(retval, 1)));
 		else if (!cmds[i])
 			count = rotate_past_pipe(input, count);
 		else
 		{
-			if (!check_dir(cmds[i]->full_cmd[0], &error_msg, 0))
+			// if (!is_executable_script(cmds[i]->full_cmd[0]))
+				// return (die(cmds, input, ft_strjoin(cmds[i]->full_cmd[0], " command not found"), set_retval(retval, 127)));
+			if (!check_dir(cmds[i]->full_cmd[0], &error_msg, 0)
+				|| !check_access(cmds[i]->full_cmd[0], &error_msg))
 				return (die(cmds, input, error_msg, set_retval(retval, 126)));
 			cmds[i]->full_path = cmd_to_path(cmds[i], &error_msg);
 			if (!cmds[i]->full_path)
 				return (die(cmds, input, error_msg, set_retval(retval, 127))); // fix so die prints correct error
-			if (file_is_empty(cmds[i]->full_path))
-				return (printf("pure death\n"), die(cmds, input, NULL, set_retval(retval, 0)));
+			// if (file_is_empty(cmds[i]->full_path))
+				// return (die(cmds, input, NULL, set_retval(retval, 0)));
 			if (error_msg)
 				cmds[i]->err_msg = error_msg;
 			i++;

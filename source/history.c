@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 14:29:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/27 13:26:03 by roversch         ###   ########.fr       */
+/*   Updated: 2025/06/30 16:55:55 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	add_heredoc_hist(int fd, char **hist)
 	read(fd, in, INT_MAX);
 	if (fd < 0)
 		return ;
-	printf("HISTORY: %s\n", in);
+	// printf("HISTORY: %s\n", in);
 	history(in, hist);
 	if (in)
 		free(in);
