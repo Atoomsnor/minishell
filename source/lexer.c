@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/24 13:29:55 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/01 14:07:07 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,14 @@ char	find_first_quote_len(char *str)
 	return (-1);
 }
 
+static int	token_pos(int pos)
+{
+	if (pos == 0)
+		return (2);
+	else
+		return (0);
+}
+
 int	check_txt(t_input *input, int i)
 {
 	int	len;
@@ -58,9 +66,9 @@ int	check_txt(t_input *input, int i)
 	if (len == -2)
 		len = ft_strlen(input->txt) - 1;
 	if (!ft_strncmp(&input->txt[len - i], ">>", 2))
-		return (len - i);
+		return (len - i + token_pos(len - i));
 	else if (!ft_strncmp(&input->txt[len - i], "<<", 2))
-		return (len - i);
+		return (len - i + token_pos(len - i));
 	else if (!ft_strncmp(&input->txt[len - i], "<", 1))
 		return (len - i);
 	else if (!ft_strncmp(&input->txt[len - i], "|", 1))

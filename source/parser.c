@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/30 19:05:14 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/01 16:20:16 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,15 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <dirent.h>
+
+void *adjust_error(char **error_msg, char *err1, char *err2)
+{
+	if (err1)
+		*error_msg = ft_strjoin(*error_msg, err1);
+	if (err2)
+		*error_msg = ft_strjoin(*error_msg, err2);
+	return (NULL);
+}
 
 int	check_dir(char *str, char **error_msg, int i)
 {
@@ -218,7 +227,7 @@ static int find_in(char *path, int *fd)
 	return (*fd);
 }
 
-int find_in_out(t_input *input, int *in_fd, int *out_fd)
+int find_in_out(t_input *input, int *in_fd, int *out_fd, char **error_msg)
 {
 	*in_fd = 0;
 	*out_fd = 1;
@@ -239,6 +248,8 @@ int find_in_out(t_input *input, int *in_fd, int *out_fd)
 			*in_fd = find_in(input->next->txt, in_fd);
 		else if (input->type == t_heredoc)
 			*in_fd = input->hd_fd;
+		if (*out_fd == -1 || *in_fd == -1)
+			return (adjust_error(error_msg, input->next->txt, ": No such file or directory\n"), -1);
 		if (*out_fd < 0)
 			return (*out_fd);
 		if (*in_fd < 0)
@@ -261,9 +272,9 @@ t_exec	*fill_exec(t_input **input, char **error_msg)
 	cmd->full_cmd = ft_calloc(count + 1, sizeof(char *));
 	if (!cmd->full_cmd)
 		return (free(cmd), NULL);
-	i = find_in_out(*input, &cmd->in_fd, &cmd->out_fd);
+	i = find_in_out(*input, &cmd->in_fd, &cmd->out_fd, error_msg);
 	if (i == -1)
-		return (ft_strmcpy(error_msg, " No such file or directory\n"), NULL);
+		return (NULL);
 	else if (i == -2)
 		return (ft_strmcpy(error_msg, " Permission denied\n"), NULL);
 	else if (i < 0)
@@ -302,15 +313,6 @@ int	is_buildin(char *cmd)
 	else if (ft_strncmp(cmd, "env", 4) == 0)
 		return (1);
 	return (0);
-}
-
-void *adjust_error(char **error_msg, char *err1, char *err2)
-{
-	if (err1)
-		*error_msg = ft_strjoin(*error_msg, err1);
-	if (err2)
-		*error_msg = ft_strjoin(*error_msg, err2);
-	return (NULL);
 }
 
 int is_executable_script(char *path)
@@ -356,24 +358,19 @@ char	*cmd_to_path(t_exec *cmd, char **error_msg)
 	return (ret);
 }
 
-void	check_heredoc(t_input *input, char **hist)
+void	check_heredoc(t_input *input, t_history *hist, int retval, char **env)
 {
-	t_input	*curr;
-
-	curr = input;
-	(void)hist;
 	while (input && input != input->head
 		&& input->type != t_pipe && input->prev)
 		input = input->prev;
-	while (input && input != curr)
+	while (input && input->type != t_pipe)
 	{
 		if (input->type == t_heredoc && input->hd_fd == 0)
-			input->hd_fd = run_here_doc(&input, input->next->txt, hist);
+			input->hd_fd = run_here_doc(&input, hist, retval, env);
 		else if (input->type == t_pipe)
 			return ;
 		input = input->next;
 	}
-	return ;
 }
 
 int	has_type(t_input *input, t_type type)
@@ -514,7 +511,7 @@ int check_access(char *path, char **error_msg)
 	return (1);
 }
 
-t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval, char **hist)
+t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval, t_history *hist)
 {
 	t_exec	**cmds;
 	char	*error_msg;
@@ -530,30 +527,26 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval, char **hist)
 		rotate_input(input);
 		if (!(*input))
 			return (die(cmds, input, "rotation error\n", NULL));
-		check_heredoc(*input, hist);
+		check_heredoc(*input, hist, *retval, envp);
 		input = dequote(envp, *retval, input);
 		if (!input)
 			return (free(cmds), NULL);
 		input = check_empty_txt(input);
 		if (!input)
 			return (free(cmds), NULL);
-		cmds[i] = fill_exec(input, &error_msg); // NULL
+		cmds[i] = fill_exec(input, &error_msg);
 		if (!cmds[i] && !has_type(*input, t_pipe))
 			return (die(cmds, input, error_msg, set_retval(retval, 1)));
 		else if (!cmds[i])
 			count = rotate_past_pipe(input, count);
 		else
 		{
-			// if (!is_executable_script(cmds[i]->full_cmd[0]))
-				// return (die(cmds, input, ft_strjoin(cmds[i]->full_cmd[0], " command not found"), set_retval(retval, 127)));
 			if (!check_dir(cmds[i]->full_cmd[0], &error_msg, 0)
 				|| !check_access(cmds[i]->full_cmd[0], &error_msg))
 				return (die(cmds, input, error_msg, set_retval(retval, 126)));
 			cmds[i]->full_path = cmd_to_path(cmds[i], &error_msg);
 			if (!cmds[i]->full_path)
-				return (die(cmds, input, error_msg, set_retval(retval, 127))); // fix so die prints correct error
-			// if (file_is_empty(cmds[i]->full_path))
-				// return (die(cmds, input, NULL, set_retval(retval, 0)));
+				return (die(cmds, input, error_msg, set_retval(retval, 127)));
 			if (error_msg)
 				cmds[i]->err_msg = error_msg;
 			i++;

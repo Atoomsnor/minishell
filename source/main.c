@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/30 16:56:12 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/01 13:22:02 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	check_write_error(t_exec **exec)
 	}
 }
 
-int	shelly(char ***envp, int retval, char **hist)
+int	shelly(char ***envp, int retval, t_history *hist)
 {
 	t_input	**input;
 	t_exec	**exec;
@@ -73,6 +73,7 @@ int	shelly(char ***envp, int retval, char **hist)
 
 	exec = NULL;
 	in = readline("megashell>$ ");
+	hist->in = in;
 	if (g_signalreceived)
 	{
 		g_signalreceived = 0;
@@ -84,36 +85,34 @@ int	shelly(char ***envp, int retval, char **hist)
 		in = skip_spaces(in);
 	if (in && in[0] != '\0')
 	{
-		//save_history(in, 0, hist);
 		input = init_list(in);
 		if (!input)
 			return (1);
 		head = *input;
 		exec = tokens_to_exec(input, *envp, &retval, hist);
-		// printf("b\n");
 		if (!exec)
 			return (retval);
 		*input = head;
-		// printf("a\n");
 		if (input && *input)
 			shank_input(input);
-		// printf("here\n");
 		if (exec[1] || exec[0]->full_path[0] != '\0')
 		{
 			retval = execute(exec, *envp);
 			check_write_error(exec);
+			history(hist);
 			return (die(exec, NULL, NULL, NULL), retval);
 		}
 		else
 		{
 			retval = run_builtin(exec[0], exec[0]->out_fd, envp, 0);
 			check_write_error(exec);
+			history(hist);
 			return (die(exec, NULL, NULL, NULL), retval);
 		}
 		if (exec)
 			lynch_exec(exec);
 		retval = 0;
-		//save_history(NULL, 1, hist);
+		history(hist);
 	}
 	return (retval);
 }
@@ -138,9 +137,19 @@ char	**ft_matdup(char **mat)
 	return (cpy);
 }
 
+t_history *init_hist()
+{
+	t_history *hist;
+
+	hist = ft_calloc(1, sizeof(t_history));
+	hist->hist_count = 0;
+	hist->in = NULL;
+	return (hist);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
-	char	*hist[HISTORY_SIZE];
+	t_history *hist;
 	char	**environment;
 	int		retval;
 
@@ -148,6 +157,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	retval = 0;
+	hist = init_hist();
 	init_signals();
 	while (1)
 	{

@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:15:06 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/09 13:26:30 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/01 17:30:34 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,21 @@ int	echo(int fd, char **to_write)
 	return (1);
 }
 
+static void change_env_var(char ***env, char *var_name, char *content)
+{
+	int	i;
+	int	len;
+
+	i = 0;
+	while ((*env)[i])
+	{
+		len = has_char((*env)[i], '=');
+		if (!ft_strncmp((*env)[i], var_name, ft_strlen(var_name)))
+			(*env)[i] = ft_strjoin(ft_substr((*env)[i], 0, len + 1), content);
+		i++;
+	}
+}
+
 int	cd(char **path, char ***env)
 {
 	char	*cwd;
@@ -83,6 +98,7 @@ int	cd(char **path, char ***env)
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 		return (0);
+	change_env_var(env, "OLDPWD", cwd);
 	if (ft_strncmp(cwd, path[1], ft_strlen(cwd)) && path[1][0] != '/')
 	{
 		joined_path = ft_strjoin(cwd, "/");
@@ -91,11 +107,13 @@ int	cd(char **path, char ***env)
 		joined_path = ft_strjoin(joined_path, path[1]);
 		if (chdir(joined_path) == -1)
 			return (ft_putstr_fd(" No such file or directory\n", 2), free(joined_path), 0);
+		change_env_var(env, "PWD", joined_path);
 	}
 	else
 	{
 		if (chdir(path[1]) == -1)
 			return (ft_putstr_fd(" No such file or directory\n", 2), free(cwd), 0);
+		change_env_var(env, "PWD", path[1]);
 	}
 	return (1);
 }

@@ -7,10 +7,11 @@
 - history after heredocing
 
 fix these:
-cat <out.txt >1 <out2.txt >2 <out3.txt >4
 
+megashell>$ << 'EOF
+rotation error
 
-ls | ls | pwd | ls | cat | ls | pwd > out | < infile cat > out2
+'cd' -> return to home
 
 - fix norm errors which are all >5functions, linetoolong and >25lines
 - ask others for stuff that will break our program

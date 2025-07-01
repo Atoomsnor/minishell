@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 16:16:34 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/27 13:43:48 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/01 16:08:13 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-void	heredocsig(int signal)
+static void	heredocsig(int signal)
 {
 	if (signal == SIGINT)
 	{
@@ -33,28 +33,30 @@ void	heredocsig(int signal)
 	}
 }
 
-int	here_child(char *delimiter)
+static int	here_child(char *delimiter, int retval, char quotetype, char **env)//TODO namechange
 {
-	char	*quote;
+	char	*input;
 	int		pipefd[2];
 
-	quote = NULL;
+	input = NULL;
 	if (pipe(pipefd) == -1)
 		return (-1);
 	while (!g_signalreceived)
 	{
-		quote = readline("> ");
-		if (!quote)
+		input = readline("> ");
+		if (!input)
 		{
 			if (g_signalreceived)
 				g_signalreceived = 0;
 			else 
 				break ;
 		}
-		write(pipefd[1], "\n", 1);
-		write(pipefd[1], quote, ft_strlen(quote));
-		if (!ft_strncmp(quote, delimiter, ft_strlen(delimiter)))
+		if (!ft_strncmp(input, delimiter, ft_strlen(delimiter)))
 			break ;
+		if (has_char(input, '$') >= 0 && quotetype != '\'')
+			input = handle_wildcard(input, env, retval);
+		write(pipefd[1], input, ft_strlen(input));
+		write(pipefd[1], "\n", 1);
 	}
 	close(pipefd[1]);
 	if (g_signalreceived)
@@ -62,59 +64,20 @@ int	here_child(char *delimiter)
 	return (pipefd[0]);
 }
 
-int	run_here_doc(t_input **input, char *delimiter, char **hist)
+int	run_here_doc(t_input **input, t_history *hist, int retval, char **env)
 {
+	char	quotetype;
+	char	*delimiter;
+
+	(void)hist;
 	signal(SIGINT, heredocsig);
-	(*input)->hd_fd = here_child(delimiter);
+	delimiter = (*input)->next->txt;
+	quotetype = find_first_quote(delimiter);
+	if (quotetype)
+		delimiter = ft_strtrim(delimiter, &quotetype);
+	(*input)->hd_fd = here_child(delimiter, retval, quotetype, env);
 	if ((*input)->hd_fd < 0)
 		return (-1);
-	add_heredoc_hist((*input)->hd_fd, hist);
 	signal(SIGINT, sigint_handler);
 	return ((*input)->hd_fd);
 }
-
-// void *quote_child(t_input **input, char quote_type)
-// {
-// 	char	*quote;
-
-// 	quote = NULL;
-// 	printf("quotechild\n");
-// 	while (!g_signalreceived && has_char(quote, quote_type) < 0)
-// 	{
-// 		quote = readline("> ");
-// 		if (!quote)
-// 		{
-// 			if (g_signalreceived)
-// 			{
-// 				g_signalreceived = 0;
-// 				exit(1);
-// 			}
-// 			else 
-// 				break ;
-// 		}
-// 		(*input)->txt = ft_strjoin((*input)->txt, "\n");
-// 		(*input)->txt = ft_strjoin((*input)->txt, quote);
-// 	}
-// 	exit(1);
-// 	return (NULL);
-// }
-
-// void	*run_quote_doc(t_input **input, char quote_type)
-// {
-// 	pid_t	pid;	
-
-// 	printf("haHAA quotetype %c\n", quote_type);
-// 	signal(SIGINT, heredocsig);
-// 	if (g_signalreceived)
-// 		g_signalreceived = 0;
-// 	pid = fork();
-// 	if (pid == -1)
-// 		return (NULL);
-// 	if (pid == 0)
-// 		quote_child(input, quote_type);
-// 	wait(NULL);
-// 	if (g_signalreceived)
-// 		g_signalreceived = 0;
-// 	signal(SIGINT, sigint_handler);
-// 	return (NULL);
-// }

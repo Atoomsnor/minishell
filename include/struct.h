@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:36:55 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/25 20:41:17 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/01 13:20:45 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define STRUCT_H
 
 #include "../libft/libft.h"
+#include <readline/history.h>
 
 #define HISTORY_SIZE 500
 
@@ -29,13 +30,6 @@ typedef enum e_type
 	t_append
 }	t_type;
 
-// typedef struct s_prompt
-// {
-// 	t_list	*cmds;
-// 	char	**envp;
-// 	pid_t	pid;	
-// }	t_prompt;
-
 typedef struct s_exec
 {
 	char	**full_cmd;
@@ -46,15 +40,12 @@ typedef struct s_exec
 	int		out_fd;
 }	t_exec;
 
-// typedef enum e_error
-// {
-// 	error_input_fail,
-// 	error_read_file_fail,
-// 	error_write_fail,
-// 	error_fill_exec,
-// 	error_cmd_to_path,
-// 	error_
-// }	t_error;
+typedef struct s_history
+{
+	char	*hist[HISTORY_SIZE];
+	char	*in;
+	int		hist_count;
+}	t_history;
 
 typedef struct s_input
 {
@@ -65,12 +56,6 @@ typedef struct s_input
 	t_type			type;
 	int				hd_fd;
 }	t_input;
-
-typedef struct s_var
-{
-	char *name;
-	char *content;
-} t_var;
 
 /* struct utils*/
 

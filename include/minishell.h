@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/30 18:02:38 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/01 16:31:31 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,11 @@ extern volatile sig_atomic_t	g_signalreceived;
 
 /* main */
 int		sig_interrupted();
-int		shelly(char ***envp, int retval, char **hist);
+int		shelly(char ***envp, int retval, t_history *hist);
 int		main(int argc, char **argv, char **envp);
 
 /* history */
-void	history(char *in, char **hist);
-void	add_heredoc_hist(int fd, char **hist);
+void	history(t_history *hist);
 
 /* signals */
 void	sighandler(int signal);
@@ -65,12 +64,10 @@ char	**split_paths(void);
 char	*find_path(char **paths, char *cmd);
 int		count_cmds(t_input *input);
 int		count_till_pipe(t_input *input);
-// int		find_in(t_input *input);
-// int		find_out(t_input *input);
 t_exec	*fill_exec(t_input **input, char **error_msg);
 int		is_buildin(char *cmd);
 char	*cmd_to_path(t_exec *cmd, char **error_msg);
-t_exec **tokens_to_exec(t_input **input, char **envp, int *retval, char **hist);
+t_exec **tokens_to_exec(t_input **input, char **envp, int *retval, t_history *hist);
 
 /* execute */
 int		run_builtin(t_exec *exec, int fd, char ***envp, int child);
@@ -95,11 +92,14 @@ int		has_char(char *str, char c);
 char	*handle_wildcard(char *str, char **env, int retval);
 
 /* heredoc */
-int		run_here_doc(t_input **input, char *delimiter, char **hist);
+int		run_here_doc(t_input **input, t_history *hist, int retval, char **env);
 void	printlist(t_input *c, int i);
+void	check_heredoc(t_input *input, t_history *hist, int retval, char **env);
 
 /* utils */
 size_t	ft_strmcpy(char **dest, const char *src);
+int		has_type(t_input *input, t_type type);
 void	free_str(char *str);
+int		ft_max(int a, int b);
 
 #endif

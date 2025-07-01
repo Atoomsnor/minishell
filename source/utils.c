@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:59:06 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/25 20:52:47 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/01 16:31:11 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,17 @@ size_t	ft_strmcpy(char **dest, const char *src)
 	}
 	(*dest)[i] = '\0';
 	return (len);
+}
+
+int	ft_max(int a, int b)
+{
+	if (a == b)
+		return (a);
+	if (a > b)
+		return (a);
+	if (b > a)
+		return (b);
+	return (0);
 }
 
 void	free_str(char *str)

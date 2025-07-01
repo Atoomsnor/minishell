@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 14:29:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/30 16:55:55 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/01 13:50:26 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,42 +17,27 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-void	history(char *in, char **hist)
+void	history(t_history *hist)
 {
-	static int	hist_count = 0;
 	int			i;
 
 	i = 1;
-	if (hist_count < HISTORY_SIZE)
+	if (hist->hist_count < HISTORY_SIZE)
 	{
-		hist[hist_count] = in;
-		add_history(in);
-		hist_count++;
+		hist->hist[hist->hist_count] = hist->in;
+		add_history(hist->in);
+		hist->hist_count++;
 	}
 	else
 	{
 		rl_clear_history();
 		while (i < HISTORY_SIZE)
 		{
-			hist[i - 1] = hist[i];
-			add_history(hist[i - 1]);
+			hist->hist[i - 1] = hist->hist[i];
+			add_history(hist->hist[i - 1]);
 			i++;
 		}
-		hist[HISTORY_SIZE - 1] = in;
-		add_history(in);
+		hist->hist[HISTORY_SIZE - 1] = hist->in;
+		add_history(hist->in);
 	}
-}
-
-void	add_heredoc_hist(int fd, char **hist)
-{
-	char	*in;
-
-	in = NULL;
-	read(fd, in, INT_MAX);
-	if (fd < 0)
-		return ;
-	// printf("HISTORY: %s\n", in);
-	history(in, hist);
-	if (in)
-		free(in);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_builtin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:23:46 by roversch          #+#    #+#             */
-/*   Updated: 2025/06/27 13:17:58 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/01 17:16:49 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-static int	export_validity(char *str, char **env)
+static int	export_validity(char *str)
 {
 	int	len;
 	int	i;
-	int has_alpha;
+	int	has_alpha;
 
 	len = 0;
 	while (str[len] && str[len] != '=')
@@ -31,8 +31,7 @@ static int	export_validity(char *str, char **env)
 	{
 		if (!ft_isalpha(str[i]))
 		{
-			if (!has_alpha || !(has_alpha
-				&& (ft_isdigit(str[i]) || str[i] == '_')))
+			if (!has_alpha || (ft_isdigit(str[i]) || str[i] == '_'))
 				return (0);
 		}
 		else
@@ -43,44 +42,54 @@ static int	export_validity(char *str, char **env)
 		return (-1);
 	if (str[len] == '=' && !str[len + 1])
 		return (0);
-	(void)env;
 	return (1);
+}
+
+static char	**make_environment(char ***env, char *str, int len)
+{
+	char	**new_env;
+	int		i;
+	int		j;
+
+	new_env = ft_calloc(sizeof(char *), len + 2);
+	i = 0;
+	j = 0;
+	while ((*env)[j])
+	{
+		if (i == len - 1)
+			new_env[i++] = ft_strdup(str);
+		else
+			new_env[i++] = (*env)[j++];
+	}
+	return (new_env);
 }
 
 int	exporting(char *str, char ***env)
 {
-	char	**new_env;
 	int		len;
 	int		i;
 
-	if (str)
-	{
-		i = export_validity(str, *env);
-		if (!i)
-			return (0);
-		else if (i == -1)
-			return (1);
-		len = 0;
-		while ((*env)[len])
-			len++;
-		new_env = ft_calloc(sizeof(char *), len + 2);
-		i = 0;
-		while ((*env)[i] && i < len - 1)
-		{
-			new_env[i] = (*env)[i];
-			i++;
-		}
-		new_env[i++] = ft_strdup(str);
-		while ((*env)[i - 1])
-		{
-			new_env[i] = (*env)[i - 1];
-			i++;
-		}
-		//free_array(*env);
-		*env = new_env;
+	if (!str)
+		return (0);
+	i = export_validity(str);
+	if (!i)
+		return (0);
+	else if (i == -1)
 		return (1);
+	len = 0;
+	i = has_char(str, '=');
+	while ((*env)[len])
+	{
+		if (!ft_strncmp((*env)[len], str, i) && (*env)[len][i] == '=')
+		{
+			free((*env)[len]);
+			(*env)[len] = ft_strdup(str);
+			return (1);
+		}
+		len++;
 	}
-	return (0);
+	*env = make_environment(env, str, len);
+	return (1);
 }
 
 // works in sync with export, destroys a saved var
