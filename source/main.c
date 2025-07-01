@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/01 13:22:02 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/01 19:15:20 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	shelly(char ***envp, int retval, t_history *hist)
 		retval = 130;
 	}
 	if (in == NULL)
-		return (-1);
+		return (printf("exit\n"), -1);
 	if (in && in[0] == ' ')
 		in = skip_spaces(in);
 	if (in && in[0] != '\0')

@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 16:16:34 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/01 16:08:13 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/01 18:53:32 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ static void	heredocsig(int signal)
 	if (signal == SIGINT)
 	{
 		g_signalreceived = signal;
+		// rl_done = 1;
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
 		write(STDOUT_FILENO, "\n", 1);
-		//rl_done = 1;
 	}
 }
 

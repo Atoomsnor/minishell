@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:33:44 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/30 19:41:39 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/01 19:06:46 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,13 @@ int	execute(t_exec **exec, char **envp)
 		pid = fork();
 		if (pid == -1)
 			return (0);
+		signal(SIGINT, SIG_IGN);
 		if (pid == 0)
+		{
+			signal(SIGINT, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
 			child(exec[i], prev_fd, exec[i + 1] != NULL, envp);
+		}
 		else
 			set_fds(exec[i], &prev_fd, exec[i + 1]);
 		i++;
@@ -124,8 +129,11 @@ int	execute(t_exec **exec, char **envp)
 	while (i--)
 	{
 		wait(&status);
+		if (status == SIGINT)
+			write(STDOUT_FILENO, "\n", 1);
 		if (status >= 256)
 			return (status >> 8);
 	}
+	signal(SIGINT, sigint_handler);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/01 16:20:16 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/01 18:34:46 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,17 +46,18 @@ int	check_dir(char *str, char **error_msg, int i)
 	return (1);
 }
 
-char	**split_paths(void)
+char	**split_paths(char **envp)
 {
 	char	**paths;
 	char	*tmp;
-	char	*path_env;
 	int		i;
 
-	path_env = getenv("PATH");
-	if (!path_env)
+	i = 0;
+	while (envp[i] && ft_strnstr(envp[i], "PATH=", 5) == NULL)
+		i++;
+	if (!envp[i])
 		return (NULL);
-	paths = ft_split(path_env, ':');
+	paths = ft_split(envp[i] + 5, ':');
 	if (!paths)
 		return (NULL);
 	i = 0;
@@ -135,71 +136,6 @@ int	count_till_pipe(t_input *input)
 	}
 	return (count);
 }
-
-// int	find_in(t_input *input)
-// {
-// 	int	fd;
-
-// 	fd = 0;
-// 	while (input && input->type != t_pipe)
-// 	{
-// 		if (input->prev && input->prev->type != t_pipe)
-// 			input = input->prev;
-// 		else
-// 			break ;
-// 	}
-// 	while (input)
-// 	{
-// 		if (input->type == t_left)
-// 		{
-// 			if (access(input->next->txt, F_OK) != 0)
-// 				return (-1);
-// 			if (access(input->next->txt, R_OK) != 0)
-// 				return (-2);
-// 			fd = open(input->next->txt, O_RDONLY);
-// 		}
-// 		else if (input->type == t_heredoc)
-// 			fd = input->hd_fd;
-// 		else if (input->type == t_pipe)
-// 			break ;
-// 		if (fd < 0)
-// 			return (-1);
-// 		input = input->next;
-// 	}
-// 	return (fd);
-// }
-
-// int	find_out(t_input *input)
-// {
-// 	int	fd;
-
-// 	fd = 1;
-// 	while (input)
-// 	{
-// 		if (input->type == t_right)
-// 		{
-// 			if (fd > 1)
-// 				close(fd);
-// 			if (access(input->next->txt, F_OK) == 0)
-// 				if (access(input->next->txt, W_OK) != 0)
-// 					return (-2);
-// 			fd = open(input->next->txt, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-// 		}
-// 		else if (input->type == t_append)
-// 		{
-// 			if (fd > 1)
-// 				close(fd);
-// 			if (access(input->next->txt, F_OK) == 0)
-// 				if (access(input->next->txt, W_OK) != 0)
-// 					return (-2);
-// 			fd = open(input->next->txt, O_WRONLY | O_CREAT | O_APPEND, 0644);
-// 		}
-// 		else if (input->type == t_pipe)
-// 			return (fd);
-// 		input = input->next;
-// 	}
-// 	return (fd);
-// }
 
 static int find_out(char *path, int *fd, t_type type)
 {
@@ -333,7 +269,7 @@ int is_executable_script(char *path)
 		return (0);
 }
 
-char	*cmd_to_path(t_exec *cmd, char **error_msg)
+char	*cmd_to_path(t_exec *cmd, char **error_msg, char **envp)
 {
 	char	**paths;
 	char	*ret;
@@ -342,13 +278,13 @@ char	*cmd_to_path(t_exec *cmd, char **error_msg)
 	if (cmd->full_cmd[0][0] == '/' || !ft_strncmp(cmd->full_cmd[0], "./", 2))
 	{
 		if (access(cmd->full_cmd[0], F_OK | X_OK) == 0)
-			return (cmd->full_cmd[0]);
+			return (ft_strdup(cmd->full_cmd[0]));
 		else
 			return (adjust_error(error_msg, cmd->full_cmd[0], ": No such file or directory\n"));
 	}
 	if (is_buildin(cmd->full_cmd[0]))
 		return ("");
-	paths = split_paths();
+	paths = split_paths(envp);
 	if (!paths)
 		return (adjust_error(error_msg, cmd->full_cmd[0], ": command not found\n"));
 	ret = find_path(paths, cmd->full_cmd[0]);
@@ -393,8 +329,6 @@ void	rotate_input(t_input **input)
 		*input = (*input)->next;
 	while (*input)
 	{
-		// if (((*input)->type == t_flag || (*input)->type == t_txt) && (((*input)->prev && ((*input)->prev->type == t_left || (*input)->prev->type == t_heredoc)) && ((*input)->next && ((*input)->next->type == t_right || (*input)->next->type == t_append))))
-		// 	(*input) = (*input)->next;
 		if ((*input) && (*input)->next && ((*input)->type == t_append
 				|| (*input)->type == t_right) && !(*input)->next->next)
 		{
@@ -533,7 +467,7 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval, t_history *hi
 			return (free(cmds), NULL);
 		input = check_empty_txt(input);
 		if (!input)
-			return (free(cmds), NULL);
+			return (free(cmds), set_retval(retval, 0), NULL);
 		cmds[i] = fill_exec(input, &error_msg);
 		if (!cmds[i] && !has_type(*input, t_pipe))
 			return (die(cmds, input, error_msg, set_retval(retval, 1)));
@@ -544,7 +478,7 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval, t_history *hi
 			if (!check_dir(cmds[i]->full_cmd[0], &error_msg, 0)
 				|| !check_access(cmds[i]->full_cmd[0], &error_msg))
 				return (die(cmds, input, error_msg, set_retval(retval, 126)));
-			cmds[i]->full_path = cmd_to_path(cmds[i], &error_msg);
+			cmds[i]->full_path = cmd_to_path(cmds[i], &error_msg, envp);
 			if (!cmds[i]->full_path)
 				return (die(cmds, input, error_msg, set_retval(retval, 127)));
 			if (error_msg)

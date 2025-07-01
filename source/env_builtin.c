@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:23:46 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/01 17:16:49 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/01 18:22:00 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	export_validity(char *str)
 	{
 		if (!ft_isalpha(str[i]))
 		{
-			if (!has_alpha || (ft_isdigit(str[i]) || str[i] == '_'))
+			if (!has_alpha || !(ft_isdigit(str[i]) || str[i] == '_'))
 				return (0);
 		}
 		else
