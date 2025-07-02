@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/01 18:34:46 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/02 13:40:48 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,12 @@
 
 void *adjust_error(char **error_msg, char *err1, char *err2)
 {
-	if (err1)
-		*error_msg = ft_strjoin(*error_msg, err1);
-	if (err2)
-		*error_msg = ft_strjoin(*error_msg, err2);
+	if (*error_msg)
+	{
+		free(*error_msg);
+		*error_msg = NULL;
+	}
+	*error_msg = ft_strjoin(err1, err2);
 	return (NULL);
 }
 
@@ -215,8 +217,11 @@ t_exec	*fill_exec(t_input **input, char **error_msg)
 		return (ft_strmcpy(error_msg, " Permission denied\n"), NULL);
 	else if (i < 0)
 		return (NULL);
+	// if ((*input)->next)
+	// 	printf("preloop %s %i\n", (*input)->next->txt, (*input)->next->type);
 	while ((*input) && (*input)->type != t_pipe && i < count)
 	{
+		// printf("fill exec %s %i\n", (*input)->txt, (*input)->type);
 		if ((*input)->type == t_txt || (*input)->type == t_flag)
 		{
 			if ((*input)->prev && i != 0)
@@ -330,7 +335,8 @@ void	rotate_input(t_input **input)
 	while (*input)
 	{
 		if ((*input) && (*input)->next && ((*input)->type == t_append
-				|| (*input)->type == t_right) && !(*input)->next->next)
+				|| (*input)->type == t_right || (*input)->type == t_left
+				|| (*input)->type == t_heredoc) && !(*input)->next->next)
 		{
 			if ((*input)->prev)
 				(*input) = (*input)->prev;
@@ -384,7 +390,7 @@ t_input	**check_empty_txt(t_input **input)
 	while (*input)
 	{
 		next = (*input)->next;
-		if ((*input)->txt && (*input)->txt[0] == '\0')
+		if (!(*input)->txt)
 		{
 			if (*input == head && next)
 			{
@@ -460,7 +466,7 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval, t_history *hi
 	{
 		rotate_input(input);
 		if (!(*input))
-			return (die(cmds, input, "rotation error\n", NULL));
+			return (die(cmds, NULL, "rotation error\n", NULL));
 		check_heredoc(*input, hist, *retval, envp);
 		input = dequote(envp, *retval, input);
 		if (!input)
@@ -470,17 +476,17 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval, t_history *hi
 			return (free(cmds), set_retval(retval, 0), NULL);
 		cmds[i] = fill_exec(input, &error_msg);
 		if (!cmds[i] && !has_type(*input, t_pipe))
-			return (die(cmds, input, error_msg, set_retval(retval, 1)));
+			return (die(cmds, NULL, error_msg, set_retval(retval, 1)));
 		else if (!cmds[i])
 			count = rotate_past_pipe(input, count);
 		else
 		{
 			if (!check_dir(cmds[i]->full_cmd[0], &error_msg, 0)
 				|| !check_access(cmds[i]->full_cmd[0], &error_msg))
-				return (die(cmds, input, error_msg, set_retval(retval, 126)));
+				return (die(cmds, NULL, error_msg, set_retval(retval, 126)));
 			cmds[i]->full_path = cmd_to_path(cmds[i], &error_msg, envp);
 			if (!cmds[i]->full_path)
-				return (die(cmds, input, error_msg, set_retval(retval, 127)));
+				return (die(cmds, NULL, error_msg, set_retval(retval, 127)));
 			if (error_msg)
 				cmds[i]->err_msg = error_msg;
 			i++;

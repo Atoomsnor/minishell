@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 12:48:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/27 16:02:02 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/02 13:44:23 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ char	*find_var_in_env(char *var_name, char **env)
 			return (env[i]);
 		i++;
 	}
+	free(var_name);
 	return (NULL);
 }
 
@@ -62,7 +63,7 @@ char	*set_var_name(char *str, char **env, int retval, int *i)
 	if (!var_name)
 		return (NULL);
 	if (var_name[0] == '\0')
-		return (NULL);
+		return (free(var_name), NULL);
 	if (!ft_strncmp(var_name, "?", 1))
 	{
 		if (var_name[1] != '\0')
@@ -107,7 +108,7 @@ char	*handle_wildcard(char *str, char **env, int retval)
 	if (!var_name)
 		return (str);
 	if (var_name[0] == '\0')
-		return (ft_strdup(""));
+		return (free(str), NULL);
 	str = remove_wildcard(str, var_name, wc, i + 1);
 	str[ft_strlen(str)] = '\0';
 	if (has_char(&str[i + 1], '$') >= 0)

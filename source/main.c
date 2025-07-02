@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/01 19:15:20 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/02 13:46:38 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,10 @@ int	shelly(char ***envp, int retval, t_history *hist)
 		if (!input)
 			return (1);
 		head = *input;
+		printlist(head, 0);
 		exec = tokens_to_exec(input, *envp, &retval, hist);
 		if (!exec)
-			return (retval);
+			return (history(hist), retval);
 		*input = head;
 		if (input && *input)
 			shank_input(input);
@@ -165,5 +166,6 @@ int	main(int argc, char **argv, char **envp)
 		if (retval == -1)
 			break ;
 	}
-	rl_clear_history();
+	free_array(environment);
+	burn_history(hist);
 }

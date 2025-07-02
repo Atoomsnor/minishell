@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:29:22 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/27 16:05:39 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/02 13:40:32 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ char	*trim_quotes(char *str, char quote, int start)
 		return (NULL);
 	ret = str;
 	ft_memmove(&ret[start], &ret[start + 1], ft_strlen(&ret[start]));
-	(void)quote;
 	while (str[start])
 	{
 		if (str[start] == quote)
@@ -102,7 +101,7 @@ t_input	**dequote(char **env, int retval, t_input **input)
 				}
 			}
 			else
-				return (die(NULL, input, "Invalid input, unclosed quote\n", NULL), NULL);
+				return (die(NULL, NULL, "Invalid input, unclosed quote\n", NULL), NULL);
 		}
 		else
 		{

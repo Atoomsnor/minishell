@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:33:44 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/01 19:06:46 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/02 12:44:46 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ int	run_builtin(t_exec *exec, int fd, char ***envp, int child)
 	}
 	else if (ft_strncmp(exec->full_cmd[0], "export", 7) == 0)
 	{
-		if (!exporting(exec->full_cmd[1], envp))
+		if (!exec->full_cmd[1])
+			env(*envp, fd);
+		else if (!exporting(exec->full_cmd[1], envp))
 			return (ft_putstr_fd(" not a valid identifier\n", 2), 1);
 	}
 	else if (ft_strncmp(exec->full_cmd[0], "unset", 6) == 0)

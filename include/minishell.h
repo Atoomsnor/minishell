@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/01 18:35:01 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/02 13:36:02 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ t_input	**init_list(char *in);
 /* murder */
 void	lynch_exec(t_exec **exec);
 void	shank_input(t_input **input);
+void	burn_history(t_history *hist);
 void	*die(t_exec **exec, t_input **input, char *error, void *ret);
 
 /* parser */

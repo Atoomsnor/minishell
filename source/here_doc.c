@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 16:16:34 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/01 18:53:32 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/02 13:07:44 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,15 @@ static int	here_child(char *delimiter, int retval, char quotetype, char **env)//
 				break ;
 		}
 		if (!ft_strncmp(input, delimiter, ft_strlen(delimiter)))
+		{
+			free(input);
 			break ;
+		}
 		if (has_char(input, '$') >= 0 && quotetype != '\'')
 			input = handle_wildcard(input, env, retval);
 		write(pipefd[1], input, ft_strlen(input));
 		write(pipefd[1], "\n", 1);
+		free(input);
 	}
 	close(pipefd[1]);
 	if (g_signalreceived)

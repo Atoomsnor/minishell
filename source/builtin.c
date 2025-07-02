@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:15:06 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/01 18:41:53 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/02 12:53:33 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int	cd(char **path, char ***env)
 	char	*cwd;
 	char	*joined_path;
 
-	if (!path || !path[1])
+	if (!path || !path[1] || (path[1][0] == '~' && path[1][1] == '\0') || !ft_strncmp(path[1], "~/", 3))
 		return (its_coming_home(*env));
 	if (path[2])
 		return (ft_putstr_fd("cd: too many arguments\n", 2), 0);
@@ -137,7 +137,7 @@ int	cd(char **path, char ***env)
 	return (1);
 }
 
-void	bi_exit(t_exec *exec, int child) // TODO needs to change ret_value in main and not actually exit when error ?
+void	bi_exit(t_exec *exec, int child)
 {
 	int	ret;
 	int	i;
@@ -145,9 +145,10 @@ void	bi_exit(t_exec *exec, int child) // TODO needs to change ret_value in main 
 	if (child)
 		return ;
 	ret = 1;
+	printf("exit\n");
 	if (exec->full_cmd[2])
 	{
-		ft_putstr_fd(" too many arguments\n", 2);
+		ft_putstr_fd("exit: too many arguments\n", 2);
 		exit (1);
 	}
 	if (exec->full_cmd[1])
@@ -157,7 +158,9 @@ void	bi_exit(t_exec *exec, int child) // TODO needs to change ret_value in main 
 		{
 			if (!ft_isdigit(exec->full_cmd[1][i]) && exec->full_cmd[1][i] != '+' && exec->full_cmd[1][i] != '-')
 			{
-				ft_putstr_fd(" numeric argument required\n", 2);
+				ft_putstr_fd("exit: ", 2);
+				ft_putstr_fd(exec->full_cmd[1], 2);
+				ft_putstr_fd(": numeric argument required\n", 2);
 				exit(2);
 			}
 			i++;
@@ -165,6 +168,5 @@ void	bi_exit(t_exec *exec, int child) // TODO needs to change ret_value in main 
 		if (i > 0 && !exec->full_cmd[1][i])
 			ret = ft_atoi(exec->full_cmd[1]);
 	}
-	printf("exit\n");
 	exit(ret);
 }

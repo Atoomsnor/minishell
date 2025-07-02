@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:23:46 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/01 18:22:00 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/02 13:03:40 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ static char	**make_environment(char ***env, char *str, int len)
 		else
 			new_env[i++] = (*env)[j++];
 	}
+	free(*env);
 	return (new_env);
 }
 
