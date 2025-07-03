@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:15:06 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/02 12:53:33 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/03 18:06:12 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static void change_env_var(char ***env, char *var_name, char *content)
 	{
 		len = has_char((*env)[i], '=');
 		if (!ft_strncmp((*env)[i], var_name, ft_strlen(var_name)))
-			(*env)[i] = ft_strjoin(ft_substr((*env)[i], 0, len + 1), content);
+			(*env)[i] = ft_strjoin(ft_substr_free((*env)[i], 0, len + 1), content);
 		i++;
 	}
 }
@@ -113,10 +113,10 @@ int	cd(char **path, char ***env)
 		return (its_coming_home(*env));
 	if (path[2])
 		return (ft_putstr_fd("cd: too many arguments\n", 2), 0);
-	(void)env;
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 		return (0);
+	joined_path = NULL;
 	change_env_var(env, "OLDPWD", cwd);
 	if (ft_strncmp(cwd, path[1], ft_strlen(cwd)) && path[1][0] != '/')
 	{
@@ -134,6 +134,9 @@ int	cd(char **path, char ***env)
 			return (ft_putstr_fd(ft_strjoin(path[1], ": No such file or directory\n"), 2), free(cwd), 0);
 		change_env_var(env, "PWD", path[1]);
 	}
+	if (joined_path)
+		free(joined_path);
+	free(cwd);
 	return (1);
 }
 

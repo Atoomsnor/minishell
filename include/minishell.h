@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/03 17:13:45 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/03 17:40:18 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ char	find_first_quote(char *str);
 int		has_char(char *str, char c);
 
 /* wildcard */
-char	*handle_wildcard(char *str, char **env, int retval);
+char	*handle_wildcard(char *str, char **env, int retval, int recur);
 
 /* heredoc */
 int		run_here_doc(t_input **input, t_history *hist, int retval, char **env);

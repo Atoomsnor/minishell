@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:29:22 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/03 17:13:58 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/03 17:40:37 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ t_input	**dequote(char **env, int retval, t_input **input)
 		if (quote_type)
 		{
 			if (quote_type == '"' && (*input)->txt[len] == '$')
-					(*input)->txt = handle_wildcard((*input)->txt, env, retval);
+					(*input)->txt = handle_wildcard((*input)->txt, env, retval, 0);
 			len = has_char(&(*input)->txt[len], quote_type) + len;
 			len2 = has_char(&(*input)->txt[len + 1], quote_type);
 			if (len2 != -1)
@@ -94,7 +94,7 @@ t_input	**dequote(char **env, int retval, t_input **input)
 				(*input)->txt = trim_quotes((*input)->txt, quote_type, len);
 				len += len2;
 				if (has_char((*input)->txt, '$') >= 0 && quote_type == '"')
-					(*input)->txt = handle_wildcard((*input)->txt, env, retval);
+					(*input)->txt = handle_wildcard((*input)->txt, env, retval, 0);
 				if (*input && (*input)->txt && has_char(&(*input)->txt[len], '\'') < 0
 					&& has_char(&(*input)->txt[len], '"') < 0)
 				{
@@ -108,7 +108,7 @@ t_input	**dequote(char **env, int retval, t_input **input)
 		else
 		{
 			if (has_char((*input)->txt, '$') >= 0)
-				(*input)->txt = handle_wildcard((*input)->txt, env, retval);
+				(*input)->txt = handle_wildcard((*input)->txt, env, retval, 0);
 			*input = (*input)->next;
 			len = 0;
 		}

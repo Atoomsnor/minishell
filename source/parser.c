@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/03 17:13:54 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/03 17:46:05 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -400,10 +400,7 @@ t_input	**check_empty_txt(t_input **input)
 				
 			}
 			else if (*input == head && !next)
-			{
-				shank_input(input);
 				return (NULL);
-			}
 			else
 				ft_lstdelone(*input);
 		}

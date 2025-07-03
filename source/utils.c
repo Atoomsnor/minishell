@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:59:06 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/03 16:42:34 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/03 17:21:14 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,9 @@ char	*ft_substr_free(char *s, unsigned int start, size_t len)
 
 void	free_and_null(void *ptr)
 {
-	free(ptr);
-	ptr = NULL;
+	if (ptr)
+	{
+		free(ptr);
+		ptr = NULL;
+	}
 }
