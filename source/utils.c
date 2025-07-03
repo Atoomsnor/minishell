@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:59:06 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/03 17:21:14 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/03 18:09:24 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	free_str(char *str)
 	str = NULL;
 }
 
-char	*ft_strjoin_free(char *s1, char *s2)
+char	*ft_strjoin_free(char *s1, char *s2, int liberate)
 {
 	int		i;
 	int		j;
@@ -89,8 +89,10 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	j = 0;
 	while (s2[j])
 		new_str[i++] = s2[j++];
-	free(s1);
-	free(s2);
+	if (liberate == 1 || liberate == 3)
+		free(s1);
+	if (liberate == 2 || liberate == 3)
+		free(s2);
 	new_str[i] = '\0';
 	return (new_str);
 }

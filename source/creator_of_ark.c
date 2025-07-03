@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 12:48:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/03 18:00:13 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/03 18:10:24 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char	*set_var_name(char *str, char **env, int retval, int *i)
 	if (!ft_strncmp(var_name, "?", 1))
 	{
 		if (var_name[1] != '\0')
-			var_name = ft_strjoin_free(ft_itoa(retval), ft_substr_free(var_name, 1, ft_strlen(var_name) - 1));
+			var_name = ft_strjoin_free(ft_itoa(retval), ft_substr_free(var_name, 1, ft_strlen(var_name) - 1), 2);
 		else
 		{
 			free_and_null(var_name);
@@ -143,7 +143,7 @@ char	*handle_wildcard(char *str, char **env, int retval, int recur)
 	if (!str)
 		return (NULL);
 	if (ft_strlen(str) > i + 1 && has_char(&str[i + 1], '$') >= 0)
-		ret = ft_strjoin_free(ft_substr(str, 0, &str[i + 1] - str), handle_wildcard(&str[i + 1], env, retval, recur + 1));
+		ret = ft_strjoin_free(ft_substr(str, 0, &str[i + 1] - str), handle_wildcard(&str[i + 1], env, retval, recur + 1), 2);
 	if (ret)
 	{
 		free_and_null(str);

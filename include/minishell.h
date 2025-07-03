@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/03 17:40:18 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/03 18:09:36 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	check_heredoc(t_input *input, t_history *hist, int retval, char **env);
 
 /* utils */
 size_t	ft_strmcpy(char **dest, const char *src);
-char	*ft_strjoin_free(char *s1, char *s2);
+char	*ft_strjoin_free(char *s1, char *s2, int liberate);
 char	*ft_substr_free(char *s, unsigned int start, size_t len);
 int		has_type(t_input *input, t_type type);
 void	free_str(char *str);

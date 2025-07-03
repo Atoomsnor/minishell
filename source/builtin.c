@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:15:06 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/03 18:06:12 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/03 18:07:52 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static void change_env_var(char ***env, char *var_name, char *content)
 	{
 		len = has_char((*env)[i], '=');
 		if (!ft_strncmp((*env)[i], var_name, ft_strlen(var_name)))
-			(*env)[i] = ft_strjoin(ft_substr_free((*env)[i], 0, len + 1), content);
+			(*env)[i] = ft_strjoin_free(ft_substr_free((*env)[i], 0, len + 1), content, 1);
 		i++;
 	}
 }
