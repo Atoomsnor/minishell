@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   murder.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:28:35 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/03 17:17:02 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/03 18:48:20 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,22 @@ void	shoot_error(char *error)
 	(void)error;
 }
 
+// void	close_exec_fds(t_exec *exec)
+// {
+// 	if (!exec)
+// 		return ;
+// 	if (exec->in_fd != -1)
+// 	{
+// 		close(exec->in_fd);
+// 		exec->in_fd = -1;
+// 	}
+// 	if (exec->out_fd != -1)
+// 	{
+// 		close(exec->out_fd);
+// 		exec->out_fd = -1;
+// 	}
+// }
+
 void	lynch_exec(t_exec **exec)
 {
 	int	i;
@@ -31,6 +47,7 @@ void	lynch_exec(t_exec **exec)
 		return ;
 	while (exec[i])
 	{
+		// close_exec_fds(exec[i]);
 		if (exec[i]->full_path && exec[i]->full_path[0] != '\0')
 			free_and_null(exec[i]->full_path);
 		if (exec[i]->full_cmd)
@@ -43,11 +60,13 @@ void	lynch_exec(t_exec **exec)
 			}
 			free_and_null(exec[i]->full_cmd);
 		}
+		// close_exec_fds(exec[i]);
 		if (exec[i])
 			free_and_null(exec[i]);
 		exec[i] = NULL;
 		i++;
 	}
+	// close_exec_fds(exec[i]);
 	free_and_null(exec[i]);
 	free_and_null(exec);
 }

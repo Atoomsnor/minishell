@@ -4,6 +4,7 @@
 #to do#
 - $"HELLO"
 
+valgrind --track-fds=yes ./minishell
 fix these:
 
 - fix norm errors which are all >5functions, linetoolong and >25lines
