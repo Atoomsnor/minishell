@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:23:46 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/02 13:03:40 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/03 14:32:51 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	exporting(char *str, char ***env)
 }
 
 // works in sync with export, destroys a saved var
-void	unset(char *name, char **env)
+void	unset(char *name, char ***env)
 {
 	int	len;
 	int	i;
@@ -103,18 +103,20 @@ void	unset(char *name, char **env)
 	{
 		i = 0;
 		len = 0;
-		while (env[len])
+		while ((*env)[len])
 			len++;
-		while (env[i])
+		while ((*env)[i] && ft_strncmp(name, (*env)[i], ft_strlen(name)))
+			i++;
+		if (i == len)
+			return ;
+		free((*env)[i]);
+		while (i < len && (*env)[i + 1])
 		{
-			if (!ft_strncmp(name, env[i], ft_strlen(name)))
-			{
-				ft_memmove(&env[i], &env[i + 1], len - i);
-				env[len - 1] = NULL;
-				break ;
-			}
+			(*env)[i] = (*env)[i + 1];
 			i++;
 		}
+		// free((*env)[len - 1]);
+		(*env)[len - 1] = NULL;
 	}
 }
 

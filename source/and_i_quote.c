@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:29:22 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/02 13:40:32 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/03 17:13:58 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ t_input	**dequote(char **env, int retval, t_input **input)
 		quote_type = find_first_quote(&(*input)->txt[len]);
 		if (quote_type)
 		{
+			if (quote_type == '"' && (*input)->txt[len] == '$')
+					(*input)->txt = handle_wildcard((*input)->txt, env, retval);
 			len = has_char(&(*input)->txt[len], quote_type) + len;
 			len2 = has_char(&(*input)->txt[len + 1], quote_type);
 			if (len2 != -1)
@@ -93,7 +95,7 @@ t_input	**dequote(char **env, int retval, t_input **input)
 				len += len2;
 				if (has_char((*input)->txt, '$') >= 0 && quote_type == '"')
 					(*input)->txt = handle_wildcard((*input)->txt, env, retval);
-				if (has_char(&(*input)->txt[len], '\'') < 0
+				if (*input && (*input)->txt && has_char(&(*input)->txt[len], '\'') < 0
 					&& has_char(&(*input)->txt[len], '"') < 0)
 				{
 					(*input) = (*input)->next;

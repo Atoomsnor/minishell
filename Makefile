@@ -39,6 +39,9 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 	$(MAKE) -C $(LIBFT_DIR) fclean
+
+fsanitize: fclean
+	$(MAKE) CFLAGS="$(CFLAGS) -fsanitize=address -g3"
 	
 re: fclean all
 

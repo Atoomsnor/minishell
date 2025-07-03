@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 12:48:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/02 13:44:23 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/03 16:43:31 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ char	*find_var_in_env(char *var_name, char **env)
 			return (env[i]);
 		i++;
 	}
-	free(var_name);
+	if (var_name[0] == '"')
+		return (var_name);
+	free_and_null(var_name);
 	return (NULL);
 }
 
@@ -63,11 +65,11 @@ char	*set_var_name(char *str, char **env, int retval, int *i)
 	if (!var_name)
 		return (NULL);
 	if (var_name[0] == '\0')
-		return (free(var_name), NULL);
+		return (free_and_null(var_name), NULL);
 	if (!ft_strncmp(var_name, "?", 1))
 	{
 		if (var_name[1] != '\0')
-			var_name = ft_strjoin(ft_itoa(retval), ft_substr(var_name, 1, ft_strlen(var_name) - 1));
+			var_name = ft_strjoin_free(ft_itoa(retval), ft_substr_free(var_name, 1, ft_strlen(var_name) - 1));
 		else
 			var_name = ft_itoa(retval);
 	}
@@ -76,6 +78,8 @@ char	*set_var_name(char *str, char **env, int retval, int *i)
 		var_name = find_var_in_env(var_name, env);
 		if (!var_name)
 			return ("");
+		if (var_name[0] == '"')
+			return (var_name);
 		var_name = trim_var_name(var_name);
 	}
 	return (var_name);
@@ -84,10 +88,28 @@ char	*set_var_name(char *str, char **env, int retval, int *i)
 char	*remove_wildcard(char *str, char *var, int start_pos, int end_pos)
 {
 	char	*out;
+	char	*substr;
+	char	*ret;
 
-	out = ft_strjoin(ft_substr(str, 0, start_pos), var);
-	out = ft_strjoin(out, ft_substr(str, end_pos, ft_strlen(str) - end_pos));
-	return (out);
+	substr = ft_substr(str, 0, start_pos);
+	if (!substr)
+		return (NULL);
+	out = ft_strjoin(substr, var);
+	free_and_null(substr);
+	free_and_null(var);
+	if (!out)
+		return (NULL);
+	substr = ft_substr(str, end_pos, ft_strlen(str) - end_pos);
+	if (!substr)
+		return (NULL);
+	ret = ft_strjoin(out, substr);
+	if (!ret)
+		return (NULL);
+	if (substr)
+		free_and_null(substr);
+	if (out)
+		free_and_null(out);
+	return (ret);
 }
 
 char	*handle_wildcard(char *str, char **env, int retval)
@@ -108,10 +130,11 @@ char	*handle_wildcard(char *str, char **env, int retval)
 	if (!var_name)
 		return (str);
 	if (var_name[0] == '\0')
-		return (free(str), NULL);
+		return (free_and_null(str), NULL);
 	str = remove_wildcard(str, var_name, wc, i + 1);
-	str[ft_strlen(str)] = '\0';
-	if (has_char(&str[i + 1], '$') >= 0)
+	if (!str)
+		return (NULL);
+	if (ft_strlen(str) > i + 1 && has_char(&str[i + 1], '$') >= 0)
 		str = ft_strjoin(ft_substr(str, 0, &str[i + 1] - str), handle_wildcard(&str[i + 1], env, retval));
 	return (str);
 }

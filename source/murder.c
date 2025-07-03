@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:28:35 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/02 13:19:56 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/03 17:17:02 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,24 +32,24 @@ void	lynch_exec(t_exec **exec)
 	while (exec[i])
 	{
 		if (exec[i]->full_path && exec[i]->full_path[0] != '\0')
-			free(exec[i]->full_path);
+			free_and_null(exec[i]->full_path);
 		if (exec[i]->full_cmd)
 		{
 			j = 0;
 			while (exec[i]->full_cmd[j])
 			{
-				free(exec[i]->full_cmd[j]);
+				free_and_null(exec[i]->full_cmd[j]);
 				j++;
 			}
-			free(exec[i]->full_cmd);
+			free_and_null(exec[i]->full_cmd);
 		}
 		if (exec[i])
-			free(exec[i]);
+			free_and_null(exec[i]);
 		exec[i] = NULL;
 		i++;
 	}
-	free(exec[i]);
-	free(exec);
+	free_and_null(exec[i]);
+	free_and_null(exec);
 }
 
 void	shank_input(t_input **input)
@@ -64,14 +64,12 @@ void	shank_input(t_input **input)
 	while (*input)
 	{
 		if ((*input)->txt)
-			free((*input)->txt);
+			free_and_null((*input)->txt);
 		next = (*input)->next;
-		free((*input));
-		*input = NULL;
+		free_and_null((*input));
 		(*input) = next;
 	}
-	free(input);
-	input = NULL;
+	free_and_null(input);
 }
 
 void	burn_history(t_history *hist)
@@ -83,16 +81,14 @@ void	burn_history(t_history *hist)
 	{
 		if (hist->in)
 		{
-			free(hist->in);
-			hist->in = NULL;
+			free_and_null(hist->in);
 		}
 		while (hist->hist[i])
 		{
-			free(hist->hist[i]);
-			hist->hist[i] = NULL;
+			free_and_null(hist->hist[i]);
 			i++;
 		}
-		free(hist);
+		free_and_null(hist);
 	}
 	rl_clear_history();
 }
@@ -103,7 +99,7 @@ void	*die(t_exec **exec, t_input **input, char *error, void *ret)
 	if (error != NULL)
 	{
 		ft_putstr_fd(error, 2);
-		free(error);
+		free_and_null(error);
 	}
 	if (exec)
 		lynch_exec(exec);
