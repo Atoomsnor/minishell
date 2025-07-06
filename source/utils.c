@@ -65,6 +65,9 @@ void	free_str(char *str)
 	str = NULL;
 }
 
+// liberate == 1 -> free s1
+// liberate == 2 -> free s2
+// liberate == 3 -> free both
 char	*ft_strjoin_free(char *s1, char *s2, int liberate)
 {
 	int		i;

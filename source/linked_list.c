@@ -26,7 +26,7 @@ int	ft_lstsize(t_input *lst)
 	return (count);
 }
 
-t_input	*ft_lstnew(void *content)
+t_input	*ft_lstnew(void *content, int i)
 {
 	t_input	*node;
 
@@ -34,6 +34,8 @@ t_input	*ft_lstnew(void *content)
 	if (!node)
 		return (NULL);
 	node->txt = ft_strdup((char *)content);
+	if (content && i)
+		free_and_null(content);
 	node->head = node;
 	node->next = NULL;
 	node->prev = NULL;

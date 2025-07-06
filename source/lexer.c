@@ -87,13 +87,13 @@ t_input	**matrix_to_list(char **matrix)
 	input = ft_calloc(1, sizeof(struct t_input *));
 	if (!input)
 		return (NULL);
-	(*input) = ft_lstnew(matrix[0]);
+	(*input) = ft_lstnew(matrix[0], 0);
 	if (!(*input))
 		return (NULL);
 	i = 1;
 	while (matrix[i])
 	{
-		ft_lstadd_back(input, ft_lstnew(matrix[i]));
+		ft_lstadd_back(input, ft_lstnew(matrix[i], 0));
 		i++;
 	}
 	return (input);
@@ -145,8 +145,8 @@ t_input	*parse_list(t_input *input)
 				i++;
 			if (i != -1)
 			{
-				ft_lstadd_next(&cpy, ft_lstnew(ft_substr(cpy->txt, i, ft_strlen(cpy->txt) - i)));
-				cpy->txt = ft_substr(cpy->txt, 0, i);
+				ft_lstadd_next(&cpy, ft_lstnew(ft_substr(cpy->txt, i, ft_strlen(cpy->txt) - i), 1));
+				cpy->txt = ft_substr_free(cpy->txt, 0, i);
 				cpy->next->type = find_type(cpy->next->txt);
 				cpy->type = find_type(cpy->txt);
 			}
@@ -170,19 +170,16 @@ t_input	**init_list(char *in)
 	char	*readl;
 
 	matrix = ft_string_split(in, ' ');
-	// print_matrix(matrix);
 	input = matrix_to_list(matrix);
-	// printlist(*input, 0);
 	free_array(matrix);
 	parse_list(input[0]);
-	// printlist(*input, 0);
 	readl = NULL;
 	while (ft_lstlast(*input)->type == t_pipe)
 	{
 		readl = readline("> ");
 		matrix = ft_string_split(readl, ' ');
 		while (*matrix)
-			ft_lstadd_back(input, ft_lstnew(*matrix++));
+			ft_lstadd_back(input, ft_lstnew(*matrix++, 1));
 		parse_list(input[0]);
 	}
 	return (input);

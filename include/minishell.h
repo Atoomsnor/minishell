@@ -34,7 +34,7 @@ void	init_signals(void);
 
 /* linked_list */
 int		ft_lstsize(t_input *lst);
-t_input	*ft_lstnew(void *content);
+t_input	*ft_lstnew(void *content, int i);
 t_input	*ft_lstlast(t_input *lst);
 void	ft_lstadd_back(t_input **lst, t_input *new_lst);
 void	ft_lstadd_front(t_input **lst, t_input *new_lst);

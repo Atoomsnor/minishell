@@ -69,7 +69,7 @@ char	*set_var_name(char *str, char **env, int retval, int *i)
 	if (!ft_strncmp(var_name, "?", 1))
 	{
 		if (var_name[1] != '\0')
-			var_name = ft_strjoin_free(ft_itoa(retval), ft_substr_free(var_name, 1, ft_strlen(var_name) - 1), 2);
+			var_name = ft_strjoin_free(ft_itoa(retval), ft_substr_free(var_name, 1, ft_strlen(var_name) - 1), 3);
 		else
 		{
 			free_and_null(var_name);
@@ -143,7 +143,7 @@ char	*handle_wildcard(char *str, char **env, int retval, int recur)
 	if (!str)
 		return (NULL);
 	if (ft_strlen(str) > i + 1 && has_char(&str[i + 1], '$') >= 0)
-		ret = ft_strjoin_free(ft_substr(str, 0, &str[i + 1] - str), handle_wildcard(&str[i + 1], env, retval, recur + 1), 2);
+		ret = ft_strjoin_free(ft_substr(str, 0, &str[i + 1] - str), handle_wildcard(&str[i + 1], env, retval, recur + 1), 3);
 	if (ret)
 	{
 		free_and_null(str);

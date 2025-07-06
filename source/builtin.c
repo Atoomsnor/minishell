@@ -123,15 +123,15 @@ int	cd(char **path, char ***env)
 		joined_path = ft_strjoin(cwd, "/");
 		if (cwd)
 			free(cwd);
-		joined_path = ft_strjoin(joined_path, path[1]);
+		joined_path = ft_strjoin_free(joined_path, path[1], 1);
 		if (chdir(joined_path) == -1)
-			return (ft_putstr_fd(ft_strjoin(path[1], ": No such file or directory\n"), 2), free(joined_path), 0);
+			return (ft_putstr_fd(path[1], 2), ft_putstr_fd(": No such file or directory\n", 2), free(joined_path), 0);
 		change_env_var(env, "PWD", joined_path);
 	}
 	else
 	{
 		if (chdir(path[1]) == -1)
-			return (ft_putstr_fd(ft_strjoin(path[1], ": No such file or directory\n"), 2), free(cwd), 0);
+			return (ft_putstr_fd(path[1], 2), ft_putstr_fd(": No such file or directory\n", 2), free(cwd), 0);
 		change_env_var(env, "PWD", path[1]);
 	}
 	if (joined_path)
