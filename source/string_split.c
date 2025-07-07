@@ -18,7 +18,7 @@ static int	ft_count(char const *s, char c)
 {
 	int	nb;
 	int	i;
-	int quote;
+	int	quote;
 
 	nb = 0;
 	i = 0;
@@ -58,33 +58,6 @@ static int	ft_len(char const *s, char c)
 	return (i);
 }
 
-// static char	*another_one(char const *s, char c, int *i)
-// {
-// 	char	*ret;
-// 	int		w_len;
-
-// 	ret = NULL;
-// 	w_len = *i;
-// 	if ((has_char((char *)&s[*i], '\'') >= 0 && s[*i] != '\'') || (s[*i] != '"' && has_char((char *)&s[*i], '"') >= 0))
-// 	{
-// 		while (s[w_len] && s[w_len] != '\'' && s[w_len] != '"' && s[w_len] != c)
-// 			w_len++;
-// 		ret = ft_substr(s, *i, w_len);
-// 		if (!ret)
-// 			return (free(ret), NULL);
-// 		*i += w_len;
-// 	}
-// 	else
-// 	{
-// 		w_len = ft_len(&s[*i], c);
-// 		ret = ft_substr(s, *i, w_len);
-// 		if (!ret)
-// 			return (free(ret), NULL);
-// 		*i += w_len;
-// 	}
-// 	return (ret);
-// }
-
 static char	*another_one(char const *s, char c, int *i)
 {
 	char	*ret;
@@ -98,54 +71,6 @@ static char	*another_one(char const *s, char c, int *i)
 	*i += w_len;
 	return (ret);
 }
-
-// static int	ft_len(char const *s, char c)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (s[i] && s[i] != c)
-// 		i++;
-// 	return (i);
-// }
-
-// static char	*another_one(char const *s, char c, int *i)
-// {
-// 	char	*ret;
-// 	int		w_len;
-
-// 	ret = NULL;
-// 	w_len = 0;
-// 	if (s[*i] == '"')
-// 	{
-// 		w_len = ft_len(&s[*i + 1], '"');
-// 		ret = ft_substr(s, *i, w_len + 2);
-// 		if (!ret)
-// 			return (free(ret), NULL);
-// 		*i += w_len + 2;
-// 		if (s[*i] != c)
-// 			ret = ft_strjoin(ret, another_one(s, c, i));
-// 	}
-// 	else if (s[*i] == '\'')
-// 	{
-// 		w_len = ft_len(&s[*i + 1], '\'');
-// 		ret = ft_substr(s, *i, w_len + 2);
-// 		if (!ret)
-// 			return (free(ret), NULL);
-// 		*i += w_len + 2;
-// 		if (s[*i] != c)
-// 			ret = ft_strjoin(ret, another_one(s, c, i));
-// 	}
-// 	else
-// 	{
-// 		w_len = ft_len(&s[*i], c);
-// 		ret = ft_substr(s, *i, w_len);
-// 		if (!ret)
-// 			return (free(ret), NULL);
-// 		*i += w_len;
-// 	}
-// 	return (ret);
-// }
 
 static char	**ft_bigsplit(char const *s, char c, char **n_str)
 {

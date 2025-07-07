@@ -39,16 +39,15 @@ void	sigint_handler(int signal)
 	rl_redisplay();
 }
 
+// struct sigaction	sa;
+// sa.sa_handler = sigint_handler;
+// sigemptyset(&sa.sa_mask);
+// sa.sa_flags = SA_RESTART;
+// sigaction(SIGINT, &sa, NULL);
 // create signals that need to be handled
 void	init_signals(void)
 {
-	// struct sigaction	sa;
-
-	// sa.sa_handler = sigint_handler;
-	// sigemptyset(&sa.sa_mask);
-	// sa.sa_flags = SA_RESTART;
-	// sigaction(SIGINT, &sa, NULL);
-	rl_catch_signals  = 1;
+	rl_catch_signals = 1;
 	signal(SIGINT, sighandler);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGUSR1, SIG_IGN);

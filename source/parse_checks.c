@@ -1,0 +1,106 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_checks.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 19:28:39 by nhendrik          #+#    #+#             */
+/*   Updated: 2025/07/07 19:28:39 by nhendrik         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../include/minishell.h"
+#include <unistd.h>
+#include <fcntl.h>
+#include <dirent.h>
+#include <stdlib.h>
+
+int	check_dir(char *str, char **error_msg, int i)
+{
+	DIR	*dir;
+
+	if (!str)
+		return (0);
+	if (i || str[0] == '/' || !ft_strncmp(str, "./", 2))
+	{
+		dir = opendir(str);
+		if (dir)
+		{
+			closedir(dir);
+			if (error_msg)
+				*error_msg = ft_strjoin(str, ": Is a directory\n");
+			return (0);
+		}
+	}
+	return (1);
+}
+
+int	is_buildin(char *cmd)
+{
+	if (ft_strncmp(cmd, "echo", 5) == 0)
+		return (1);
+	else if (ft_strncmp(cmd, "pwd", 4) == 0)
+		return (1);
+	else if (ft_strncmp(cmd, "cd", 3) == 0)
+		return (1);
+	else if (ft_strncmp(cmd, "export", 7) == 0)
+		return (1);
+	else if (ft_strncmp(cmd, "unset", 6) == 0)
+		return (1);
+	else if (ft_strncmp(cmd, "exit", 5) == 0)
+		return (1);
+	else if (ft_strncmp(cmd, "env", 4) == 0)
+		return (1);
+	return (0);
+}
+
+t_input	**check_empty_txt(t_input **input)
+{
+	t_input	*head;
+	t_input	*next;
+
+	head = *input;
+	while (*input)
+	{
+		next = (*input)->next;
+		if (!(*input)->txt)
+		{
+			if (*input == head && next)
+			{
+				ft_lstcopy(*input, (*input)->next);
+				next = *input;
+				ft_lstdelone((*input)->next);
+			}
+			else if (*input == head && !next)
+				return (NULL);
+			else
+				ft_lstdelone(*input);
+		}
+		*input = next;
+	}
+	*input = head;
+	if (!input || !(*input))
+		return (NULL);
+	return (input);
+}
+
+int	check_access(char *path, char **error_msg)
+{
+	if (access(path, F_OK) == 0)
+	{
+		if (access(path, X_OK) != 0 && !ft_strncmp(path, "./", 2))
+		{
+			if (*error_msg)
+			{
+				free(error_msg);
+				error_msg = NULL;
+			}
+			*error_msg = ft_strdup(" Permission denied");
+			return (0);
+		}
+		else
+			return (1);
+	}
+	return (1);
+}

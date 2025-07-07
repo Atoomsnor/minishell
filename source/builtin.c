@@ -70,74 +70,17 @@ int	echo(int fd, char **to_write)
 	return (1);
 }
 
-static void change_env_var(char ***env, char *var_name, char *content)
+void	exit_numeric(t_exec *exec, int	*i)
 {
-	int	i;
-	int	len;
-
-	i = 0;
-	while ((*env)[i])
+	if (!ft_isdigit(exec->full_cmd[1][*i]) && exec->full_cmd[1][*i] != '+'
+			&& exec->full_cmd[1][*i] != '-')
 	{
-		len = has_char((*env)[i], '=');
-		if (!ft_strncmp((*env)[i], var_name, ft_strlen(var_name)))
-			(*env)[i] = ft_strjoin_free(ft_substr_free((*env)[i], 0, len + 1), content, 1);
-		i++;
+		ft_putstr_fd("exit: ", 2);
+		ft_putstr_fd(exec->full_cmd[1], 2);
+		ft_putstr_fd(": numeric argument required\n", 2);
+		exit(2);
 	}
-}
-
-static int its_coming_home(char **env)
-{
-	int	i;
-
-	i = 0;
-	while (env[i])
-	{
-		if (!ft_strncmp("HOME=", env[i], 5))
-		{
-			if (chdir(ft_substr(env[i], 5, ft_strlen(env[i]) - 5)) == 0)
-				return (1);
-			else
-				break ;
-		}
-		i++;
-	}
-	return (0);
-}
-
-int	cd(char **path, char ***env)
-{
-	char	*cwd;
-	char	*joined_path;
-
-	if (!path || !path[1] || (path[1][0] == '~' && path[1][1] == '\0') || !ft_strncmp(path[1], "~/", 3))
-		return (its_coming_home(*env));
-	if (path[2])
-		return (ft_putstr_fd("cd: too many arguments\n", 2), 0);
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
-		return (0);
-	joined_path = NULL;
-	change_env_var(env, "OLDPWD", cwd);
-	if (ft_strncmp(cwd, path[1], ft_strlen(cwd)) && path[1][0] != '/')
-	{
-		joined_path = ft_strjoin(cwd, "/");
-		if (cwd)
-			free(cwd);
-		joined_path = ft_strjoin_free(joined_path, path[1], 1);
-		if (chdir(joined_path) == -1)
-			return (ft_putstr_fd(path[1], 2), ft_putstr_fd(": No such file or directory\n", 2), free(joined_path), 0);
-		change_env_var(env, "PWD", joined_path);
-	}
-	else
-	{
-		if (chdir(path[1]) == -1)
-			return (ft_putstr_fd(path[1], 2), ft_putstr_fd(": No such file or directory\n", 2), free(cwd), 0);
-		change_env_var(env, "PWD", path[1]);
-	}
-	if (joined_path)
-		free(joined_path);
-	free(cwd);
-	return (1);
+	(*i)++;
 }
 
 void	bi_exit(t_exec *exec, int child)
@@ -158,16 +101,7 @@ void	bi_exit(t_exec *exec, int child)
 	{
 		i = 0;
 		while (exec->full_cmd[1][i])
-		{
-			if (!ft_isdigit(exec->full_cmd[1][i]) && exec->full_cmd[1][i] != '+' && exec->full_cmd[1][i] != '-')
-			{
-				ft_putstr_fd("exit: ", 2);
-				ft_putstr_fd(exec->full_cmd[1], 2);
-				ft_putstr_fd(": numeric argument required\n", 2);
-				exit(2);
-			}
-			i++;
-		}
+			exit_numeric(exec, &i);
 		if (i > 0 && !exec->full_cmd[1][i])
 			ret = ft_atoi(exec->full_cmd[1]);
 	}

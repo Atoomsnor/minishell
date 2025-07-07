@@ -26,6 +26,7 @@ int		main(int argc, char **argv, char **envp);
 
 /* history */
 void	history(t_history *hist);
+t_history	*init_hist();
 
 /* signals */
 void	sighandler(int signal);
@@ -52,6 +53,7 @@ int		check_txt(t_input *input, int i);
 t_input	**matrix_to_list(char **mat);
 t_input	*parse_list(t_input *input);
 t_input	**init_list(char *in);
+char	find_first_quote_len(char *str);
 
 /* murder */
 void	lynch_exec(t_exec **exec);
@@ -102,8 +104,18 @@ size_t	ft_strmcpy(char **dest, const char *src);
 char	*ft_strjoin_free(char *s1, char *s2, int liberate);
 char	*ft_substr_free(char *s, unsigned int start, size_t len);
 int		has_type(t_input *input, t_type type);
-void	free_str(char *str);
-int		ft_max(int a, int b);
 void	free_and_null(void *ptr);
+char	**ft_matdup(char **mat);
+
+/* to be sorted*/
+int		rotate_past_pipe(t_input **input, int count);
+int		check_dir(char *str, char **error_msg, int i);
+int		check_access(char *path, char **error_msg);
+int		find_in_out(t_input *input, int *in_fd, int *out_fd, char **error_msg);
+void	rotate_input(t_input **input);
+t_input	**check_empty_txt(t_input **input);
+void	*set_retval(int *retval, int val);
+void	*adjust_error(char **error_msg, char *err1, char *err2);
+void	ft_lstcopy(t_input *input, t_input *next);
 
 #endif

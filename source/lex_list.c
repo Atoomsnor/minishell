@@ -1,0 +1,81 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   to_linked_list.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 16:47:59 by nhendrik          #+#    #+#             */
+/*   Updated: 2025/07/07 16:47:59 by nhendrik         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../include/minishell.h"
+#include <stdio.h>
+#include <unistd.h>
+
+t_input	**matrix_to_list(char **matrix)
+{
+	t_input	**input;
+	int		i;
+
+	input = ft_calloc(1, sizeof(struct t_input *));
+	if (!input)
+		return (NULL);
+	(*input) = ft_lstnew(matrix[0], 0);
+	if (!(*input))
+		return (NULL);
+	i = 1;
+	while (matrix[i])
+	{
+		ft_lstadd_back(input, ft_lstnew(matrix[i], 0));
+		i++;
+	}
+	return (input);
+}
+
+void	rotation(int *i, t_input *cpy)
+{
+	int	len;
+
+	if ((cpy->type == t_txt || cpy->type == t_flag))
+	{
+		len = find_first_quote_len(cpy->txt);
+		if (len == -1)
+			len = ft_strlen(cpy->txt);
+		while (len-- > 0 && *i == -1)
+			*i = check_txt(cpy, len);
+		if (*i == 0)
+			(*i)++;
+		if (*i != -1)
+		{
+			ft_lstadd_next(&cpy, ft_lstnew(ft_substr(cpy->txt,
+						*i, ft_strlen(cpy->txt) - *i), 1));
+			cpy->txt = ft_substr_free(cpy->txt, 0, *i);
+			cpy->next->type = find_type(cpy->next->txt);
+			cpy->type = find_type(cpy->txt);
+		}
+	}
+}
+
+t_input	*parse_list(t_input *input)
+{
+	t_input	*cpy;
+	int		i;
+
+	cpy = input;
+	while (cpy)
+	{
+		if (cpy->type == t_none)
+			cpy->type = find_type(cpy->txt);
+		cpy = cpy->next;
+	}
+	cpy = input;
+	while (cpy)
+	{
+		i = -1;
+		rotation(&i, cpy);
+		cpy = cpy->next;
+	}
+	return (input);
+}

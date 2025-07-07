@@ -47,10 +47,8 @@ int	run_builtin(t_exec *exec, int fd, char ***envp, int child)
 
 void	child(t_exec *exec, int prev_fd, int has_next, char **envp)
 {
-	int	ret;
-
-	ret = 1;
-	if (exec->err_msg && exec->in_fd == 0 && !ft_strncmp(exec->full_cmd[0], "cat", 4))
+	if (exec->err_msg && exec->in_fd == 0
+		&& !ft_strncmp(exec->full_cmd[0], "cat", 4))
 		exit(0);
 	if (prev_fd != -1)
 	{
@@ -68,10 +66,10 @@ void	child(t_exec *exec, int prev_fd, int has_next, char **envp)
 	if (exec->out_fd != STDOUT_FILENO)
 		dup2(exec->out_fd, STDOUT_FILENO);
 	if (exec->full_path && exec->full_path[0] != '\0')
-		ret = execve(exec->full_path, exec->full_cmd, envp);
+		exit(execve(exec->full_path, exec->full_cmd, envp));
 	else
 		run_builtin(exec, exec->out_fd, &envp, 1);
-	exit(ret);
+	exit(1);
 }
 
 void	set_fds(t_exec *exec, int *prev_fd, t_exec *next)
@@ -85,25 +83,29 @@ void	set_fds(t_exec *exec, int *prev_fd, t_exec *next)
 	}
 }
 
-void check_pipe(int *pipe, int prev_fd)
+int	exec_loop(t_exec **exec, int i, int *prev_fd, char **envp)
 {
-	char buff[2];
+	pid_t	pid;
 
-	if (prev_fd == -1)
-		return ;
-	if (read(pipe[0], buff, 1) < 1)
+	if ((exec[i + 1] || exec[i]->err_msg) && pipe(exec[i]->pipe) == -1)
+		return (0);
+	pid = fork();
+	if (pid == -1)
+		return (0);
+	signal(SIGINT, SIG_IGN);
+	if (pid == 0)
 	{
-		write(2, " Broken pipe\n", 13);
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		child(exec[i], *prev_fd, exec[i + 1] != NULL, envp);
 	}
-	else if (buff[0] == '\0')
-	{
-		write(2, " Broken pipe\n", 13);
-	}
+	else
+		set_fds(exec[i], prev_fd, exec[i + 1]);
+	return (1);
 }
 
 int	execute(t_exec **exec, char **envp)
 {
-	pid_t	pid;
 	int		i;
 	int		status;
 	int		prev_fd;
@@ -112,20 +114,8 @@ int	execute(t_exec **exec, char **envp)
 	prev_fd = -1;
 	while (exec[i])
 	{
-		if ((exec[i + 1] || exec[i]->err_msg) && pipe(exec[i]->pipe) == -1)
+		if (!exec_loop(exec, i, &prev_fd, envp))
 			return (0);
-		pid = fork();
-		if (pid == -1)
-			return (0);
-		signal(SIGINT, SIG_IGN);
-		if (pid == 0)
-		{
-			signal(SIGINT, SIG_DFL);
-			signal(SIGQUIT, SIG_DFL);
-			child(exec[i], prev_fd, exec[i + 1] != NULL, envp);
-		}
-		else
-			set_fds(exec[i], &prev_fd, exec[i + 1]);
 		i++;
 	}
 	while (i--)

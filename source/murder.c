@@ -16,59 +16,49 @@
 #include <unistd.h>
 #include <readline/readline.h>
 
-void	shoot_error(char *error)
+void	close_exec_fds(t_exec *exec)
 {
-	(void)error;
+	if (!exec)
+		return ;
+	if (exec->in_fd != 0)
+	{
+		close(exec->in_fd);
+		exec->in_fd = 0;
+	}
+	if (exec->out_fd != 1)
+	{
+		close(exec->out_fd);
+		exec->out_fd = 1;
+	}
 }
-
-// void	close_exec_fds(t_exec *exec)
-// {
-// 	if (!exec)
-// 		return ;
-// 	if (exec->in_fd != -1)
-// 	{
-// 		close(exec->in_fd);
-// 		exec->in_fd = -1;
-// 	}
-// 	if (exec->out_fd != -1)
-// 	{
-// 		close(exec->out_fd);
-// 		exec->out_fd = -1;
-// 	}
-// }
 
 void	lynch_exec(t_exec **exec)
 {
-	int	i;
-	int	j;
+	int		j;
+	t_exec	**head;
 
-	i = 0;
 	if (!exec)
 		return ;
-	while (exec[i])
+	head = exec;
+	while (*exec)
 	{
-		// close_exec_fds(exec[i]);
-		if (exec[i]->full_path && exec[i]->full_path[0] != '\0')
-			free_and_null(exec[i]->full_path);
-		if (exec[i]->full_cmd)
+		close_exec_fds((*exec));
+		if ((*exec)->err_msg)
+			free_and_null((*exec)->err_msg);
+		if ((*exec)->full_path && (*exec)->full_path[0] != '\0')
+			free_and_null((*exec)->full_path);
+		if ((*exec)->full_cmd)
 		{
 			j = 0;
-			while (exec[i]->full_cmd[j])
-			{
-				free_and_null(exec[i]->full_cmd[j]);
-				j++;
-			}
-			free_and_null(exec[i]->full_cmd);
+			while ((*exec)->full_cmd[j])
+				free_and_null((*exec)->full_cmd[j++]);
+			free_and_null((*exec)->full_cmd);
 		}
-		// close_exec_fds(exec[i]);
-		if (exec[i])
-			free_and_null(exec[i]);
-		exec[i] = NULL;
-		i++;
+		if ((*exec))
+			free_and_null((*exec));
+		exec++;
 	}
-	// close_exec_fds(exec[i]);
-	free_and_null(exec[i]);
-	free_and_null(exec);
+	free_and_null(head);
 }
 
 void	shank_input(t_input **input)
@@ -78,7 +68,7 @@ void	shank_input(t_input **input)
 	if (!input)
 		return ;
 	next = NULL;
-	if (*input && (*input)->head &&  *input != (*input)->head)
+	if (*input && (*input)->head && *input != (*input)->head)
 		*input = (*input)->head;
 	while (*input)
 	{

@@ -1,0 +1,101 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 19:25:23 by nhendrik          #+#    #+#             */
+/*   Updated: 2025/07/07 19:25:23 by nhendrik         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../include/minishell.h"
+#include <stdlib.h>
+#include <unistd.h>
+
+void	free_array(char **array)
+{
+	int	i;
+
+	if (!array)
+		return ;
+	i = 0;
+	while (array[i])
+	{
+		free(array[i]);
+		array[i] = NULL;
+		i++;
+	}
+	free(array);
+}
+
+// liberate == 1 -> free s1
+// liberate == 2 -> free s2
+// liberate == 3 -> free both
+char	*ft_strjoin_free(char *s1, char *s2, int liberate)
+{
+	int		i;
+	int		j;
+	char	*new_str;
+
+	if (!s1 && !s2)
+		return (NULL);
+	if (!s1)
+		return (ft_strdup(s2));
+	if (!s2)
+		return (ft_strdup(s1));
+	i = ft_strlen(s1);
+	j = ft_strlen(s2);
+	new_str = (char *)malloc(i + j + 1);
+	if (!new_str)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (s1[j])
+		new_str[i++] = s1[j++];
+	j = 0;
+	while (s2[j])
+		new_str[i++] = s2[j++];
+	if (liberate == 1 || liberate == 3)
+		free(s1);
+	if (liberate == 2 || liberate == 3)
+		free(s2);
+	new_str[i] = '\0';
+	return (new_str);
+}
+
+char	*ft_substr_free(char *s, unsigned int start, size_t len)
+{
+	char	*substr;
+	size_t	s_len;
+	size_t	i;
+
+	s_len = 0;
+	i = 0;
+	if (!s)
+		return (NULL);
+	while (s[s_len])
+		s_len++;
+	if (start >= s_len)
+		return (ft_strdup(""));
+	if (start + len > s_len)
+		len = s_len - start;
+	substr = (char *)malloc(len + 1);
+	if (!substr)
+		return (NULL);
+	while (i < len)
+		substr[i++] = s[start++];
+	free(s);
+	substr[i] = '\0';
+	return (substr);
+}
+
+void	free_and_null(void *ptr)
+{
+	if (ptr)
+	{
+		free(ptr);
+		ptr = NULL;
+	}
+}

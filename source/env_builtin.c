@@ -115,7 +115,6 @@ void	unset(char *name, char ***env)
 			(*env)[i] = (*env)[i + 1];
 			i++;
 		}
-		// free((*env)[len - 1]);
 		(*env)[len - 1] = NULL;
 	}
 }

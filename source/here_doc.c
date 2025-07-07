@@ -25,7 +25,6 @@ static void	heredocsig(int signal)
 	if (signal == SIGINT)
 	{
 		g_signalreceived = signal;
-		// rl_done = 1;
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
@@ -33,29 +32,38 @@ static void	heredocsig(int signal)
 	}
 }
 
-static int	here_child(char *delimiter, int retval, char quotetype, char **env)//TODO namechange
+static char	*heredoc_input_loop(char *delimiter)
 {
 	char	*input;
-	int		pipefd[2];
 
-	input = NULL;
+	input = readline("> ");
+	if (!input)
+	{
+		if (g_signalreceived)
+			g_signalreceived = 0;
+		else
+			return (NULL);
+	}
+	if (!ft_strncmp(input, delimiter, ft_strlen(delimiter)))
+	{
+		free(input);
+		return (NULL);
+	}
+	return (input);
+}
+
+static int	here_child(char *delimiter, int retval, char quotetype, char **env)
+{
+	int		pipefd[2];
+	char	*input;
+
 	if (pipe(pipefd) == -1)
 		return (-1);
 	while (!g_signalreceived)
 	{
-		input = readline("> ");
+		input = heredoc_input_loop(delimiter);
 		if (!input)
-		{
-			if (g_signalreceived)
-				g_signalreceived = 0;
-			else 
-				break ;
-		}
-		if (!ft_strncmp(input, delimiter, ft_strlen(delimiter)))
-		{
-			free(input);
 			break ;
-		}
 		if (has_char(input, '$') >= 0 && quotetype != '\'')
 			input = handle_wildcard(input, env, retval, 0);
 		write(pipefd[1], input, ft_strlen(input));
@@ -84,4 +92,19 @@ int	run_here_doc(t_input **input, t_history *hist, int retval, char **env)
 		return (-1);
 	signal(SIGINT, sigint_handler);
 	return ((*input)->hd_fd);
+}
+
+void	check_heredoc(t_input *input, t_history *hist, int retval, char **env)
+{
+	while (input && input != input->head
+		&& input->type != t_pipe && input->prev)
+		input = input->prev;
+	while (input && input->type != t_pipe)
+	{
+		if (input->type == t_heredoc && input->hd_fd == 0)
+			input->hd_fd = run_here_doc(&input, hist, retval, env);
+		else if (input->type == t_pipe)
+			return ;
+		input = input->next;
+	}
 }

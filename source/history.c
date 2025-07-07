@@ -41,3 +41,13 @@ void	history(t_history *hist)
 		add_history(hist->in);
 	}
 }
+
+t_history	*init_hist(void)
+{
+	t_history	*hist;
+
+	hist = ft_calloc(1, sizeof(t_history));
+	hist->hist_count = 0;
+	hist->in = NULL;
+	return (hist);
+}

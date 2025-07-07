@@ -51,6 +51,33 @@ char	*trim_var_name(char *str)
 	return (NULL);
 }
 
+char	*get_var(char *var_name, int retval, char **env)
+{
+	if (!ft_strncmp(var_name, "?", 1))
+	{
+		if (var_name[1] != '\0')
+			var_name = ft_strjoin_free(ft_itoa(retval), ft_substr_free(var_name,
+						1, ft_strlen(var_name) - 1), 3);
+		else
+		{
+			free_and_null(var_name);
+			var_name = ft_itoa(retval);
+		}
+		if (!var_name)
+			return (NULL);
+	}
+	else
+	{
+		var_name = find_var_in_env(var_name, env);
+		if (!var_name)
+			return ("");
+		if (var_name[0] == '"')
+			return (var_name);
+		var_name = trim_var_name(var_name);
+	}
+	return (var_name);
+}
+
 char	*set_var_name(char *str, char **env, int retval, int *i)
 {
 	char	*var_name;
@@ -66,25 +93,9 @@ char	*set_var_name(char *str, char **env, int retval, int *i)
 		return (NULL);
 	if (var_name[0] == '\0')
 		return (free_and_null(var_name), NULL);
-	if (!ft_strncmp(var_name, "?", 1))
-	{
-		if (var_name[1] != '\0')
-			var_name = ft_strjoin_free(ft_itoa(retval), ft_substr_free(var_name, 1, ft_strlen(var_name) - 1), 3);
-		else
-		{
-			free_and_null(var_name);
-			var_name = ft_itoa(retval);
-		}
-	}
-	else
-	{
-		var_name = find_var_in_env(var_name, env);
-		if (!var_name)
-			return ("");
-		if (var_name[0] == '"')
-			return (var_name);
-		var_name = trim_var_name(var_name);
-	}
+	var_name = get_var(var_name, retval, env);
+	if (!var_name)
+		return (NULL);
 	return (var_name);
 }
 
@@ -126,11 +137,9 @@ char	*handle_wildcard(char *str, char **env, int retval, int recur)
 
 	ret = NULL;
 	i = 0;
-	if (!str)
-		return (NULL);
-	while (str[i] && str[i] != '$')
+	while (str && str[i] && str[i] != '$')
 		i++;
-	if (!str[i])
+	if (!str && !str[i])
 		return (NULL);
 	pos[0] = i;
 	var_name = set_var_name(str, env, retval, &i);
@@ -143,11 +152,9 @@ char	*handle_wildcard(char *str, char **env, int retval, int recur)
 	if (!str)
 		return (NULL);
 	if (ft_strlen(str) > i + 1 && has_char(&str[i + 1], '$') >= 0)
-		ret = ft_strjoin_free(ft_substr(str, 0, &str[i + 1] - str), handle_wildcard(&str[i + 1], env, retval, recur + 1), 3);
+		ret = ft_strjoin_free(ft_substr(str, 0, &str[i + 1] - str),
+				handle_wildcard(&str[i + 1], env, retval, recur + 1), 3);
 	if (ret)
-	{
-		free_and_null(str);
-		return (ret);
-	}
+		return (free_and_null(str), ret);
 	return (str);
 }

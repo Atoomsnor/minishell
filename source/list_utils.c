@@ -83,3 +83,12 @@ t_input	*list_move(t_input *lst, int times)
 	}
 	return (cpy);
 }
+
+void	ft_lstcopy(t_input *input, t_input *next)
+{
+	input->hd_fd = next->hd_fd;
+	if (input->txt)
+		free(input->txt);
+	input->txt = ft_strdup(next->txt);
+	input->type = next->type;
+}

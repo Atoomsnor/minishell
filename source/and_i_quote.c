@@ -69,43 +69,47 @@ char	*trim_quotes(char *str, char quote, int start)
 	return (ret);
 }
 
+int	sub_quote(t_input **input, int *len, int retval, char **env)
+{
+	int	len2;
+	int	quote_type;
+
+	quote_type = find_first_quote(&(*input)->txt[*len]);
+	if (!quote_type)
+		return (0);
+	if (quote_type == '"' && (*input)->txt[*len] == '$')
+		(*input)->txt = handle_wildcard((*input)->txt, env, retval, 0);
+	*len = has_char(&(*input)->txt[*len], quote_type) + *len;
+	len2 = has_char(&(*input)->txt[*len + 1], quote_type);
+	if (len2 == -1)
+		return (ft_putstr_fd("Invalid input, unclosed quote\n", 2), -1);
+	(*input)->txt = trim_quotes((*input)->txt, quote_type, *len);
+	*len += len2;
+	if (has_char((*input)->txt, '$') >= 0 && quote_type == '"')
+		(*input)->txt = handle_wildcard((*input)->txt, env, retval, 0);
+	if (*input && (*input)->txt && has_char(&(*input)->txt[*len], '\'') < 0
+		&& has_char(&(*input)->txt[*len], '"') < 0)
+	{
+		(*input) = (*input)->next;
+		*len = 0;
+	}
+	return (1);
+}
+
 t_input	**dequote(char **env, int retval, t_input **input)
 {
-	char	quote_type;
 	int		len;
-	int		len2;
+	int		sub;
 	t_input	*head;
 
-	quote_type = 0;
 	len = 0;
-	len2 = 0;
 	head = *input;
 	while (*input && ((*input)->type != t_pipe))
 	{
-		quote_type = find_first_quote(&(*input)->txt[len]);
-		if (quote_type)
-		{
-			if (quote_type == '"' && (*input)->txt[len] == '$')
-					(*input)->txt = handle_wildcard((*input)->txt, env, retval, 0);
-			len = has_char(&(*input)->txt[len], quote_type) + len;
-			len2 = has_char(&(*input)->txt[len + 1], quote_type);
-			if (len2 != -1)
-			{
-				(*input)->txt = trim_quotes((*input)->txt, quote_type, len);
-				len += len2;
-				if (has_char((*input)->txt, '$') >= 0 && quote_type == '"')
-					(*input)->txt = handle_wildcard((*input)->txt, env, retval, 0);
-				if (*input && (*input)->txt && has_char(&(*input)->txt[len], '\'') < 0
-					&& has_char(&(*input)->txt[len], '"') < 0)
-				{
-					(*input) = (*input)->next;
-					len = 0;
-				}
-			}
-			else
-				return (die(NULL, NULL, "Invalid input, unclosed quote\n", NULL), NULL);
-		}
-		else
+		sub = sub_quote(input, &len, retval, env);
+		if (sub == -1)
+			return (NULL);
+		else if (!sub)
 		{
 			if (has_char((*input)->txt, '$') >= 0)
 				(*input)->txt = handle_wildcard((*input)->txt, env, retval, 0);
