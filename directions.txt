@@ -1,9 +1,6 @@
 - https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf
 - https://gitlab.com/madebypixel02/minishell
 
-#to do#
-- $"HELLO"
-
 valgrind --track-fds=yes ./minishell
 fix these:
 

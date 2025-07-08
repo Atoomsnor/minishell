@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/08 11:47:51 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:11:17 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ static t_exec	*fill_exec(t_input **input, char **error_msg)
 	cmd = ft_calloc(1, sizeof(t_exec));
 	if (!cmd)
 		return (NULL);
+	cmd->err_msg = NULL;
 	count = count_till_pipe(*input);
 	cmd->full_cmd = ft_calloc(count + 1, sizeof(char *));
 	if (!cmd->full_cmd)
@@ -65,7 +66,8 @@ static int	prepare_input(t_input **input, char **envp,
 	rotate_input(input);
 	if (!(*input))
 		return (ft_putstr_fd("Parsing error\n", 2), 0);
-	check_heredoc(*input, hist, *retval, envp);
+	if (check_heredoc(*input, hist, *retval, envp) == -1)
+		return (0);
 	input = dequote(envp, *retval, input);
 	if (!input)
 		return (0);
@@ -93,10 +95,11 @@ t_exec	**tokens_to_exec(t_input **input, char **envp,
 				int *retval, t_history *hist)
 {
 	t_exec		**cmds;
-	static char	*error_msg = NULL;
+	char	*error_msg;
 	int			count;
 	int			i;
 
+	error_msg = NULL;
 	count = count_cmds(*input);
 	cmds = ft_calloc(count + 1, sizeof(t_exec *));
 	i = 0;

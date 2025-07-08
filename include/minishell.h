@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/08 11:44:52 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:10:21 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ char	*handle_wildcard(char *str, char **env, int retval, int recur);
 /* heredoc */
 int		run_here_doc(t_input **input, t_history *hist, int retval, char **env);
 void	printlist(t_input *c, int i);
-void	check_heredoc(t_input *input, t_history *hist, int retval, char **env);
+int		check_heredoc(t_input *input, t_history *hist, int retval, char **env);
 
 /* utils */
 size_t	ft_strmcpy(char **dest, const char *src);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 16:16:34 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/03 17:40:27 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:10:55 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,86 +15,83 @@
 #include <readline/history.h>
 #include <readline/readline.h>
 #include <signal.h>
-#include <unistd.h>
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
-static void	heredocsig(int signal)
-{
-	if (signal == SIGINT)
-	{
-		g_signalreceived = signal;
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
-		write(STDOUT_FILENO, "\n", 1);
-	}
-}
 
-static char	*heredoc_input_loop(char *delimiter)
+static void	run_here_child(char *delimiter, int pipefd,
+	char **env, int retval)
 {
 	char	*input;
+	char	quotetype;
 
-	input = readline("> ");
-	if (!input)
+	signal(SIGINT, SIG_DFL);
+	quotetype = find_first_quote(delimiter);
+	if (quotetype)
+		delimiter = ft_strtrim(delimiter, &quotetype);
+	while (1)
 	{
-		if (g_signalreceived)
-			g_signalreceived = 0;
-		else
-			return (NULL);
-	}
-	if (!ft_strncmp(input, delimiter, ft_strlen(delimiter)))
-	{
+		input = readline("> ");
+		if (!input)
+			break ;
+		if (!ft_strncmp(input, delimiter, ft_strlen(delimiter)))
+		{
+			free(input);
+			break ;
+		}
+		if (has_char(input, '$') >= 0 && quotetype != '\'')
+			input = handle_wildcard(input, env, retval, 0);
+		write(pipefd, input, ft_strlen(input));
+		write(pipefd, "\n", 1);
 		free(input);
-		return (NULL);
 	}
-	return (input);
+	exit(1);
 }
 
-static int	here_child(char *delimiter, int retval, char quotetype, char **env)
+static int	start_here_child(char *delimiter, int retval, char **env)
 {
+	pid_t	pid;
+	int		status;
 	int		pipefd[2];
-	char	*input;
 
 	if (pipe(pipefd) == -1)
 		return (-1);
-	while (!g_signalreceived)
+	pid = fork();
+	if (pid < 0)
+		return (-1);
+	if (pid == 0)
 	{
-		input = heredoc_input_loop(delimiter);
-		if (!input)
-			break ;
-		if (has_char(input, '$') >= 0 && quotetype != '\'')
-			input = handle_wildcard(input, env, retval, 0);
-		write(pipefd[1], input, ft_strlen(input));
-		write(pipefd[1], "\n", 1);
-		free(input);
+		close(pipefd[0]);
+		run_here_child(delimiter, pipefd[1], env, retval);
 	}
+	signal(SIGINT, SIG_IGN);
 	close(pipefd[1]);
-	if (g_signalreceived)
-		g_signalreceived = 0;
+	wait(&status);
+	if (status == SIGINT)
+	{
+		ft_putchar_fd('\n', STDOUT_FILENO);
+		return (close(pipefd[0]), -1);
+	}
+	if (status >> 8 != 1)
+		return (close(pipefd[0]), -1);
 	return (pipefd[0]);
 }
 
 int	run_here_doc(t_input **input, t_history *hist, int retval, char **env)
 {
-	char	quotetype;
 	char	*delimiter;
 
 	(void)hist;
-	signal(SIGINT, heredocsig);
 	delimiter = (*input)->next->txt;
-	quotetype = find_first_quote(delimiter);
-	if (quotetype)
-		delimiter = ft_strtrim(delimiter, &quotetype);
-	(*input)->hd_fd = here_child(delimiter, retval, quotetype, env);
+	(*input)->hd_fd = start_here_child(delimiter, retval, env);
+	signal(SIGINT, sigint_handler);
 	if ((*input)->hd_fd < 0)
 		return (-1);
-	signal(SIGINT, sigint_handler);
 	return ((*input)->hd_fd);
 }
 
-void	check_heredoc(t_input *input, t_history *hist, int retval, char **env)
+int	check_heredoc(t_input *input, t_history *hist, int retval, char **env)
 {
 	while (input && input != input->head
 		&& input->type != t_pipe && input->prev)
@@ -103,8 +100,12 @@ void	check_heredoc(t_input *input, t_history *hist, int retval, char **env)
 	{
 		if (input->type == t_heredoc && input->hd_fd == 0)
 			input->hd_fd = run_here_doc(&input, hist, retval, env);
+
 		else if (input->type == t_pipe)
-			return ;
+			return (0);
+		if (input->hd_fd == -1)
+			return (-1); 
 		input = input->next;
 	}
+	return (0);
 }
