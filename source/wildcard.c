@@ -23,7 +23,8 @@ char	*find_and_trim_var(char *var_name, char **env, int gate)
 	if (gate == 69)
 	{
 		while (env[++i])
-			if (ft_strncmp(var_name, env[i], ft_strlen(var_name)) == 0)
+			if (ft_strncmp(var_name, env[i], ft_strlen(var_name)) == 0
+						&& env[i][ft_strlen(var_name)] == '=')
 				return (free_and_null(var_name), env[i]);
 		if (var_name[0] == '"')
 			return (var_name);

@@ -83,6 +83,8 @@ static int	sub_quote(t_input **input, int *len, int retval, char **env)
 	*len += len2;
 	if (has_char((*input)->txt, '$') >= 0 && quote_type == '"')
 		(*input)->txt = handle_wildcard((*input)->txt, env, retval, 0);
+	if (!(*input)->txt)
+		return (0);
 	if (*input && (*input)->txt && has_char(&(*input)->txt[*len], '\'') < 0
 		&& has_char(&(*input)->txt[*len], '"') < 0)
 	{
