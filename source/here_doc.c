@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 16:16:34 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 17:34:21 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 17:54:04 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static int	run_here_doc(t_input **input,
 
 	delimiter = (*input)->next->txt;
 	(*input)->hd_fd = here_parent(delimiter, retval, env);
-	signal(SIGINT, sigint_handler);
+	signal(SIGINT, sighandler);
 	if ((*input)->hd_fd < 0)
 		return (-1);
 	return ((*input)->hd_fd);

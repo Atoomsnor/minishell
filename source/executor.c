@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:33:44 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 16:58:17 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/08 18:44:20 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ int	run_builtin(t_exec *exec, int fd, char ***envp, int child)
 	}
 	else if (ft_strncmp(exec->full_cmd[0], "unset", 6) == 0)
 		unset(exec->full_cmd[1], envp);
-	else if (ft_strncmp(exec->full_cmd[0], "exit", 5) == 0)
-		bi_exit(exec, child);
 	else if (ft_strncmp(exec->full_cmd[0], "env", 4) == 0)
 		env(*envp, fd);
 	if (child)
@@ -126,6 +124,6 @@ int	execute(t_exec **exec, char **envp)
 		if (status >= 256)
 			return (status >> 8);
 	}
-	signal(SIGINT, sigint_handler);
+	signal(SIGINT, sighandler);
 	return (0);
 }

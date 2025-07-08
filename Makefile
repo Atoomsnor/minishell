@@ -13,7 +13,7 @@ OBJ			= $(SRC:%.c=$(OBJ_DIR)/%.o)
 OBJ_DIR		= obj
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -Iinclude -pthread
+CFLAGS = -Wall -Wextra -Werror
 MSFLAGS = -lreadline -lhistory
 
 LIBFT_DIR = libft
@@ -40,9 +40,6 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 	$(MAKE) -C $(LIBFT_DIR) fclean
-
-fsanitize: fclean
-	$(MAKE) CFLAGS="$(CFLAGS) -fsanitize=address -g3"
 	
 re: fclean all
 
