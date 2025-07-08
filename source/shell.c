@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 17:09:11 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 17:08:30 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/08 17:41:15 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static int	run(t_input **input, char ***envp, int retval, t_history *hist)
 
 	exec = NULL;
 	head = *input;
-	exec = tokens_to_exec(input, *envp, &retval, hist);
+	exec = tokens_to_exec(input, *envp, &retval);
 	*input = head;
 	if (input && *input)
 		shank_input(input);

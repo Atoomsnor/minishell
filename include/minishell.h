@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/08 17:09:25 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/08 17:38:10 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include "../libft/libft.h"
-#include "struct.h"
-#include <signal.h>
+# include "../libft/libft.h"
+# include "struct.h"
+# include <signal.h>
 
 extern volatile sig_atomic_t	g_signalreceived;
 
@@ -34,7 +34,7 @@ int			echo(int fd, char **to_write);
 void		bi_exit(t_exec *exec, int child);
 
 /* cd */
-int	cd(char **path, char ***env);
+int			cd(char **path, char ***env);
 
 /* env_builtin */
 int			exporting(char *str, char ***env);
@@ -47,7 +47,8 @@ void		child(t_exec *exec, int prev_fd, int has_next, char **envp);
 int			execute(t_exec **exec, char **envp);
 
 /* find_fds */
-int			find_in_out(t_input *input, int *in_fd, int *out_fd, char **error_msg);
+int			find_in_out(t_input *input, int *in_fd,
+				int *out_fd, char **error_msg);
 int			file_is_empty(char *path);
 
 /* free_utils */
@@ -57,7 +58,7 @@ char		*ft_substr_free(char *s, unsigned int start, size_t len);
 void		free_and_null(void *ptr);
 
 /* here_doc */
-int			check_heredoc(t_input *input, t_history *hist, int retval, char **env);
+int			check_heredoc(t_input *input, int retval, char **env);
 
 /* history */
 void		history(t_history *hist);
@@ -108,7 +109,7 @@ int			count_cmds(t_input *input);
 int			count_till_pipe(t_input *input);
 
 /* parser */
-t_exec		**tokens_to_exec(t_input **input, char **envp, int *retval, t_history *hist);
+t_exec		**tokens_to_exec(t_input **input, char **envp, int *retval);
 
 /* pathfinding */
 char		*cmd_to_path(t_exec *cmd, char **error_msg, char **envp);

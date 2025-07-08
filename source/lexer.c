@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 16:59:10 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/08 17:41:11 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include <readline/readline.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 char	find_first_quote_len(char *str)
 {
@@ -63,20 +64,15 @@ t_input	**init_list(char *in)
 {
 	t_input	**input;
 	char	**matrix;
-	char	*readl;
 
 	matrix = ft_string_split(in, ' ');
 	input = matrix_to_list(matrix);
 	free_array(matrix);
 	parse_list(input[0]);
-	readl = NULL;
-	while (ft_lstlast(*input)->type == t_pipe)
+	if (ft_lstlast(*input)->type == t_pipe)
 	{
-		readl = readline("> ");
-		matrix = ft_string_split(readl, ' ');
-		while (*matrix)
-			ft_lstadd_back(input, ft_lstnew(*matrix++, 1));
-		parse_list(input[0]);
+		free(in);
+		return (die(NULL, input, ft_strdup("Invalid input\n"), NULL));
 	}
 	return (input);
 }

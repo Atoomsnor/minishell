@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/08 16:37:53 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/08 17:35:25 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,12 @@ static t_exec	*fill_exec(t_input **input, char **error_msg)
 	return (cmd);
 }
 
-static int	prepare_input(t_input **input, char **envp,
-							int *retval, t_history *hist)
+static int	prepare_input(t_input **input, char **envp, int *retval)
 {
 	rotate_input(input);
 	if (!(*input))
 		return (ft_putstr_fd("Parsing error\n", 2), 0);
-	if (check_heredoc(*input, hist, *retval, envp) == -1)
+	if (check_heredoc(*input, *retval, envp) == -1)
 		return (0);
 	input = dequote(envp, *retval, input);
 	if (!input)
@@ -88,8 +87,7 @@ static int	path_validity(t_exec *cmd, char **error_msg,
 	return (1);
 }
 
-t_exec	**tokens_to_exec(t_input **input, char **envp,
-							int *retval, t_history *hist)
+t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval)
 {
 	t_exec		**cmds;
 	char		*error_msg;
@@ -102,7 +100,7 @@ t_exec	**tokens_to_exec(t_input **input, char **envp,
 	i = 0;
 	while (i < count)
 	{
-		if (!prepare_input(input, envp, retval, hist))
+		if (!prepare_input(input, envp, retval))
 			return (lynch_exec(cmds), NULL);
 		cmds[i] = fill_exec(input, &error_msg);
 		if (!cmds[i] && !has_type(*input, t_pipe))

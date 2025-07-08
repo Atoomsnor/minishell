@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 16:16:34 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 17:08:38 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/08 17:34:21 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,11 @@ static int	here_parent(char *delimiter, int retval, char **env)
 	return (pipefd[0]);
 }
 
-static int	run_here_doc(t_input **input, t_history *hist,
+static int	run_here_doc(t_input **input,
 							int retval, char **env)
 {
 	char	*delimiter;
 
-	(void)hist;
 	delimiter = (*input)->next->txt;
 	(*input)->hd_fd = here_parent(delimiter, retval, env);
 	signal(SIGINT, sigint_handler);
@@ -89,7 +88,7 @@ static int	run_here_doc(t_input **input, t_history *hist,
 	return ((*input)->hd_fd);
 }
 
-int	check_heredoc(t_input *input, t_history *hist, int retval, char **env)
+int	check_heredoc(t_input *input, int retval, char **env)
 {
 	while (input && input != input->head
 		&& input->type != t_pipe && input->prev)
@@ -97,7 +96,7 @@ int	check_heredoc(t_input *input, t_history *hist, int retval, char **env)
 	while (input && input->type != t_pipe)
 	{
 		if (input->type == t_heredoc && input->hd_fd == 0)
-			input->hd_fd = run_here_doc(&input, hist, retval, env);
+			input->hd_fd = run_here_doc(&input, retval, env);
 		else if (input->type == t_pipe)
 			return (0);
 		if (input->hd_fd == -1)
