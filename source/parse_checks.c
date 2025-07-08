@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:28:39 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/07 19:28:39 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 11:14:39 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,29 +57,28 @@ int	is_buildin(char *cmd)
 
 t_input	**check_empty_txt(t_input **input)
 {
-	t_input	*head;
+	t_input	*cpy;
 	t_input	*next;
 
-	head = *input;
-	while (*input)
+	cpy = *input;
+	while (cpy)
 	{
-		next = (*input)->next;
-		if (!(*input)->txt)
+		next = cpy->next;
+		if (!cpy->txt)
 		{
-			if (*input == head && next)
+			if (cpy == *input && next)
 			{
-				ft_lstcopy(*input, (*input)->next);
-				next = *input;
-				ft_lstdelone((*input)->next);
+				ft_lstcopy(cpy, cpy->next);
+				next = cpy;
+				ft_lstdelone(cpy->next);
 			}
-			else if (*input == head && !next)
+			else if (cpy == *input && !next)
 				return (NULL);
 			else
-				ft_lstdelone(*input);
+				ft_lstdelone(cpy);
 		}
-		*input = next;
+		cpy = next;
 	}
-	*input = head;
 	if (!input || !(*input))
 		return (NULL);
 	return (input);

@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:59:06 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/03 18:09:24 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 10:48:23 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ size_t	ft_strmcpy(char **dest, const char *src)
 
 	len = ft_strlen(src);
 	i = 0;
-	*dest = ft_calloc(len, sizeof(char));
+	*dest = ft_calloc(len + 1, sizeof(char));
 	while (src[i])
 	{
 		(*dest)[i] = src[i];

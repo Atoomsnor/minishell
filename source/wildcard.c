@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   creator_of_ark.c                                   :+:      :+:    :+:   */
+/*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 12:48:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/03 18:10:24 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 12:27:30 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,37 +16,28 @@
 #include <stdio.h>
 #include <unistd.h>
 
-char	*find_var_in_env(char *var_name, char **env)
+char	*find_and_trim_var(char *var_name, char **env, int gate)
 {
 	int	i;
 
-	i = 0;
+	i = -1;
 	if (!var_name)
 		return (NULL);
-	while (env[i])
+	if (gate == 69)
 	{
-		if (ft_strncmp(var_name, env[i], ft_strlen(var_name)) == 0)
-			return (free_and_null(var_name), env[i]);
-		i++;
+		while (env[++i])
+			if (ft_strncmp(var_name, env[i], ft_strlen(var_name)) == 0)
+				return (free_and_null(var_name), env[i]);
+		if (var_name[0] == '"')
+			return (var_name);
+		free_and_null(var_name);
 	}
-	if (var_name[0] == '"')
-		return (var_name);
-	free_and_null(var_name);
-	return (NULL);
-}
-
-char	*trim_var_name(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (!str)
-		return (NULL);
-	while (str[i])
+	else if (gate == 420)
 	{
-		if (str[i] == '=')
-			return (ft_substr(str, i + 1, ft_strlen(str) - i + 1));
-		i++;
+		while (var_name[++i])
+			if (var_name[i] == '=')
+				return (ft_substr(var_name, i + 1,
+						ft_strlen(var_name) - i + 1));
 	}
 	return (NULL);
 }
@@ -68,12 +59,12 @@ char	*get_var(char *var_name, int retval, char **env)
 	}
 	else
 	{
-		var_name = find_var_in_env(var_name, env);
+		var_name = find_and_trim_var(var_name, env, 69);
 		if (!var_name)
 			return ("");
 		if (var_name[0] == '"')
 			return (var_name);
-		var_name = trim_var_name(var_name);
+		var_name = find_and_trim_var(var_name, env, 420);
 	}
 	return (var_name);
 }
@@ -96,6 +87,7 @@ char	*set_var_name(char *str, char **env, int retval, int *i)
 	var_name = get_var(var_name, retval, env);
 	if (!var_name)
 		return (NULL);
+	(*i)++;
 	return (var_name);
 }
 
@@ -131,29 +123,27 @@ char	*remove_wildcard(char *str, char *var, int pos[2], int recur)
 char	*handle_wildcard(char *str, char **env, int retval, int recur)
 {
 	char	*var_name;
-	int		i;
 	int		pos[2];
 	char	*ret;
 
+	pos[0] = 0;
 	ret = NULL;
-	i = 0;
-	while (str && str[i] && str[i] != '$')
-		i++;
-	if (!str && !str[i])
+	while (str && str[pos[0]] && str[pos[0]] != '$')
+		pos[0]++;
+	if (!str && !str[pos[0]])
 		return (NULL);
-	pos[0] = i;
-	var_name = set_var_name(str, env, retval, &i);
+	pos[1] = pos[0];
+	var_name = set_var_name(str, env, retval, &pos[1]);
 	if (!var_name)
 		return (str);
 	if (var_name[0] == '\0')
 		return (free_and_null(str), NULL);
-	pos[1] = i + 1;
 	str = remove_wildcard(str, var_name, pos, recur);
 	if (!str)
 		return (NULL);
-	if (ft_strlen(str) > i + 1 && has_char(&str[i + 1], '$') >= 0)
-		ret = ft_strjoin_free(ft_substr(str, 0, &str[i + 1] - str),
-				handle_wildcard(&str[i + 1], env, retval, recur + 1), 3);
+	if (ft_strlen(str) > pos[0] + 1 && has_char(&str[pos[0] + 1], '$') >= 0)
+		ret = ft_strjoin_free(ft_substr(str, 0, &str[pos[0] + 1] - str),
+				handle_wildcard(&str[pos[0] + 1], env, retval, recur + 1), 3);
 	if (ret)
 		return (free_and_null(str), ret);
 	return (str);

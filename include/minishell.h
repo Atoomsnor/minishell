@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/03 18:09:36 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 11:44:52 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ char	**split_paths(char **envp);
 char	*find_path(char **paths, char *cmd);
 int		count_cmds(t_input *input);
 int		count_till_pipe(t_input *input);
-t_exec	*fill_exec(t_input **input, char **error_msg);
 int		is_buildin(char *cmd);
 char	*cmd_to_path(t_exec *cmd, char **error_msg, char **envp);
 t_exec **tokens_to_exec(t_input **input, char **envp, int *retval, t_history *hist);

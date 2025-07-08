@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 17:09:11 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/07 17:09:11 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 12:41:02 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ char	*skip_spaces(char *in)
 	if (in[i])
 	{
 		ret = ft_substr(in, i, ft_strlen(in) - i);
-		free(in);
+		free_and_null(in);
 		return (ret);
 	}
-	free(in);
+	free_and_null(in);
 	return (NULL);
 }
 
@@ -48,6 +48,25 @@ void	check_write_error(t_exec **exec)
 			ft_putstr_fd(exec[i]->err_msg, 2);
 		i++;
 	}
+}
+
+int	shell_exec(int *retval, t_exec **exec, char ***envp, t_history *hist)
+{
+	if (exec[1] || exec[0]->full_path[0] != '\0')
+	{
+		*retval = execute(exec, *envp);
+		check_write_error(exec);
+		history(hist);
+		return (die(exec, NULL, NULL, NULL), 0);
+	}
+	else
+	{
+		*retval = run_builtin(exec[0], exec[0]->out_fd, envp, 0);
+		check_write_error(exec);
+		history(hist);
+		return (die(exec, NULL, NULL, NULL), 0);
+	}
+	return (1);
 }
 
 int	shelly(char ***envp, int retval, t_history *hist)
@@ -81,20 +100,8 @@ int	shelly(char ***envp, int retval, t_history *hist)
 			shank_input(input);
 		if (!exec)
 			return (history(hist), retval);
-		if (exec[1] || exec[0]->full_path[0] != '\0')
-		{
-			retval = execute(exec, *envp);
-			check_write_error(exec);
-			history(hist);
-			return (die(exec, NULL, NULL, NULL), retval);
-		}
-		else
-		{
-			retval = run_builtin(exec[0], exec[0]->out_fd, envp, 0);
-			check_write_error(exec);
-			history(hist);
-			return (die(exec, NULL, NULL, NULL), retval);
-		}
+		if (!shell_exec(&retval, exec, envp, hist))
+			return (retval);
 		if (exec)
 			lynch_exec(exec);
 		retval = 0;

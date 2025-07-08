@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/03 17:46:05 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 11:47:51 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,22 @@
 #include <stdlib.h>
 #include <dirent.h>
 
-int	file_is_empty(char *path)
+static void	fill_full_cmd(t_input **input, t_exec *cmd, int *i)
 {
-	int		fd;
-	char	buff[2];
-
-	if (!path)
-		return (1);
-	fd = open(path, O_RDONLY);
-	if (fd < 0)
-		return (1);
-	if (read(fd, buff, 2) == 0)
-		return (close(fd), 1);
-	close(fd);
-	return (0);
+	if ((*input)->type == t_txt || (*input)->type == t_flag)
+	{
+		if ((*input)->prev && *i != 0)
+		{
+			if ((*input)->prev->type == t_txt
+				|| (*input)->prev->type == t_flag)
+				cmd->full_cmd[(*i)++] = ft_strdup((*input)->txt);
+		}
+		else
+			cmd->full_cmd[(*i)++] = ft_strdup((*input)->txt);
+	}
 }
 
-t_exec	*fill_exec(t_input **input, char **error_msg)
+static t_exec	*fill_exec(t_input **input, char **error_msg)
 {
 	t_exec	*cmd;
 	int		count;
@@ -54,46 +53,57 @@ t_exec	*fill_exec(t_input **input, char **error_msg)
 			ft_strmcpy(error_msg, " Permission denied\n"), NULL);
 	while ((*input) && (*input)->type != t_pipe && i < count)
 	{
-		if ((*input)->type == t_txt || (*input)->type == t_flag)
-		{
-			if ((*input)->prev && i != 0)
-			{
-				if ((*input)->prev->type == t_txt
-					|| (*input)->prev->type == t_flag)
-					cmd->full_cmd[i++] = ft_strdup((*input)->txt);
-			}
-			else
-				cmd->full_cmd[i++] = ft_strdup((*input)->txt);
-		}
+		fill_full_cmd(input, cmd, &i);
 		*input = (*input)->next;
 	}
 	return (cmd);
 }
 
+static int	prepare_input(t_input **input, char **envp,
+				int *retval, t_history *hist)
+{
+	rotate_input(input);
+	if (!(*input))
+		return (ft_putstr_fd("Parsing error\n", 2), 0);
+	check_heredoc(*input, hist, *retval, envp);
+	input = dequote(envp, *retval, input);
+	if (!input)
+		return (0);
+	input = check_empty_txt(input);
+	if (!input)
+		return (set_retval(retval, 0), 0);
+	return (1);
+}
+
+static int	path_validity(t_exec *cmd, char **error_msg,
+				int *retval, char **envp)
+{
+	if (!check_dir(cmd->full_cmd[0], error_msg, 0)
+		|| !check_access(cmd->full_cmd[0], error_msg))
+		return (set_retval(retval, 126), 0);
+	cmd->full_path = cmd_to_path(cmd, error_msg, envp);
+	if (!cmd->full_path)
+		return (set_retval(retval, 127), 0);
+	if (error_msg)
+		cmd->err_msg = *error_msg;
+	return (1);
+}
+
 t_exec	**tokens_to_exec(t_input **input, char **envp,
 				int *retval, t_history *hist)
 {
-	t_exec	**cmds;
-	char	*error_msg;
-	int		count;
-	int		i;
+	t_exec		**cmds;
+	static char	*error_msg = NULL;
+	int			count;
+	int			i;
 
 	count = count_cmds(*input);
 	cmds = ft_calloc(count + 1, sizeof(t_exec *));
 	i = 0;
-	error_msg = NULL;
 	while (i < count)
 	{
-		rotate_input(input);
-		if (!(*input))
-			return (die(cmds, NULL, ft_strdup("Parsing error\n"), NULL));
-		check_heredoc(*input, hist, *retval, envp);
-		input = dequote(envp, *retval, input);
-		if (!input)
-			return (free(cmds), NULL);
-		input = check_empty_txt(input);
-		if (!input)
-			return (lynch_exec(cmds), set_retval(retval, 0), NULL);
+		if (!prepare_input(input, envp, retval, hist))
+			return (lynch_exec(cmds), NULL);
 		cmds[i] = fill_exec(input, &error_msg);
 		if (!cmds[i] && !has_type(*input, t_pipe))
 			return (die(cmds, NULL, error_msg, set_retval(retval, 1)));
@@ -101,18 +111,10 @@ t_exec	**tokens_to_exec(t_input **input, char **envp,
 			count = rotate_past_pipe(input, count);
 		else
 		{
-			if (!check_dir(cmds[i]->full_cmd[0], &error_msg, 0)
-				|| !check_access(cmds[i]->full_cmd[0], &error_msg))
-				return (die(cmds, NULL, error_msg, set_retval(retval, 126)));
-			cmds[i]->full_path = cmd_to_path(cmds[i], &error_msg, envp);
-			if (!cmds[i]->full_path)
-				return (die(cmds, NULL, error_msg, set_retval(retval, 127)));
-			if (error_msg)
-				cmds[i]->err_msg = error_msg;
+			if (!path_validity(cmds[i], &error_msg, retval, envp))
+				return (die(cmds, NULL, error_msg, NULL));
 			i++;
 		}
 	}
-	if (!cmds[0])
-		return (free(cmds), NULL);
 	return (cmds);
 }

@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:25:23 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/07 19:25:23 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 12:35:25 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,10 @@ void	free_array(char **array)
 // liberate == 3 -> free both
 char	*ft_strjoin_free(char *s1, char *s2, int liberate)
 {
-	int		i;
-	int		j;
-	char	*new_str;
+	size_t	len;
+	size_t	len1;
+	size_t	len2;
+	char	*str;
 
 	if (!s1 && !s2)
 		return (NULL);
@@ -45,24 +46,19 @@ char	*ft_strjoin_free(char *s1, char *s2, int liberate)
 		return (ft_strdup(s2));
 	if (!s2)
 		return (ft_strdup(s1));
-	i = ft_strlen(s1);
-	j = ft_strlen(s2);
-	new_str = (char *)malloc(i + j + 1);
-	if (!new_str)
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	len = len1 + len2;
+	str = (char *)malloc(sizeof(char) * (len + 1));
+	if (str == NULL)
 		return (NULL);
-	i = 0;
-	j = 0;
-	while (s1[j])
-		new_str[i++] = s1[j++];
-	j = 0;
-	while (s2[j])
-		new_str[i++] = s2[j++];
+	ft_strlcpy(str, s1, len1 + 1);
+	ft_strlcat(str, s2, len + 1);
 	if (liberate == 1 || liberate == 3)
 		free(s1);
 	if (liberate == 2 || liberate == 3)
 		free(s2);
-	new_str[i] = '\0';
-	return (new_str);
+	return (str);
 }
 
 char	*ft_substr_free(char *s, unsigned int start, size_t len)

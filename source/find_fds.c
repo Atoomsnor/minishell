@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   find_fd.c                                          :+:      :+:    :+:   */
+/*   find_fds.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 18:03:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/07 18:03:53 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 11:19:59 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,25 @@ static int	find_in(char *path, int *fd)
 	return (*fd);
 }
 
-int	find_in_out(t_input *input, int *in_fd, int *out_fd, char **error_msg)
+t_input	*rotate_backwards(t_input *input)
 {
-	*in_fd = 0;
-	*out_fd = 1;
 	while (input && input->type != t_pipe)
 	{
 		if (input->prev && input->prev->type != t_pipe)
 			input = input->prev;
 		else
-			break ;
+			return (input);
 	}
+	return (input);
+}
+
+int	find_in_out(t_input *input, int *in_fd, int *out_fd, char **error_msg)
+{
+	*in_fd = 0;
+	*out_fd = 1;
+	input = rotate_backwards(input);
+	if (!input)
+		return (-1);
 	if (input->type == t_pipe)
 		input = input->next;
 	while (input && input->type != t_pipe)
@@ -70,5 +78,21 @@ int	find_in_out(t_input *input, int *in_fd, int *out_fd, char **error_msg)
 			return (*in_fd);
 		input = input->next;
 	}
+	return (0);
+}
+
+int	file_is_empty(char *path)
+{
+	int		fd;
+	char	buff[2];
+
+	if (!path)
+		return (1);
+	fd = open(path, O_RDONLY);
+	if (fd < 0)
+		return (1);
+	if (read(fd, buff, 2) == 0)
+		return (close(fd), 1);
+	close(fd);
 	return (0);
 }

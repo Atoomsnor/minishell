@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:49:11 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/24 18:32:27 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 12:47:57 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,33 @@ static int	ft_count(char const *s, char c)
 			nb++;
 		i++;
 	}
+	if (quote)
+		nb++;
 	return (nb);
 }
 
 static int	ft_len(char const *s, char c)
 {
 	int	i;
+	int	len;
 
 	i = 0;
 	while (s[i] && s[i] != c)
 	{
 		if (s[i] == '\'' && c != '"' && s[i] != c)
-			i += ft_len(&s[i + 1], '\'') + 2;
+		{
+			len = ft_len(&s[i + 1], '\'');
+			if (!s[i + 1 + len])
+				return (i + 1 + len);
+			i += len + 2;
+		}
 		else if (s[i] == '\"' && c != '\'' && s[i] != c)
-			i += ft_len(&s[i + 1], '"') + 2;
+		{
+			len = ft_len(&s[i + 1], '"');
+			if (!s[i + 1 + len])
+				return (i + 1 + len);
+			i += len + 2;
+		}
 		else
 			i++;
 	}
