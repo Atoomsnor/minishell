@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   and_i_quote.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:29:22 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/03 17:40:37 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:25:33 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include <complex.h>
-#include <signal.h>
 #include <stdio.h>
 #include <readline/readline.h>
 #include <unistd.h>
@@ -98,9 +97,9 @@ int	sub_quote(t_input **input, int *len, int retval, char **env)
 
 t_input	**dequote(char **env, int retval, t_input **input)
 {
+	t_input	*head;
 	int		len;
 	int		sub;
-	t_input	*head;
 
 	len = 0;
 	head = *input;

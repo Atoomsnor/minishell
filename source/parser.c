@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/08 16:11:17 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:30:23 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static t_exec	*fill_exec(t_input **input, char **error_msg)
 }
 
 static int	prepare_input(t_input **input, char **envp,
-				int *retval, t_history *hist)
+							int *retval, t_history *hist)
 {
 	rotate_input(input);
 	if (!(*input))
@@ -78,7 +78,7 @@ static int	prepare_input(t_input **input, char **envp,
 }
 
 static int	path_validity(t_exec *cmd, char **error_msg,
-				int *retval, char **envp)
+							int *retval, char **envp)
 {
 	if (!check_dir(cmd->full_cmd[0], error_msg, 0)
 		|| !check_access(cmd->full_cmd[0], error_msg))
@@ -92,10 +92,10 @@ static int	path_validity(t_exec *cmd, char **error_msg,
 }
 
 t_exec	**tokens_to_exec(t_input **input, char **envp,
-				int *retval, t_history *hist)
+							int *retval, t_history *hist)
 {
 	t_exec		**cmds;
-	char	*error_msg;
+	char		*error_msg;
 	int			count;
 	int			i;
 
@@ -114,9 +114,8 @@ t_exec	**tokens_to_exec(t_input **input, char **envp,
 			count = rotate_past_pipe(input, count);
 		else
 		{
-			if (!path_validity(cmds[i], &error_msg, retval, envp))
+			if (!path_validity(cmds[i++], &error_msg, retval, envp))
 				return (die(cmds, NULL, error_msg, NULL));
-			i++;
 		}
 	}
 	return (cmds);

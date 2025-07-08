@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 14:29:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/01 13:50:26 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:22:05 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 void	history(t_history *hist)
 {
-	int			i;
+	int	i;
 
 	i = 1;
 	if (hist->hist_count < HISTORY_SIZE)

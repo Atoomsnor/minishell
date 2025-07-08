@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_builtin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:23:46 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/03 14:32:51 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:19:26 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 
 static int	export_validity(char *str)
 {
+	int	has_alpha;
 	int	len;
 	int	i;
-	int	has_alpha;
 
 	len = 0;
 	while (str[len] && str[len] != '=')
@@ -93,7 +93,6 @@ int	exporting(char *str, char ***env)
 	return (1);
 }
 
-// works in sync with export, destroys a saved var
 void	unset(char *name, char ***env)
 {
 	int	len;

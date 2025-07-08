@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 12:48:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 12:27:30 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:27:56 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,8 @@ char	*set_var_name(char *str, char **env, int retval, int *i)
 
 char	*remove_wildcard(char *str, char *var, int pos[2], int recur)
 {
-	char	*out;
 	char	*substr;
+	char	*out;
 	char	*ret;
 
 	substr = ft_substr(str, 0, pos[0]);
@@ -123,8 +123,8 @@ char	*remove_wildcard(char *str, char *var, int pos[2], int recur)
 char	*handle_wildcard(char *str, char **env, int retval, int recur)
 {
 	char	*var_name;
-	int		pos[2];
 	char	*ret;
+	int		pos[2];
 
 	pos[0] = 0;
 	ret = NULL;

@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 16:16:34 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 16:10:55 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:21:52 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,8 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-
-static void	run_here_child(char *delimiter, int pipefd,
-	char **env, int retval)
+static void	here_child(char *delimiter, int pipefd,
+							char **env, int retval)
 {
 	char	*input;
 	char	quotetype;
@@ -49,7 +48,7 @@ static void	run_here_child(char *delimiter, int pipefd,
 	exit(1);
 }
 
-static int	start_here_child(char *delimiter, int retval, char **env)
+static int	here_parent(char *delimiter, int retval, char **env)
 {
 	pid_t	pid;
 	int		status;
@@ -63,7 +62,7 @@ static int	start_here_child(char *delimiter, int retval, char **env)
 	if (pid == 0)
 	{
 		close(pipefd[0]);
-		run_here_child(delimiter, pipefd[1], env, retval);
+		here_child(delimiter, pipefd[1], env, retval);
 	}
 	signal(SIGINT, SIG_IGN);
 	close(pipefd[1]);
@@ -84,7 +83,7 @@ int	run_here_doc(t_input **input, t_history *hist, int retval, char **env)
 
 	(void)hist;
 	delimiter = (*input)->next->txt;
-	(*input)->hd_fd = start_here_child(delimiter, retval, env);
+	(*input)->hd_fd = here_parent(delimiter, retval, env);
 	signal(SIGINT, sigint_handler);
 	if ((*input)->hd_fd < 0)
 		return (-1);
@@ -100,11 +99,10 @@ int	check_heredoc(t_input *input, t_history *hist, int retval, char **env)
 	{
 		if (input->type == t_heredoc && input->hd_fd == 0)
 			input->hd_fd = run_here_doc(&input, hist, retval, env);
-
 		else if (input->type == t_pipe)
 			return (0);
 		if (input->hd_fd == -1)
-			return (-1); 
+			return (-1);
 		input = input->next;
 	}
 	return (0);

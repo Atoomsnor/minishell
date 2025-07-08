@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:33:44 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/03 14:09:44 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:19:45 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,9 +106,9 @@ int	exec_loop(t_exec **exec, int i, int *prev_fd, char **envp)
 
 int	execute(t_exec **exec, char **envp)
 {
-	int		i;
-	int		status;
 	int		prev_fd;
+	int		status;
+	int		i;
 
 	i = 0;
 	prev_fd = -1;

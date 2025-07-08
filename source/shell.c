@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 17:09:11 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 15:02:38 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:29:18 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,31 +69,33 @@ int	shell_exec(int *retval, t_exec **exec, char ***envp, t_history *hist)
 	return (1);
 }
 
-// void	run_shell()
-// {
-// 		head = *input;
-// 		exec = tokens_to_exec(input, *envp, &retval, hist);
-// 		*input = head;
-// 		if (input && *input)
-// 			shank_input(input);
-// 		if (!exec)
-// 			return (history(hist), retval);
-// 		if (!shell_exec(&retval, exec, envp, hist))
-// 			return (retval);
-// 		if (exec)
-// 			lynch_exec(exec);
-// 		retval = 0;
-// 		history(hist);
-// }
+int	run(t_input **input, char ***envp, int retval, t_history *hist)
+{
+	t_exec	**exec;
+	t_input	*head;
+
+	exec = NULL;
+	head = *input;
+	exec = tokens_to_exec(input, *envp, &retval, hist);
+	*input = head;
+	if (input && *input)
+		shank_input(input);
+	if (!exec)
+		return (history(hist), retval);
+	if (!shell_exec(&retval, exec, envp, hist))
+		return (retval);
+	if (exec)
+		lynch_exec(exec);
+	retval = 0;
+	history(hist);
+	return (retval);
+}
 
 int	shelly(char ***envp, int retval, t_history *hist)
 {
 	t_input	**input;
-	t_exec	**exec;
-	t_input	*head;
 	char	*in;
 
-	exec = NULL;
 	in = readline("megashell>$ ");
 	hist->in = in;
 	if (g_signalreceived)
@@ -110,19 +112,7 @@ int	shelly(char ***envp, int retval, t_history *hist)
 		input = init_list(in);
 		if (!input)
 			return (1);
-		head = *input;
-		exec = tokens_to_exec(input, *envp, &retval, hist);
-		*input = head;
-		if (input && *input)
-			shank_input(input);
-		if (!exec)
-			return (history(hist), retval);
-		if (!shell_exec(&retval, exec, envp, hist))
-			return (retval);
-		if (exec)
-			lynch_exec(exec);
-		retval = 0;
-		history(hist);
+		retval = run(input, envp, retval, hist);
 	}
 	return (retval);
 }

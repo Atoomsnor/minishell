@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 13:33:15 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/30 16:56:41 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:27:05 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 
 volatile sig_atomic_t	g_signalreceived = 0;
 
-// function called when signals are received
 void	sighandler(int signal)
 {
 	if (signal == SIGINT)
@@ -39,12 +38,6 @@ void	sigint_handler(int signal)
 	rl_redisplay();
 }
 
-// struct sigaction	sa;
-// sa.sa_handler = sigint_handler;
-// sigemptyset(&sa.sa_mask);
-// sa.sa_flags = SA_RESTART;
-// sigaction(SIGINT, &sa, NULL);
-// create signals that need to be handled
 void	init_signals(void)
 {
 	rl_catch_signals = 1;

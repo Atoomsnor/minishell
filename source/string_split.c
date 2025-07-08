@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   string_split.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:49:11 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 12:47:57 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:27:25 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 
 static int	ft_count(char const *s, char c)
 {
+	int	quote;
 	int	nb;
 	int	i;
-	int	quote;
 
 	nb = 0;
 	i = 0;
@@ -45,8 +45,8 @@ static int	ft_count(char const *s, char c)
 
 static int	ft_len(char const *s, char c)
 {
-	int	i;
 	int	len;
+	int	i;
 
 	i = 0;
 	while (s[i] && s[i] != c)
@@ -110,7 +110,6 @@ static char	**ft_bigsplit(char const *s, char c, char **n_str)
 	return (n_str);
 }
 
-// version of ft_split that preserves anything in quotes
 char	**ft_string_split(char const *s, char c)
 {
 	char	**n_str;

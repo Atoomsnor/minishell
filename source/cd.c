@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 14:50:13 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/07 14:50:13 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:19:07 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	change_env_var(char ***env, char *var_name, char *content)
 	}
 }
 
-static int	its_coming_home(char **env)
+static int	home_path(char **env)
 {
 	int	i;
 
@@ -79,7 +79,7 @@ int	cd(char **path, char ***env)
 
 	if (!path || !path[1] || (path[1][0] == '~' && path[1][1] == '\0')
 			|| !ft_strncmp(path[1], "~/", 3))
-		return (its_coming_home(*env));
+		return (home_path(*env));
 	if (path[2])
 		return (ft_putstr_fd("cd: too many arguments\n", 2), 0);
 	cwd = getcwd(NULL, 0);

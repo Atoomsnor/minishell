@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:25:23 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 12:35:25 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:20:36 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,12 @@ void	free_array(char **array)
 	free(array);
 }
 
-// liberate == 1 -> free s1
-// liberate == 2 -> free s2
-// liberate == 3 -> free both
 char	*ft_strjoin_free(char *s1, char *s2, int liberate)
 {
+	char	*str;
 	size_t	len;
 	size_t	len1;
 	size_t	len2;
-	char	*str;
 
 	if (!s1 && !s2)
 		return (NULL);

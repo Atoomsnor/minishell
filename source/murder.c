@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:28:35 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/03 18:48:20 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:23:40 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void	close_exec_fds(t_exec *exec)
 
 void	lynch_exec(t_exec **exec)
 {
-	int		j;
 	t_exec	**head;
+	int		i;
 
 	if (!exec)
 		return ;
@@ -49,9 +49,9 @@ void	lynch_exec(t_exec **exec)
 			free_and_null((*exec)->full_path);
 		if ((*exec)->full_cmd)
 		{
-			j = 0;
-			while ((*exec)->full_cmd[j])
-				free_and_null((*exec)->full_cmd[j++]);
+			i = 0;
+			while ((*exec)->full_cmd[i])
+				free_and_null((*exec)->full_cmd[i++]);
 			free_and_null((*exec)->full_cmd);
 		}
 		if ((*exec))
@@ -89,9 +89,7 @@ void	burn_history(t_history *hist)
 	if (hist)
 	{
 		if (hist->in)
-		{
 			free_and_null(hist->in);
-		}
 		while (hist->hist[i])
 		{
 			free_and_null(hist->hist[i]);
