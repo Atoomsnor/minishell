@@ -3,36 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/01 14:07:07 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:59:10 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include <fcntl.h>
-#include <stdio.h>
-#include <unistd.h>
 #include <readline/readline.h>
-
-t_type	find_type(char *in)
-{
-	if (!ft_strncmp(in, "<", 2))
-		return (t_left);
-	else if (!ft_strncmp(in, "|", 2))
-		return (t_pipe);
-	else if (!ft_strncmp(in, ">", 2))
-		return (t_right);
-	else if (!ft_strncmp(in, ">>", 3))
-		return (t_append);
-	else if (!ft_strncmp(in, "<<", 3))
-		return (t_heredoc);
-	else if (in[0] == '-')
-		return (t_flag);
-	else
-		return (t_txt);
-}
+#include <stdio.h>
 
 char	find_first_quote_len(char *str)
 {

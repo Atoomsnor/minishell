@@ -6,17 +6,16 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:28:35 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 16:23:40 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:59:49 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include <stdlib.h>
+#include <readline/readline.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <readline/readline.h>
 
-void	close_exec_fds(t_exec *exec)
+static void	close_exec_fds(t_exec *exec)
 {
 	if (!exec)
 		return ;

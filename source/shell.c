@@ -6,18 +6,15 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 17:09:11 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 16:29:18 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/08 17:08:30 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include <readline/readline.h>
-#include <readline/history.h>
-#include <unistd.h>
-#include <stdlib.h>
 #include <stdio.h>
 
-char	*skip_spaces(char *in)
+static char	*skip_spaces(char *in)
 {
 	char	*ret;
 	int		i;
@@ -37,7 +34,7 @@ char	*skip_spaces(char *in)
 	return (NULL);
 }
 
-void	check_write_error(t_exec **exec)
+static void	check_write_error(t_exec **exec)
 {
 	int	i;
 
@@ -50,7 +47,8 @@ void	check_write_error(t_exec **exec)
 	}
 }
 
-int	shell_exec(int *retval, t_exec **exec, char ***envp, t_history *hist)
+static int	shell_exec(int *retval, t_exec **exec,
+						char ***envp, t_history *hist)
 {
 	if (exec[1] || exec[0]->full_path[0] != '\0')
 	{
@@ -69,7 +67,7 @@ int	shell_exec(int *retval, t_exec **exec, char ***envp, t_history *hist)
 	return (1);
 }
 
-int	run(t_input **input, char ***envp, int retval, t_history *hist)
+static int	run(t_input **input, char ***envp, int retval, t_history *hist)
 {
 	t_exec	**exec;
 	t_input	*head;

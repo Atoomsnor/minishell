@@ -6,15 +6,12 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:29:22 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 16:25:33 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:57:22 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include <complex.h>
 #include <stdio.h>
-#include <readline/readline.h>
-#include <unistd.h>
 
 int	has_char(char *str, char c)
 {
@@ -48,7 +45,7 @@ char	find_first_quote(char *str)
 	return (0);
 }
 
-char	*trim_quotes(char *str, char quote, int start)
+static char	*trim_quotes(char *str, char quote, int start)
 {
 	char	*ret;
 
@@ -68,7 +65,7 @@ char	*trim_quotes(char *str, char quote, int start)
 	return (ret);
 }
 
-int	sub_quote(t_input **input, int *len, int retval, char **env)
+static int	sub_quote(t_input **input, int *len, int retval, char **env)
 {
 	int	len2;
 	int	quote_type;

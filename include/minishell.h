@@ -6,115 +6,130 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/08 16:10:21 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/08 17:09:25 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include <signal.h>
 #include "../libft/libft.h"
 #include "struct.h"
+#include <signal.h>
 
 extern volatile sig_atomic_t	g_signalreceived;
 
 /* main */
-int		sig_interrupted();
-int		shelly(char ***envp, int retval, t_history *hist);
-int		main(int argc, char **argv, char **envp);
+int			main(int argc, char **argv, char **envp);
+
+/* and_i_quote */
+int			has_char(char *str, char c);
+char		find_first_quote(char *str);
+t_input		**dequote(char **env, int retval, t_input **input);
+
+/* builtin */
+int			pwd(int fd);
+char		*join_strings(char *s1, char *s2);
+int			echo(int fd, char **to_write);
+void		bi_exit(t_exec *exec, int child);
+
+/* cd */
+int	cd(char **path, char ***env);
+
+/* env_builtin */
+int			exporting(char *str, char ***env);
+void		unset(char *name, char ***env);
+void		env(char **envp, int fd);
+
+/* executor */
+int			run_builtin(t_exec *exec, int fd, char ***envp, int child);
+void		child(t_exec *exec, int prev_fd, int has_next, char **envp);
+int			execute(t_exec **exec, char **envp);
+
+/* find_fds */
+int			find_in_out(t_input *input, int *in_fd, int *out_fd, char **error_msg);
+int			file_is_empty(char *path);
+
+/* free_utils */
+void		free_array(char **array);
+char		*ft_strjoin_free(char *s1, char *s2, int liberate);
+char		*ft_substr_free(char *s, unsigned int start, size_t len);
+void		free_and_null(void *ptr);
+
+/* here_doc */
+int			check_heredoc(t_input *input, t_history *hist, int retval, char **env);
 
 /* history */
-void	history(t_history *hist);
-t_history	*init_hist();
+void		history(t_history *hist);
+t_history	*init_hist(void);
 
-/* signals */
-void	sighandler(int signal);
-void	sigint_handler(int signal);
-void	init_signals(void);
-
-/* linked_list */
-int		ft_lstsize(t_input *lst);
-t_input	*ft_lstnew(void *content, int i);
-t_input	*ft_lstlast(t_input *lst);
-void	ft_lstadd_back(t_input **lst, t_input *new_lst);
-void	ft_lstadd_front(t_input **lst, t_input *new_lst);
-
-/* list_utils */
-void	ft_lstsethead(t_input **lst, t_input *head);
-void	ft_lstdelone(t_input *lst);
-void	ft_lstadd_next(t_input **lst, t_input *new_lst);
-t_input	*list_move(t_input *lst, int times);
+/* lex_list */
+t_input		**matrix_to_list(char **matrix);
+void		rotation(int *i, t_input *cpy);
+t_input		*parse_list(t_input *input);
 
 /* lexer */
-char	**ft_string_split(char const *s, char c);
-t_type	find_type(char *in);
-int		check_txt(t_input *input, int i);
-t_input	**matrix_to_list(char **mat);
-t_input	*parse_list(t_input *input);
-t_input	**init_list(char *in);
-char	find_first_quote_len(char *str);
+char		find_first_quote_len(char *str);
+int			check_txt(t_input *input, int i);
+t_input		**init_list(char *in);
+
+/* linked list*/
+t_input		*ft_lstnew(void *content, int i);
+t_input		*ft_lstlast(t_input *lst);
+void		ft_lstadd_back(t_input **lst, t_input *new_lst);
+
+/* list utils */
+void		ft_lstsethead(t_input **lst, t_input *head);
+void		ft_lstdelone(t_input *lst);
+void		ft_lstadd_next(t_input **lst, t_input *new_lst);
+void		ft_lstcopy(t_input *input, t_input *next);
 
 /* murder */
-void	lynch_exec(t_exec **exec);
-void	shank_input(t_input **input);
-void	burn_history(t_history *hist);
-void	*die(t_exec **exec, t_input **input, char *error, void *ret);
+void		lynch_exec(t_exec **exec);
+void		shank_input(t_input **input);
+void		burn_history(t_history *hist);
+void		*die(t_exec **exec, t_input **input, char *error, void *ret);
+
+/* parser_checks */
+int			check_dir(char *str, char **error_msg, int i);
+int			is_buildin(char *cmd);
+t_input		**check_empty_txt(t_input **input);
+int			check_access(char *path, char **error_msg);
+
+/* parser_error */
+void		*adjust_error(char **error_msg, char *err1, char *err2);
+void		*set_retval(int *retval, int val);
+
+/* parser_utils */
+void		rotate_input(t_input **input);
+int			rotate_past_pipe(t_input **input, int count);
+int			has_type(t_input *input, t_type type);
+int			count_cmds(t_input *input);
+int			count_till_pipe(t_input *input);
 
 /* parser */
-void	free_array(char **array);
-char	**split_paths(char **envp);
-char	*find_path(char **paths, char *cmd);
-int		count_cmds(t_input *input);
-int		count_till_pipe(t_input *input);
-int		is_buildin(char *cmd);
-char	*cmd_to_path(t_exec *cmd, char **error_msg, char **envp);
-t_exec **tokens_to_exec(t_input **input, char **envp, int *retval, t_history *hist);
+t_exec		**tokens_to_exec(t_input **input, char **envp, int *retval, t_history *hist);
 
-/* execute */
-int		run_builtin(t_exec *exec, int fd, char ***envp, int child);
-void	child(t_exec *exec, int prev_fd, int has_next, char **envp);
-int		execute(t_exec **exec, char **envp);
+/* pathfinding */
+char		*cmd_to_path(t_exec *cmd, char **error_msg, char **envp);
 
-/* builtins */
-int		pwd(int fd);
-int		echo(int fd, char **to_write);
-int		cd(char **path, char ***env);
-int		exporting(char *str, char ***env);
-void	unset(char *name, char ***env);
-void	bi_exit(t_exec *exec, int child);
-void	env(char **envp, int fd);
+/* shell */
+int			shelly(char ***envp, int retval, t_history *hist);
 
-/* quote */
-t_input	**dequote(char **env, int retval, t_input **input);
-char	find_first_quote(char *str);
-int		has_char(char *str, char c);
+/* signal */
+void		sighandler(int signal);
+void		sigint_handler(int signal);
+void		init_signals(void);
 
-/* wildcard */
-char	*handle_wildcard(char *str, char **env, int retval, int recur);
-
-/* heredoc */
-int		run_here_doc(t_input **input, t_history *hist, int retval, char **env);
-void	printlist(t_input *c, int i);
-int		check_heredoc(t_input *input, t_history *hist, int retval, char **env);
+/* string_split */
+char		**ft_string_split(char const *s, char c);
 
 /* utils */
-size_t	ft_strmcpy(char **dest, const char *src);
-char	*ft_strjoin_free(char *s1, char *s2, int liberate);
-char	*ft_substr_free(char *s, unsigned int start, size_t len);
-int		has_type(t_input *input, t_type type);
-void	free_and_null(void *ptr);
-char	**ft_matdup(char **mat);
+size_t		ft_strmcpy(char **dest, const char *src);
+char		**ft_matdup(char **mat);
 
-/* to be sorted*/
-int		rotate_past_pipe(t_input **input, int count);
-int		check_dir(char *str, char **error_msg, int i);
-int		check_access(char *path, char **error_msg);
-int		find_in_out(t_input *input, int *in_fd, int *out_fd, char **error_msg);
-void	rotate_input(t_input **input);
-t_input	**check_empty_txt(t_input **input);
-void	*set_retval(int *retval, int val);
-void	*adjust_error(char **error_msg, char *err1, char *err2);
-void	ft_lstcopy(t_input *input, t_input *next);
+/* wildcard */
+char		*find_and_trim_var(char *var_name, char **env, int gate);
+char		*handle_wildcard(char *str, char **env, int retval, int recur);
 
 #endif

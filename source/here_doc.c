@@ -6,13 +6,11 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 16:16:34 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 16:21:52 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/08 17:08:38 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include <fcntl.h>
-#include <readline/history.h>
 #include <readline/readline.h>
 #include <signal.h>
 #include <stdlib.h>
@@ -77,7 +75,8 @@ static int	here_parent(char *delimiter, int retval, char **env)
 	return (pipefd[0]);
 }
 
-int	run_here_doc(t_input **input, t_history *hist, int retval, char **env)
+static int	run_here_doc(t_input **input, t_history *hist,
+							int retval, char **env)
 {
 	char	*delimiter;
 

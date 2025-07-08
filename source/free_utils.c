@@ -6,13 +6,12 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:25:23 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 16:20:36 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:34:24 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include <stdlib.h>
-#include <unistd.h>
 
 void	free_array(char **array)
 {

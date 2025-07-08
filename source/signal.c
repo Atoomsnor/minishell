@@ -6,13 +6,13 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 13:33:15 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 16:27:05 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:38:28 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include <signal.h>
 #include <readline/readline.h>
+#include <signal.h>
 #include <stdio.h>
 
 volatile sig_atomic_t	g_signalreceived = 0;

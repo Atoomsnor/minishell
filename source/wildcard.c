@@ -6,15 +6,12 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 12:48:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 16:27:56 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/08 17:01:07 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include <fcntl.h>
-#include <stdlib.h>
 #include <stdio.h>
-#include <unistd.h>
 
 char	*find_and_trim_var(char *var_name, char **env, int gate)
 {
@@ -42,7 +39,7 @@ char	*find_and_trim_var(char *var_name, char **env, int gate)
 	return (NULL);
 }
 
-char	*get_var(char *var_name, int retval, char **env)
+static char	*get_var(char *var_name, int retval, char **env)
 {
 	if (!ft_strncmp(var_name, "?", 1))
 	{
@@ -69,7 +66,7 @@ char	*get_var(char *var_name, int retval, char **env)
 	return (var_name);
 }
 
-char	*set_var_name(char *str, char **env, int retval, int *i)
+static char	*set_var_name(char *str, char **env, int retval, int *i)
 {
 	char	*var_name;
 	int		wc;
@@ -91,7 +88,7 @@ char	*set_var_name(char *str, char **env, int retval, int *i)
 	return (var_name);
 }
 
-char	*remove_wildcard(char *str, char *var, int pos[2], int recur)
+static char	*remove_wildcard(char *str, char *var, int pos[2], int recur)
 {
 	char	*substr;
 	char	*out;

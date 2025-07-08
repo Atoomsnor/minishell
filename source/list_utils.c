@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:13:12 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/27 16:33:08 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 17:01:42 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,19 +69,6 @@ void	ft_lstadd_next(t_input **lst, t_input *new_lst)
 		(*lst)->next->prev = new_lst;
 	}
 	(*lst)->next = new_lst;
-}
-
-t_input	*list_move(t_input *lst, int times)
-{
-	t_input	*cpy;
-
-	cpy = lst;
-	while (times > 0 && cpy)
-	{
-		cpy = cpy->next;
-		times--;
-	}
-	return (cpy);
 }
 
 void	ft_lstcopy(t_input *input, t_input *next)

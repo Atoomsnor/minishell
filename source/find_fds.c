@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_fds.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 18:03:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 11:19:59 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:58:30 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static int	find_in(char *path, int *fd)
 	return (*fd);
 }
 
-t_input	*rotate_backwards(t_input *input)
+static t_input	*rotate_backwards(t_input *input)
 {
 	while (input && input->type != t_pipe)
 	{

@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:15:06 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/03 18:07:52 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:57:05 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include <limits.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -70,7 +69,7 @@ int	echo(int fd, char **to_write)
 	return (1);
 }
 
-void	exit_numeric(t_exec *exec, int	*i)
+static void	exit_numeric(t_exec *exec, int	*i)
 {
 	if (!ft_isdigit(exec->full_cmd[1][*i]) && exec->full_cmd[1][*i] != '+'
 			&& exec->full_cmd[1][*i] != '-')

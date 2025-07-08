@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   parse_checks.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:28:39 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 11:14:39 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:36:37 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include <unistd.h>
-#include <fcntl.h>
 #include <dirent.h>
 #include <stdlib.h>
 

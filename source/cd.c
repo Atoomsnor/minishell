@@ -6,12 +6,11 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 14:50:13 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 16:19:07 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:33:38 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include <limits.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>

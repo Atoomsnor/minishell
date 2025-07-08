@@ -6,16 +6,14 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 14:29:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 16:22:05 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:34:54 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include <limits.h>
 #include <readline/history.h>
 #include <readline/readline.h>
 #include <stdlib.h>
-#include <unistd.h>
 
 void	history(t_history *hist)
 {

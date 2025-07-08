@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   printing.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 16:45:59 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/07 16:45:59 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:33:00 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
-#include <stdio.h>
+// #include "../include/minishell.h"
+// #include <stdio.h>
 
 //void	printlist(t_input *c, int i)
 //{

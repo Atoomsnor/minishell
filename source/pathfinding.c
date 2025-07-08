@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pathfinding.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:22:43 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/07 19:22:43 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 17:00:14 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	is_executable_script(char *path)
 		return (0);
 }
 
-char	**split_paths(char **envp)
+static char	**split_paths(char **envp)
 {
 	char	**paths;
 	char	*tmp;
@@ -60,7 +60,7 @@ char	**split_paths(char **envp)
 	return (paths);
 }
 
-char	*find_path(char **paths, char *cmd)
+static char	*find_path(char **paths, char *cmd)
 {
 	char	*found_path;
 	int		i;

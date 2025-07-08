@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:33:44 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 16:19:45 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:58:17 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	child(t_exec *exec, int prev_fd, int has_next, char **envp)
 	exit(1);
 }
 
-void	set_fds(t_exec *exec, int *prev_fd, t_exec *next)
+static void	set_fds(t_exec *exec, int *prev_fd, t_exec *next)
 {
 	if ((*prev_fd) != -1)
 		close((*prev_fd));
@@ -83,7 +83,7 @@ void	set_fds(t_exec *exec, int *prev_fd, t_exec *next)
 	}
 }
 
-int	exec_loop(t_exec **exec, int i, int *prev_fd, char **envp)
+static int	exec_loop(t_exec **exec, int i, int *prev_fd, char **envp)
 {
 	pid_t	pid;
 

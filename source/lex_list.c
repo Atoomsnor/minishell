@@ -1,18 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   to_linked_list.c                                   :+:      :+:    :+:   */
+/*   lex_list.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 16:47:59 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/07 16:47:59 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:59:41 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include <stdio.h>
-#include <unistd.h>
 
 t_input	**matrix_to_list(char **matrix)
 {
@@ -32,6 +31,24 @@ t_input	**matrix_to_list(char **matrix)
 		i++;
 	}
 	return (input);
+}
+
+static t_type	find_type(char *in)
+{
+	if (!ft_strncmp(in, "<", 2))
+		return (t_left);
+	else if (!ft_strncmp(in, "|", 2))
+		return (t_pipe);
+	else if (!ft_strncmp(in, ">", 2))
+		return (t_right);
+	else if (!ft_strncmp(in, ">>", 3))
+		return (t_append);
+	else if (!ft_strncmp(in, "<<", 3))
+		return (t_heredoc);
+	else if (in[0] == '-')
+		return (t_flag);
+	else
+		return (t_txt);
 }
 
 void	rotation(int *i, t_input *cpy)

@@ -3,17 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:59:06 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/08 10:48:23 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:38:43 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include <stdlib.h>
 #include <stdio.h>
-#include <unistd.h>
 
 size_t	ft_strmcpy(char **dest, const char *src)
 {

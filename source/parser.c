@@ -6,16 +6,13 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/08 16:30:23 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:37:53 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include <fcntl.h>
 #include <stdio.h>
-#include <unistd.h>
 #include <stdlib.h>
-#include <dirent.h>
 
 static void	fill_full_cmd(t_input **input, t_exec *cmd, int *i)
 {

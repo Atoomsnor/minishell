@@ -3,28 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   linked_list.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 12:08:29 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/06/11 13:34:17 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/08 17:01:30 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include <stdlib.h>
-
-int	ft_lstsize(t_input *lst)
-{
-	int	count;
-
-	count = 0;
-	while (lst)
-	{
-		count++;
-		lst = lst->next;
-	}
-	return (count);
-}
 
 t_input	*ft_lstnew(void *content, int i)
 {
@@ -71,28 +58,4 @@ void	ft_lstadd_back(t_input **lst, t_input *new_lst)
 	new_lst->prev = end;
 	new_lst->next = NULL;
 	new_lst->head = (*lst)->head;
-}
-
-void	ft_lstadd_front(t_input **lst, t_input *new_lst)
-{
-	if (lst)
-	{
-		if ((*lst) != new_lst)
-		{
-			if (new_lst->next && new_lst->prev)
-			{
-				new_lst->next->prev = new_lst->prev;
-				new_lst->prev->next = new_lst->next;
-			}
-			else if (new_lst->next)
-				new_lst->next->prev = NULL;
-			else if (new_lst->prev)
-				new_lst->prev->next = NULL;
-			new_lst->next = *lst;
-			new_lst->prev = NULL;
-			if (*lst)
-				(*lst)->prev = new_lst;
-			*lst = new_lst;
-		}
-	}
 }
