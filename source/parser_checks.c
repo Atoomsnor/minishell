@@ -68,6 +68,8 @@ t_input	**check_empty_txt(t_input **input)
 			if (cpy == *input && next)
 			{
 				ft_lstcopy(cpy, cpy->next);
+				if (!cpy->txt)
+					return (malloc_error_free(shank_input(input)));
 				next = cpy;
 				ft_lstdelone(cpy->next);
 			}

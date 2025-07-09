@@ -37,12 +37,12 @@ static t_exec	*fill_exec(t_input **input, char **error_msg)
 
 	cmd = ft_calloc(1, sizeof(t_exec));
 	if (!cmd)
-		return (NULL);
+		return (malloc_error_free(NULL));
 	cmd->err_msg = NULL;
 	count = count_till_pipe(*input);
 	cmd->full_cmd = ft_calloc(count + 1, sizeof(char *));
 	if (!cmd->full_cmd)
-		return (free(cmd), NULL);
+		return (malloc_error_free(free_and_null(cmd)));
 	i = find_in_out(*input, &cmd->in_fd, &cmd->out_fd, error_msg);
 	if (i < 0 && i != -2)
 		return (free_and_null(cmd->full_cmd), free_and_null(cmd), NULL);
@@ -97,6 +97,8 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval)
 	error_msg = NULL;
 	count = count_cmds(*input);
 	cmds = ft_calloc(count + 1, sizeof(t_exec *));
+	if (!cmds)
+		return (malloc_error_free(NULL));
 	i = 0;
 	while (i < count)
 	{

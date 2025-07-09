@@ -1,11 +1,20 @@
 - https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf
 - https://gitlab.com/madebypixel02/minishell
 
-valgrind --track-fds=yes ./minishell
 fix these:
 
-- fix norm errors which are all >5functions, linetoolong and >25lines
-- ask others for stuff that will break our program
+- return proper value																				// DONE ?
+- Tabs are treated as regular characters															
+- `echo -nnn` and `echo -n -n` behave differently than in bash										// partially done
+- `exit 1 2` isnt supposed to exit
+- `exit 10000000000000000000000000000000000000` isnt handled correctly
+- running `cat` and then pressing ctrl+c has a different exit code than bash						
+- `echo "'$USER'"` segfaults																		// partial fix?
+- `../../usr/bin/ls` in home directory causes double free											// unable to replicate ?
+- `ls >` should be a syntax error																	
+- heredoc should never expand variables when delimiter contains quotes								
+- `cat <<eo'f'` should end with eof, also shouldnt expand because the delimiter contains quotes		// heredoc strtrim -> quotetrim?
+
 
 - orhan bothered me and I forgot what I was putting here
 #rowan#

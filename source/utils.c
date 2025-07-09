@@ -21,6 +21,8 @@ size_t	ft_strmcpy(char **dest, const char *src)
 	len = ft_strlen(src);
 	i = 0;
 	*dest = ft_calloc(len + 1, sizeof(char));
+	if (!*dest)
+		return (0);
 	while (src[i])
 	{
 		(*dest)[i] = src[i];
@@ -41,10 +43,14 @@ char	**ft_matdup(char **mat)
 	while (mat[len])
 		len++;
 	cpy = ft_calloc(len + 1, sizeof(char *));
+	if (!cpy)
+		return (NULL);
 	len = 0;
 	while (mat[len])
 	{
 		cpy[len] = ft_strdup(mat[len]);
+		if (!cpy[len])
+			return (NULL);
 		len++;
 	}
 	return (cpy);

@@ -13,12 +13,12 @@
 #include "../include/minishell.h"
 #include <stdlib.h>
 
-void	free_array(char **array)
+void	*free_array(char **array)
 {
 	int	i;
 
 	if (!array)
-		return ;
+		return (NULL);
 	i = 0;
 	while (array[i])
 	{
@@ -27,6 +27,7 @@ void	free_array(char **array)
 		i++;
 	}
 	free(array);
+	return (NULL);
 }
 
 char	*ft_strjoin_free(char *s1, char *s2, int liberate)
@@ -83,11 +84,19 @@ char	*ft_substr_free(char *s, unsigned int start, size_t len)
 	return (substr);
 }
 
-void	free_and_null(void *ptr)
+void	*free_and_null(void *ptr)
 {
 	if (ptr)
 	{
 		free(ptr);
 		ptr = NULL;
 	}
+	return (NULL);
+}
+
+void *malloc_error_free(void *f)
+{
+	(void)f;
+	ft_putstr_fd("Memory allocation error\n", 2);
+	return (NULL);
 }

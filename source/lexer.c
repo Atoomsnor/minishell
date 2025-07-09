@@ -66,8 +66,12 @@ t_input	**init_list(char *in)
 	char	**matrix;
 
 	matrix = ft_string_split(in, ' ');
+	if (!matrix)
+		return (free_and_null(in));
 	input = matrix_to_list(matrix);
 	free_array(matrix);
+	if (!input)
+		return (free_and_null(in));
 	parse_list(input[0]);
 	if (ft_lstlast(*input)->type == t_pipe)
 	{

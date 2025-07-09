@@ -118,6 +118,6 @@ char	**ft_string_split(char const *s, char c)
 		return (NULL);
 	n_str = ft_calloc(sizeof(char *), ft_count(s, c) + 1);
 	if (!n_str)
-		return (NULL);
+		return (malloc_error_free(NULL));
 	return (ft_bigsplit(s, c, n_str));
 }

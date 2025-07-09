@@ -17,18 +17,24 @@ int	main(int argc, char **argv, char **envp)
 	t_history	*hist;
 	char		**environment;
 	int			retval;
+	int			ret;
 
-	environment = ft_matdup(envp);
 	(void)argc;
 	(void)argv;
+	environment = ft_matdup(envp);
+	if (!environment)
+		return (malloc_error_free(NULL), 0);
 	retval = 0;
 	hist = init_hist();
+	if (!hist)
+		return (malloc_error_free(free_array(environment)), 0);
 	init_signals();
 	while (1)
 	{
-		retval = shelly(&environment, retval, hist);
-		if (retval == -1)
+		ret = shelly(&environment, retval, hist);
+		if (ret == -1)
 			break ;
+		retval = ret;
 	}
 	free_array(environment);
 	burn_history(hist);

@@ -50,12 +50,18 @@ static char	**make_environment(char ***env, char *str, int len)
 	int		j;
 
 	new_env = ft_calloc(sizeof(char *), len + 2);
+	if (!new_env)
+		return (malloc_error_free(NULL), *env);
 	i = 0;
 	j = 0;
 	while ((*env)[j])
 	{
 		if (i == len - 1)
-			new_env[i++] = ft_strdup(str);
+		{
+			new_env[i] = ft_strdup(str);
+			if (!new_env[i++])
+				return (malloc_error_free(free_array(new_env)), *env);
+		}
 		else
 			new_env[i++] = (*env)[j++];
 	}
@@ -83,11 +89,15 @@ int	exporting(char *str, char ***env)
 		{
 			free((*env)[len]);
 			(*env)[len] = ft_strdup(str);
+			if (!(*env)[len])
+				return (0);
 			return (1);
 		}
 		len++;
 	}
 	*env = make_environment(env, str, len);
+	if (!*env)
+		return (0);
 	return (1);
 }
 

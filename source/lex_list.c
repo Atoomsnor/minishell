@@ -20,14 +20,15 @@ t_input	**matrix_to_list(char **matrix)
 
 	input = ft_calloc(1, sizeof(struct t_input *));
 	if (!input)
-		return (NULL);
+		return (malloc_error_free(NULL));
 	(*input) = ft_lstnew(matrix[0], 0);
 	if (!(*input))
-		return (NULL);
+		return (malloc_error_free(free_and_null(input)));
 	i = 1;
 	while (matrix[i])
 	{
-		ft_lstadd_back(input, ft_lstnew(matrix[i], 0));
+		if (!ft_lstadd_back(input, ft_lstnew(matrix[i], 0)))
+			return (malloc_error_free(shank_input(input)));
 		i++;
 	}
 	return (input);
@@ -51,7 +52,7 @@ static t_type	find_type(char *in)
 		return (t_txt);
 }
 
-void	rotation(int *i, t_input *cpy)
+int	rotation(int *i, t_input *cpy)
 {
 	int	len;
 
@@ -69,10 +70,13 @@ void	rotation(int *i, t_input *cpy)
 			ft_lstadd_next(&cpy, ft_lstnew(ft_substr(cpy->txt,
 						*i, ft_strlen(cpy->txt) - *i), 1));
 			cpy->txt = ft_substr_free(cpy->txt, 0, *i);
+			if (!cpy->txt)
+				return (ft_lstdelone(cpy), 0);
 			cpy->next->type = find_type(cpy->next->txt);
 			cpy->type = find_type(cpy->txt);
 		}
 	}
+	return (1);
 }
 
 t_input	*parse_list(t_input *input)
@@ -91,7 +95,8 @@ t_input	*parse_list(t_input *input)
 	while (cpy)
 	{
 		i = -1;
-		rotation(&i, cpy);
+		if (!rotation(&i, cpy))
+			return (NULL);
 		cpy = cpy->next;
 	}
 	return (input);

@@ -60,12 +60,12 @@ void	lynch_exec(t_exec **exec)
 	free_and_null(head);
 }
 
-void	shank_input(t_input **input)
+void	*shank_input(t_input **input)
 {
 	t_input	*next;
 
 	if (!input)
-		return ;
+		return (NULL);
 	next = NULL;
 	if (*input && (*input)->head && *input != (*input)->head)
 		*input = (*input)->head;
@@ -78,9 +78,10 @@ void	shank_input(t_input **input)
 		(*input) = next;
 	}
 	free_and_null(input);
+	return (NULL);
 }
 
-void	burn_history(t_history *hist)
+void	*burn_history(t_history *hist)
 {
 	int	i;
 
@@ -97,6 +98,7 @@ void	burn_history(t_history *hist)
 		free_and_null(hist);
 	}
 	rl_clear_history();
+	return (NULL);
 }
 
 void	*die(t_exec **exec, t_input **input, char *error, void *ret)

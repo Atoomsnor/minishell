@@ -28,6 +28,8 @@ static char	*skip_spaces(char *in)
 	{
 		ret = ft_substr(in, i, ft_strlen(in) - i);
 		free_and_null(in);
+		if (!ret)
+			return (NULL);
 		return (ret);
 	}
 	free_and_null(in);

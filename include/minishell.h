@@ -52,10 +52,11 @@ int			find_in_out(t_input *input, int *in_fd,
 int			file_is_empty(char *path);
 
 /* free_utils */
-void		free_array(char **array);
+void		*free_array(char **array);
 char		*ft_strjoin_free(char *s1, char *s2, int liberate);
 char		*ft_substr_free(char *s, unsigned int start, size_t len);
-void		free_and_null(void *ptr);
+void		*free_and_null(void *ptr);
+void		*malloc_error_free(void *);
 
 /* here_doc */
 int			check_heredoc(t_input *input, int retval, char **env);
@@ -66,7 +67,7 @@ t_history	*init_hist(void);
 
 /* lex_list */
 t_input		**matrix_to_list(char **matrix);
-void		rotation(int *i, t_input *cpy);
+int			rotation(int *i, t_input *cpy);
 t_input		*parse_list(t_input *input);
 
 /* lexer */
@@ -77,7 +78,7 @@ t_input		**init_list(char *in);
 /* linked list*/
 t_input		*ft_lstnew(void *content, int i);
 t_input		*ft_lstlast(t_input *lst);
-void		ft_lstadd_back(t_input **lst, t_input *new_lst);
+int			ft_lstadd_back(t_input **lst, t_input *new_lst);
 
 /* list utils */
 void		ft_lstsethead(t_input **lst, t_input *head);
@@ -87,8 +88,8 @@ void		ft_lstcopy(t_input *input, t_input *next);
 
 /* murder */
 void		lynch_exec(t_exec **exec);
-void		shank_input(t_input **input);
-void		burn_history(t_history *hist);
+void		*shank_input(t_input **input);
+void		*burn_history(t_history *hist);
 void		*die(t_exec **exec, t_input **input, char *error, void *ret);
 
 /* parser_checks */

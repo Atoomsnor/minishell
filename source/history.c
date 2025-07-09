@@ -45,6 +45,8 @@ t_history	*init_hist(void)
 	t_history	*hist;
 
 	hist = ft_calloc(1, sizeof(t_history));
+	if (!hist)
+		return (NULL);
 	hist->hist_count = 0;
 	hist->in = NULL;
 	return (hist);

@@ -25,25 +25,38 @@ static void	change_env_var(char ***env, char *var_name, char *content)
 	{
 		len = has_char((*env)[i], '=');
 		if (!ft_strncmp((*env)[i], var_name, ft_strlen(var_name)))
+		{
 			(*env)[i] = ft_strjoin_free(ft_substr_free((*env)[i], 0, len + 1),
 					content, 1);
+			if (!(*env)[i])
+			{
+				free_array(*env);
+				return ;
+			}
+		}
 		i++;
 	}
 }
 
 static int	home_path(char **env)
 {
-	int	i;
+	char	*substr;
+	int		i;
 
 	i = 0;
+	substr = NULL;
 	while (env[i])
 	{
 		if (!ft_strncmp("HOME=", env[i], 5))
 		{
-			if (chdir(ft_substr(env[i], 5, ft_strlen(env[i]) - 5)) == 0)
-				return (1);
+			substr = ft_substr(env[i], 5, ft_strlen(env[i]) - 5);
+			if (!substr)
+				return (0);
+			if (chdir(substr) == 0)
+				return (free_and_null(substr), 1);
 			else
 				break ;
+			free_and_null(substr);
 		}
 		i++;
 	}
@@ -57,6 +70,8 @@ static int	absolute_path(char *path, char ***env, char *cwd)
 	joined_path = ft_strjoin(cwd, "/");
 	if (cwd)
 		free_and_null(cwd);
+	if (!joined_path)
+		return (0);
 	joined_path = ft_strjoin_free(joined_path, path, 1);
 	if (!joined_path)
 		return (0);
@@ -85,6 +100,8 @@ int	cd(char **path, char ***env)
 	if (!cwd)
 		return (0);
 	change_env_var(env, "OLDPWD", cwd);
+	if (!*env)
+		return (free(cwd), 0);
 	if (ft_strncmp(cwd, path[1], ft_strlen(cwd)) && path[1][0] != '/')
 		return (absolute_path(path[1], env, cwd));
 	else
@@ -93,6 +110,8 @@ int	cd(char **path, char ***env)
 			return (ft_putstr_fd(path[1], 2),
 				ft_putstr_fd(": No such file or directory\n", 2), free(cwd), 0);
 		change_env_var(env, "PWD", path[1]);
+		if (!*env)
+			return (free(cwd), 0);
 	}
 	free(cwd);
 	return (1);
