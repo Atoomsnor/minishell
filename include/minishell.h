@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/08 20:47:54 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/10 11:09:16 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_input		**dequote(char **env, int retval, t_input **input);
 int			pwd(int fd);
 char		*join_strings(char *s1, char *s2);
 int			echo(int fd, char **to_write);
-void		bi_exit(t_exec **exec, char ***envp, t_history *hist);
+int			bi_exit(t_exec **exec, char ***envp, t_history *hist);
 
 /* cd */
 int			cd(char **path, char ***env);

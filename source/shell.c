@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 17:09:11 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 18:46:51 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/10 11:10:38 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,9 @@ static int	shell_exec(int *retval, t_exec **exec,
 	else
 	{
 		if (!ft_strncmp(exec[0]->full_cmd[0], "exit", 5))
-			bi_exit(exec, envp, hist);
-		*retval = run_builtin(exec[0], exec[0]->out_fd, envp, 0);
+			*retval = bi_exit(exec, envp, hist);
+		else 
+			*retval = run_builtin(exec[0], exec[0]->out_fd, envp, 0);
 		check_write_error(exec);
 		history(hist);
 		return (die(exec, NULL, NULL, NULL), 0);

@@ -6,11 +6,12 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:15:06 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 18:51:46 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/10 12:38:36 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <limits.h>
 #include <readline/readline.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -76,41 +77,44 @@ int	echo(int fd, char **to_write)
 	return (1);
 }
 
-static void	exit_numeric(t_exec *exec, int	*i)
+static void	exit_numeric(t_exec **exec, int	*i, char ***envp, t_history *hist)
 {
-	if (!ft_isdigit(exec->full_cmd[1][*i]) && exec->full_cmd[1][*i] != '+'
-			&& exec->full_cmd[1][*i] != '-')
+	if (!ft_isdigit((*exec)->full_cmd[1][*i]) && (*exec)->full_cmd[1][*i] != '+'
+			&& (*exec)->full_cmd[1][*i] != '-')
 	{
 		ft_putstr_fd("exit: ", 2);
-		ft_putstr_fd(exec->full_cmd[1], 2);
+		ft_putstr_fd((*exec)->full_cmd[1], 2);
 		ft_putstr_fd(": numeric argument required\n", 2);
+		free_array(*envp);
+		burn_history(hist);
+		lynch_exec(exec);
 		exit(2);
 	}
 	(*i)++;
 }
 
-void	bi_exit(t_exec **exec, char ***envp, t_history *hist)
+int	bi_exit(t_exec **exec, char ***envp, t_history *hist)
 {
-	int	ret;
+	unsigned long	ret;
 	int	i;
 
 	ret = 1;
 	printf("exit\n");
 	if ((*exec)->full_cmd[1] && (*exec)->full_cmd[2])
-	{
-		ft_putstr_fd("exit: too many arguments\n", 2);
-		return ;
-	}
+		return (ft_putstr_fd("exit: too many arguments\n", 2), 1);
 	if ((*exec)->full_cmd[1])
 	{
 		i = 0;
 		while ((*exec)->full_cmd[1][i])
-			exit_numeric((*exec), &i);
+			exit_numeric(exec, &i, envp, hist);
 		if (i > 0 && !(*exec)->full_cmd[1][i])
-			ret = ft_atoi((*exec)->full_cmd[1]);
+			ret = ft_atol((*exec)->full_cmd[1]);
+		if (ret > LONG_MAX)
+			exit_numeric(exec, &i, envp, hist);
 	}
 	free_array(*envp);
 	burn_history(hist);
 	lynch_exec(exec);
 	exit(ret);
+	return (0);
 }

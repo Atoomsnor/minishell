@@ -3,11 +3,13 @@
 
 fix these:
 
-- return proper value																				// DONE ?
+
+
+	+ return proper value																				// DONE ?
 - Tabs are treated as regular characters															
 - `echo -nnn` and `echo -n -n` behave differently than in bash										// partially done
-- `exit 1 2` isnt supposed to exit
-- `exit 10000000000000000000000000000000000000` isnt handled correctly
+	+ `exit 1 2` isnt supposed to exit
+	+ `exit 10000000000000000000000000000000000000` isnt handled correctly
 - running `cat` and then pressing ctrl+c has a different exit code than bash						
 - `echo "'$USER'"` segfaults																		// partial fix?
 - `../../usr/bin/ls` in home directory causes double free											// unable to replicate ?
@@ -24,9 +26,6 @@ fix these:
 - mald about rowan's dyslexia
 - be bored before raid and start on environment stuff
 
-- valgrind time bbyyyyyyyyyyyyyyyyyyyyyyyyyyyy
-- norm changes,
-- win
 - fail eval
 - fix
 - win again

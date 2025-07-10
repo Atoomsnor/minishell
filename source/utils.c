@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:59:06 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/08 16:38:43 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/10 10:59:05 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char	**ft_matdup(char **mat)
 	{
 		cpy[len] = ft_strdup(mat[len]);
 		if (!cpy[len])
-			return (NULL);
+			return (free_array(cpy), NULL);
 		len++;
 	}
 	return (cpy);

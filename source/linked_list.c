@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 12:08:29 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 17:01:30 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/10 11:04:28 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_input	*ft_lstnew(void *content, int i)
 	if (content && i)
 		free_and_null(content);
 	if (content && !node->txt)
-		return (NULL);
+		return (free_and_null(node), NULL);
 	node->head = node;
 	node->next = NULL;
 	node->prev = NULL;
@@ -51,7 +51,7 @@ int	ft_lstadd_back(t_input **lst, t_input *new_lst)
 {
 	t_input	*end;
 
-	if (new_lst)
+	if (!new_lst)
 		return (0);
 	if (new_lst->next && new_lst->prev)
 	{
