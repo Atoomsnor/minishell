@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:59:06 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/10 10:59:05 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/10 13:12:06 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include <stdio.h>
+#include <limits.h>
 
 size_t	ft_strmcpy(char **dest, const char *src)
 {
@@ -54,4 +55,29 @@ char	**ft_matdup(char **mat)
 		len++;
 	}
 	return (cpy);
+}
+
+unsigned long	ft_atoul(const char *nptr)
+{
+	unsigned long	result;
+	int				i;
+
+	result = 0;
+	i = 0;
+	while (nptr[i] == ' ' || nptr[i] == '\t' || nptr[i] == '\n'
+		|| nptr[i] == '\v' || nptr[i] == '\f' || nptr[i] == '\r')
+		i++;
+	if (nptr[i] == '-' || nptr[i] == '+')
+		if (nptr[i++] == '-')
+			return (LONG_MAX + ft_atol(nptr) + 1);
+	while (nptr[i] >= '0' && nptr[i] <= '9')
+	{
+		result = result * 10 + (nptr[i] - '0');
+		if (result > LONG_MAX)
+			return (result);
+		i++;
+	}
+	if (!(nptr[i] == '\0') && !(nptr[i] == ' '))
+		return (0);
+	return (result);
 }

@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 16:16:34 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 17:54:04 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/10 15:34:07 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ static void	here_child(char *delimiter, int pipefd,
 	signal(SIGINT, SIG_DFL);
 	quotetype = find_first_quote(delimiter);
 	if (quotetype)
-		delimiter = ft_strtrim(delimiter, &quotetype);
+		delimiter = trim_quotes(delimiter, quotetype,
+				has_char(delimiter, quotetype));
 	while (1)
 	{
 		input = readline("> ");
@@ -37,7 +38,7 @@ static void	here_child(char *delimiter, int pipefd,
 			free(input);
 			break ;
 		}
-		if (has_char(input, '$') >= 0 && quotetype != '\'')
+		if (has_char(input, '$') >= 0 && !quotetype)
 			input = handle_wildcard(input, env, retval, 0);
 		write(pipefd, input, ft_strlen(input));
 		write(pipefd, "\n", 1);

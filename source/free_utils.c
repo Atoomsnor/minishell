@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:25:23 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 16:34:24 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/10 15:33:16 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	*free_and_null(void *ptr)
 	return (NULL);
 }
 
-void *malloc_error_free(void *f)
+void	*malloc_error_free(void *f)
 {
 	(void)f;
 	ft_putstr_fd("Memory allocation error\n", 2);

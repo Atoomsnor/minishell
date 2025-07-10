@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/10 12:21:40 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/10 15:42:06 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,10 +110,8 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval)
 		else if (!cmds[i])
 			count = rotate_past_pipe(input, count);
 		else
-		{
 			if (!path_validity(cmds[i++], &error_msg, retval, envp))
 				return (die(cmds, NULL, error_msg, NULL));
-		}
 	}
 	return (cmds);
 }

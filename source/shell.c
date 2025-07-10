@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 17:09:11 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/10 11:10:38 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/10 15:36:04 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static char	*skip_spaces(char *in)
 	i = 0;
 	if (!in)
 		return (NULL);
-	while (in[i] == ' ')
+	while (ft_iswhitespace(in[i]))
 		i++;
 	if (in[i])
 	{
@@ -63,7 +63,7 @@ static int	shell_exec(int *retval, t_exec **exec,
 	{
 		if (!ft_strncmp(exec[0]->full_cmd[0], "exit", 5))
 			*retval = bi_exit(exec, envp, hist);
-		else 
+		else
 			*retval = run_builtin(exec[0], exec[0]->out_fd, envp, 0);
 		check_write_error(exec);
 		history(hist);
@@ -108,7 +108,7 @@ int	shelly(char ***envp, int retval, t_history *hist)
 	}
 	if (in == NULL)
 		return (printf("exit\n"), -1);
-	if (in && in[0] == ' ')
+	if (in && ft_iswhitespace(in[0]))
 		in = skip_spaces(in);
 	if (in && in[0] != '\0')
 	{

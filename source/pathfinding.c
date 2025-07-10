@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pathfinding.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:22:43 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/10 12:17:25 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/10 13:35:10 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,8 @@ char	*cmd_to_path(t_exec *cmd, char **error_msg, char **envp)
 	char	*ret;
 
 	ret = NULL;
-	if (cmd->full_cmd[0][0] == '/' || !ft_strncmp(cmd->full_cmd[0], "./", 2))
+	if (cmd->full_cmd[0][0] == '/' || !ft_strncmp(cmd->full_cmd[0], "./", 2)
+		|| !ft_strncmp(cmd->full_cmd[0], "../", 3))
 	{
 		if (access(cmd->full_cmd[0], F_OK | X_OK) == 0)
 			return (ft_strdup(cmd->full_cmd[0]));

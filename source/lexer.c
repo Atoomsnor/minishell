@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 17:41:11 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/10 15:36:51 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,30 @@ int	check_txt(t_input *input, int i)
 		return (-1);
 }
 
+char	*check_syntax(t_input *input)
+{
+	while (input)
+	{
+		if (input->type != t_txt && input->type != t_flag)
+		{
+			if (!input->next)
+				return (ft_strdup("newline'\n"));
+			else if (input->next->type != t_txt && input->next->type != t_flag
+				&& input->type != t_pipe)
+				return (ft_strjoin(input->next->txt, "'\n"));
+			else if (input->type == t_pipe && input->next->type == t_pipe)
+				return (ft_strdup("|'\n"));
+		}
+		input = input->next;
+	}
+	return (NULL);
+}
+
 t_input	**init_list(char *in)
 {
 	t_input	**input;
 	char	**matrix;
+	char	*err;
 
 	matrix = ft_string_split(in, ' ');
 	if (!matrix)
@@ -73,10 +93,12 @@ t_input	**init_list(char *in)
 	if (!input)
 		return (free_and_null(in));
 	parse_list(input[0]);
-	if (ft_lstlast(*input)->type == t_pipe)
+	err = check_syntax(input[0]);
+	if (err)
 	{
 		free(in);
-		return (die(NULL, input, ft_strdup("Invalid input\n"), NULL));
+		return (die(NULL, input,
+				ft_strjoin("syntax error near unexpected token `", err), NULL));
 	}
 	return (input);
 }

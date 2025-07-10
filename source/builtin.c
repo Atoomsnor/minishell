@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:15:06 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/10 12:38:36 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/10 15:51:46 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,26 @@ int	pwd(int fd)
 	return (1);
 }
 
-char	*join_strings(char *s1, char *s2)
+static int	check_flag(char **to_write, int *i)
 {
-	char	*ret;
+	int	j;
+	int	ret;
 
-	ret = ft_strjoin(s1, s2);
-	if (s1)
-		free(s1);
-	if (!ret)
-		return (NULL);
+	ret = 0;
+	while (to_write[*i])
+	{
+		if (to_write[*i][0] != '-')
+			break ;
+		j = 1;
+		while (to_write[*i][j])
+		{
+			if (to_write[*i][j] != 'n')
+				return (ret);
+			j++;
+		}
+		ret = 1;
+		(*i)++;
+	}
 	return (ret);
 }
 
@@ -54,26 +65,23 @@ int	echo(int fd, char **to_write)
 	if (!to_write || !*to_write || fd < 0)
 		return (0);
 	out = NULL;
-	cmp = ft_strncmp(*to_write, "-n", 2);
 	i = 0;
-	while (!cmp && to_write[++i])
-		cmp = ft_strncmp(to_write[i], "-n", 2);
+	cmp = check_flag(to_write, &i);
 	while (to_write[i])
 	{
-		out = join_strings(out, to_write[i]);
+		out = ft_strjoin_free(out, to_write[i], 1);
 		if (out && to_write[i + 1])
-			out = join_strings(out, " ");
+			out = ft_strjoin_free(out, " ", 1);
 		if (!out)
 			return (0);
 		i++;
 	}
-	if (cmp)
-		out = join_strings(out, "\n");
+	if (!cmp)
+		out = ft_strjoin_free(out, "\n", 1);
 	if (!out)
 		return (0);
 	ft_putstr_fd(out, fd);
-	if (out)
-		free(out);
+	free_and_null(out);
 	return (1);
 }
 
@@ -96,7 +104,7 @@ static void	exit_numeric(t_exec **exec, int	*i, char ***envp, t_history *hist)
 int	bi_exit(t_exec **exec, char ***envp, t_history *hist)
 {
 	unsigned long	ret;
-	int	i;
+	int				i;
 
 	ret = 1;
 	printf("exit\n");
@@ -108,7 +116,7 @@ int	bi_exit(t_exec **exec, char ***envp, t_history *hist)
 		while ((*exec)->full_cmd[1][i])
 			exit_numeric(exec, &i, envp, hist);
 		if (i > 0 && !(*exec)->full_cmd[1][i])
-			ret = ft_atol((*exec)->full_cmd[1]);
+			ret = ft_atoul((*exec)->full_cmd[1]);
 		if (ret > LONG_MAX)
 			exit_numeric(exec, &i, envp, hist);
 	}

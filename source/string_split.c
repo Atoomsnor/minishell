@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   string_split.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:49:11 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/10 10:54:20 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/10 15:39:30 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static int	ft_len(char const *s, char c)
 	return (i);
 }
 
-static char	*another_one(char const *s, char c, int *i)
+static char	*ft_substrsplit(char const *s, char c, int *i)
 {
 	char	*ret;
 	int		w_len;
@@ -100,7 +100,7 @@ static char	**ft_bigsplit(char const *s, char c, char **n_str)
 			i++;
 		else
 		{
-			n_str[j] = another_one(s, c, &i);
+			n_str[j] = ft_substrsplit(s, c, &i);
 			if (!n_str[j])
 				return (free_array(n_str), NULL);
 			j++;

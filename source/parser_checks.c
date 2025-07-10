@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_checks.c                                     :+:      :+:    :+:   */
+/*   parser_checks.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:28:39 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 16:36:37 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/10 16:00:02 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,16 @@ int	is_buildin(char *cmd)
 	return (0);
 }
 
+static int	copy_from_next(t_input **cpy, t_input **next)
+{
+	ft_lstcopy(*cpy, (*cpy)->next);
+	if (!(*cpy)->txt)
+		return (0);
+	*next = *cpy;
+	ft_lstdelone((*cpy)->next);
+	return (1);
+}
+
 t_input	**check_empty_txt(t_input **input)
 {
 	t_input	*cpy;
@@ -67,11 +77,8 @@ t_input	**check_empty_txt(t_input **input)
 		{
 			if (cpy == *input && next)
 			{
-				ft_lstcopy(cpy, cpy->next);
-				if (!cpy->txt)
+				if (!copy_from_next(&cpy, &next))
 					return (malloc_error_free(shank_input(input)));
-				next = cpy;
-				ft_lstdelone(cpy->next);
 			}
 			else if (cpy == *input && !next)
 				return (NULL);

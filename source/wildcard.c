@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 12:48:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 17:01:07 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/10 15:40:14 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*find_and_trim_var(char *var_name, char **env, int gate)
 	{
 		while (env[++i])
 			if (ft_strncmp(var_name, env[i], ft_strlen(var_name)) == 0
-						&& env[i][ft_strlen(var_name)] == '=')
+				&& env[i][ft_strlen(var_name)] == '=')
 				return (free_and_null(var_name), env[i]);
 		if (var_name[0] == '"')
 			return (var_name);
@@ -73,9 +73,10 @@ static char	*set_var_name(char *str, char **env, int retval, int *i)
 	int		wc;
 
 	wc = *i;
-	while (str[*i] && str[*i] != ' ')
+	while (str[*i] && !ft_iswhitespace(str[*i])
+		&& str[*i] != '\'' && str[*i] != '"')
 		(*i)++;
-	if (str[*i] == ' ')
+	if (ft_iswhitespace(str[*i]) || str[*i] == '\'' || str[*i] == '"')
 		(*i)--;
 	var_name = ft_substr(str, wc + 1, (*i) - wc);
 	if (!var_name)

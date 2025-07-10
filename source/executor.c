@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:33:44 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/10 12:24:48 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/10 15:40:54 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,21 +108,22 @@ int	execute(t_exec **exec, char **envp)
 	int		status;
 	int		i;
 
-	i = 0;
+	i = -1;
 	prev_fd = -1;
-	while (exec[i])
-	{
+	while (exec[++i])
 		if (!exec_loop(exec, i, &prev_fd, envp))
 			return (0);
-		i++;
-	}
 	while (i--)
 	{
 		wait(&status);
 		if (status == SIGINT)
+		{
 			write(STDOUT_FILENO, "\n", 1);
+			signal(SIGINT, sighandler);
+			return (130);
+		}
 		if (status >= 256)
-			return (status >> 8);
+			return (signal(SIGINT, sighandler), status >> 8);
 	}
 	signal(SIGINT, sighandler);
 	return (0);

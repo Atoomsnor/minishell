@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 14:50:13 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/10 12:29:43 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/10 15:53:37 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,15 +104,12 @@ int	cd(char **path, char ***env)
 		return (free(cwd), 0);
 	if (ft_strncmp(cwd, path[1], ft_strlen(cwd)) && path[1][0] != '/')
 		return (absolute_path(path[1], env, cwd));
-	else
-	{
-		if (chdir(path[1]) == -1)
-			return (ft_putstr_fd(path[1], 2),
-				ft_putstr_fd(": No such file or directory\n", 2), free(cwd), 0);
-		change_env_var(env, "PWD", path[1]);
-		if (!*env)
-			return (free(cwd), 0);
-	}
+	if (chdir(path[1]) == -1)
+		return (ft_putstr_fd(path[1], 2),
+			ft_putstr_fd(": No such file or directory\n", 2), free(cwd), 0);
+	change_env_var(env, "PWD", path[1]);
+	if (!*env)
+		return (free(cwd), 0);
 	free(cwd);
 	return (1);
 }

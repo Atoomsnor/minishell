@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/10 11:09:16 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/10 14:51:04 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ extern volatile sig_atomic_t	g_signalreceived;
 int			main(int argc, char **argv, char **envp);
 
 /* and_i_quote */
+char		*trim_quotes(char *str, char quote, int start);
 int			has_char(char *str, char c);
 char		find_first_quote(char *str);
 t_input		**dequote(char **env, int retval, t_input **input);
 
 /* builtin */
 int			pwd(int fd);
-char		*join_strings(char *s1, char *s2);
 int			echo(int fd, char **to_write);
 int			bi_exit(t_exec **exec, char ***envp, t_history *hist);
 
@@ -127,8 +127,9 @@ void		init_signals(void);
 char		**ft_string_split(char const *s, char c);
 
 /* utils */
-size_t		ft_strmcpy(char **dest, const char *src);
-char		**ft_matdup(char **mat);
+size_t			ft_strmcpy(char **dest, const char *src);
+char			**ft_matdup(char **mat);
+unsigned long	ft_atoul(const char *nptr);
 
 /* wildcard */
 char		*find_and_trim_var(char *var_name, char **env, int gate);

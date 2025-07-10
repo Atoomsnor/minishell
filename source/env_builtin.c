@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_builtin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:23:46 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/08 16:33:52 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/10 15:32:45 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,16 +74,14 @@ int	exporting(char *str, char ***env)
 	int		len;
 	int		i;
 
-	if (!str)
-		return (0);
 	i = export_validity(str);
 	if (!i)
 		return (0);
 	else if (i == -1)
 		return (1);
-	len = 0;
+	len = -1;
 	i = has_char(str, '=');
-	while ((*env)[len])
+	while ((*env)[++len])
 	{
 		if (!ft_strncmp((*env)[len], str, i) && (*env)[len][i] == '=')
 		{
@@ -93,7 +91,6 @@ int	exporting(char *str, char ***env)
 				return (0);
 			return (1);
 		}
-		len++;
 	}
 	*env = make_environment(env, str, len);
 	if (!*env)
