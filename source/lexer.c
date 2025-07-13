@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/10 16:20:59 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/13 18:13:45 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,11 +95,8 @@ t_input	**init_list(char *in)
 	parse_list(input[0]);
 	err = check_syntax(input[0]);
 	if (err)
-	{
-		free(in);
 		return (die(NULL, input,
 				ft_strjoin_free("syntax error near unexpected token `",
 					err, 2), NULL));
-	}
 	return (input);
 }

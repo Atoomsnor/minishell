@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 17:09:11 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/10 15:36:04 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/13 18:13:02 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ int	shelly(char ***envp, int retval, t_history *hist)
 	{
 		input = init_list(in);
 		if (!input)
-			return (1);
+			return (history(hist), 1);
 		retval = run(input, envp, retval, hist);
 	}
 	return (retval);
