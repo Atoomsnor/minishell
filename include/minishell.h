@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/10 16:14:36 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/14 12:00:44 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,6 @@
 
 extern volatile sig_atomic_t	g_signalreceived;
 
-/* main */
-int				main(int argc, char **argv, char **envp);
-
 /* and_i_quote */
 char			*trim_quotes(char *str, char quote, int start);
 int				has_char(char *str, char c);
@@ -32,12 +29,8 @@ t_input			**dequote(char **env, int retval, t_input **input);
 int				pwd(int fd);
 int				echo(int fd, char **to_write);
 int				bi_exit(t_exec **exec, char ***envp, t_history *hist);
-
-/* cd */
 int				cd(char **path, char ***env);
-
-/* env_builtin */
-int				exporting(char *str, char ***env);
+int				exports(char **str, char ***env);
 void			unset(char *name, char ***env);
 void			env(char **envp, int fd);
 
@@ -132,7 +125,7 @@ char			**ft_matdup(char **mat);
 unsigned long	ft_atoul(const char *nptr);
 
 /* wildcard */
-char			*find_and_trim_var(char *var_name, char **env, int gate);
 char			*handle_wildcard(char *str, char **env, int retval, int recur);
+char			*set_var_name(char *str, char **env, int retval, int *i);
 
 #endif

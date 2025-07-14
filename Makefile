@@ -5,6 +5,7 @@ history.c executor.c murder.c utils.c free_utils.c \
 parser.c lexer.c linked_list.c list_utils.c parser_utils.c \
 signal.c and_i_quote.c wildcard.c here_doc.c cd.c lex_list.c \
 find_fds.c pathfinding.c parser_checks.c parser_error.c shell.c\
+export.c wildcard_var.c
 
 SRC_DIR = source
 
