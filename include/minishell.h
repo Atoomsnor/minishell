@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/14 12:00:44 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/14 15:02:57 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ t_input			*parse_list(t_input *input);
 /* lexer */
 char			find_first_quote_len(char *str);
 int				check_txt(t_input *input, int i);
-t_input			**init_list(char *in);
+t_input			**init_list(char *in, int skip);
 
 /* linked list*/
 t_input			*ft_lstnew(void *content, int i);

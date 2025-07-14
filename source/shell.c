@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 17:09:11 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/14 10:46:27 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/14 15:07:37 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <readline/readline.h>
 #include <stdio.h>
 
-static char	*skip_spaces(char *in)
+static char	*skip_spaces(char *in, int *skip)
 {
 	char	*ret;
 	int		i;
@@ -27,9 +27,9 @@ static char	*skip_spaces(char *in)
 	if (in[i])
 	{
 		ret = ft_substr(in, i, ft_strlen(in) - i);
-		free_and_null(in);
 		if (!ret)
 			return (NULL);
+		*skip = 1;
 		return (ret);
 	}
 	free_and_null(in);
@@ -98,7 +98,9 @@ int	shelly(char ***envp, int retval, t_history *hist)
 {
 	t_input	**input;
 	char	*in;
+	int		skipped_whitespace;
 
+	skipped_whitespace = 0;
 	in = readline("megashell>$ ");
 	hist->in = in;
 	if (g_signalreceived)
@@ -109,13 +111,14 @@ int	shelly(char ***envp, int retval, t_history *hist)
 	if (in == NULL)
 		return (printf("exit\n"), -1);
 	if (in && ft_iswhitespace(in[0]))
-		in = skip_spaces(in);
-	if (in && in[0] != '\0')
-	{
-		input = init_list(in);
-		if (!input)
-			return (history(hist), 1);
-		retval = run(input, envp, retval, hist);
-	}
+		in = skip_spaces(in, &skipped_whitespace);
+	if (in && in[0] == '\0')
+		return (free_and_null(in), retval);
+	if (!in)
+		return (retval);
+	input = init_list(in, skipped_whitespace);
+	if (!input)
+		return (history(hist), 1);
+	retval = run(input, envp, retval, hist);
 	return (retval);
 }

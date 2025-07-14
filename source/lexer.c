@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:14:32 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/13 18:13:45 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/14 15:04:06 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char	*check_syntax(t_input *input)
 	return (NULL);
 }
 
-t_input	**init_list(char *in)
+t_input	**init_list(char *in, int skip)
 {
 	t_input	**input;
 	char	**matrix;
@@ -92,6 +92,8 @@ t_input	**init_list(char *in)
 	free_array(matrix);
 	if (!input)
 		return (free_and_null(in));
+	if (skip)
+		free_and_null(in);
 	parse_list(input[0]);
 	err = check_syntax(input[0]);
 	if (err)

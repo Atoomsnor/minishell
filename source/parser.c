@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/14 11:02:18 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/14 15:08:28 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,11 @@ static void	fill_full_cmd(t_input **input, t_exec *cmd, int *i)
 {
 	if ((*input)->type == t_txt || (*input)->type == t_flag)
 	{
-		if ((*input)->prev && *i != 0)
+		if ((*input)->prev)
 		{
 			if ((*input)->prev->type == t_txt
-				|| (*input)->prev->type == t_flag)
+				|| (*input)->prev->type == t_flag
+				|| (*input)->prev->type == t_pipe)
 				cmd->full_cmd[(*i)++] = ft_strdup((*input)->txt);
 		}
 		else
@@ -105,7 +106,7 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval)
 		if (!prepare_input(input, envp, retval))
 			return (lynch_exec(cmds), NULL);
 		cmds[i] = fill_exec(input, &error_msg);
-		if (!cmds[i] && !has_type(*input, t_pipe))
+		if (!cmds[i] && !has_type((*input)->next, t_pipe))
 			return (die(cmds, NULL, error_msg, set_retval(retval, 1)));
 		else if (!cmds[i])
 			count = rotate_past_pipe(input, count);

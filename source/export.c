@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 10:26:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/14 12:17:14 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/14 14:40:34 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ static int	export_validity(char *str)
 	len = 0;
 	while (str[len] && str[len] != '=')
 		len++;
+	if (len == 0)
+		return (0);
 	i = 0;
 	has_alpha = 0;
 	while (i < len)
@@ -38,8 +40,6 @@ static int	export_validity(char *str)
 	}
 	if (!str[len])
 		return (-1);
-	if (str[len] == '=' && !str[len + 1])
-		return (0);
 	return (1);
 }
 
