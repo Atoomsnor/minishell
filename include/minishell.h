@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/14 15:02:57 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/15 18:02:38 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void			*free_and_null(void *ptr);
 void			*malloc_error_free(void *f);
 
 /* here_doc */
-int				check_heredoc(t_input *input, int retval, char **env);
+int				check_heredoc(t_input *input, int *retval, char **env);
 
 /* history */
 void			history(t_history *hist);

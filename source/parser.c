@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/14 15:08:28 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/15 19:41:27 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static int	prepare_input(t_input **input, char **envp, int *retval)
 	rotate_input(input);
 	if (!(*input))
 		return (ft_putstr_fd("Parsing error\n", 2), 0);
-	if (check_heredoc(*input, *retval, envp) == -1)
+	if (check_heredoc(*input, retval, envp) == -1)
 		return (0);
 	input = dequote(envp, *retval, input);
 	if (!input)
@@ -97,11 +97,12 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval)
 
 	error_msg = NULL;
 	count = count_cmds(*input);
+	printf("count: %i\n", count);
 	cmds = ft_calloc(count + 1, sizeof(t_exec *));
 	if (!cmds)
 		return (malloc_error_free(NULL));
 	i = 0;
-	while (i < count)
+	while (i < count && *input)
 	{
 		if (!prepare_input(input, envp, retval))
 			return (lynch_exec(cmds), NULL);

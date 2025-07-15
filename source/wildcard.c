@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 12:48:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/14 12:31:03 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/15 17:57:33 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,12 @@ static char	*recursive_wildcard(char *str, int pos[3], char **env, int retval)
 {
 	char	*ret;
 
-	ret = ft_strjoin_free(ft_substr(str, 0, &str[pos[0] + 1] - str - 1),
+	ret = NULL;
+	if (!str[pos[1] + 1])
+		ret = ft_strjoin_free(ft_substr(str, 0, pos[0]),
+			ft_substr(str, pos[1], ft_strlen(str) - pos[1]), 3);
+	else
+		ret = ft_strjoin_free(ft_substr(str, 0, &str[pos[0] + 1] - str - 1),
 			handle_wildcard(&str[pos[0 + 1]], env, retval,
 				pos[2] + 1), 3);
 	if (str && !pos[2])
@@ -80,11 +85,13 @@ char	*handle_wildcard(char *str, char **env, int retval, int recur)
 	if (var_name[0] == '\0' && has_char(&str[pos[0] + 1], '$') >= 0)
 		return (recursive_wildcard(str, pos, env, retval));
 	else if (var_name[0] == '\0' && !pos[2])
-		return (free_and_null(str));
+		return (ft_strjoin_free(ft_substr(str, 0, pos[0]),
+				ft_substr(str, pos[1], ft_strlen(str) - pos[1]), 3));
 	str = remove_wildcard(str, var_name, pos, recur);
 	if (!str)
 		return (NULL);
-	if (ft_strlen(str) > pos[0] + 1 && has_char(&str[pos[0] + 1], '$') >= 0)
+	if (ft_strlen(str) > pos[0] + 1 && has_char(&str[pos[0] + 1], '$') >= 0
+		&& str[has_char(&str[pos[1]], '$') + pos[1] + 1])
 		ret = ft_strjoin_free(ft_substr(str, 0, &str[pos[0] + 1] - str),
 				handle_wildcard(&str[pos[0] + 1], env, retval, recur + 1), 3);
 	if (ret)

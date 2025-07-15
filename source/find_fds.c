@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_fds.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 18:03:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 16:58:30 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/15 18:35:42 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,13 @@ static t_input	*rotate_backwards(t_input *input)
 	return (input);
 }
 
+static int	hd_fd(int in_fd, int hd_fd)
+{
+	if (in_fd > 1)
+		close(in_fd);
+	return (hd_fd);
+}
+
 int	find_in_out(t_input *input, int *in_fd, int *out_fd, char **error_msg)
 {
 	*in_fd = 0;
@@ -68,7 +75,7 @@ int	find_in_out(t_input *input, int *in_fd, int *out_fd, char **error_msg)
 		else if (input->type == t_left)
 			*in_fd = find_in(input->next->txt, in_fd);
 		else if (input->type == t_heredoc)
-			*in_fd = input->hd_fd;
+			*in_fd = hd_fd(*in_fd, input->hd_fd);
 		if (*out_fd == -1 || *in_fd == -1)
 			return (adjust_error(error_msg, input->next->txt,
 					": No such file or directory\n"), -1);
@@ -78,21 +85,5 @@ int	find_in_out(t_input *input, int *in_fd, int *out_fd, char **error_msg)
 			return (*in_fd);
 		input = input->next;
 	}
-	return (0);
-}
-
-int	file_is_empty(char *path)
-{
-	int		fd;
-	char	buff[2];
-
-	if (!path)
-		return (1);
-	fd = open(path, O_RDONLY);
-	if (fd < 0)
-		return (1);
-	if (read(fd, buff, 2) == 0)
-		return (close(fd), 1);
-	close(fd);
 	return (0);
 }

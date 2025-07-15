@@ -6,14 +6,14 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 13:33:15 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 17:54:11 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/15 18:13:59 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include <readline/readline.h>
 #include <signal.h>
-#include <stdio.h>
+#include <unistd.h>
 
 volatile sig_atomic_t	g_signalreceived = 0;
 
@@ -21,8 +21,8 @@ void	sighandler(int signal)
 {
 	if (signal == SIGINT)
 	{
-		g_signalreceived = 1;
-		printf("\n");
+		g_signalreceived = SIGINT;
+		write(1, "\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();

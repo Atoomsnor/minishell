@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:15:06 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/10 15:51:46 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/15 19:08:44 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,7 @@ int	bi_exit(t_exec **exec, char ***envp, t_history *hist)
 
 	ret = 1;
 	printf("exit\n");
-	if ((*exec)->full_cmd[1] && (*exec)->full_cmd[2])
-		return (ft_putstr_fd("exit: too many arguments\n", 2), 1);
+	
 	if ((*exec)->full_cmd[1])
 	{
 		i = 0;
@@ -120,6 +119,8 @@ int	bi_exit(t_exec **exec, char ***envp, t_history *hist)
 		if (ret > LONG_MAX)
 			exit_numeric(exec, &i, envp, hist);
 	}
+	if ((*exec)->full_cmd[1] && (*exec)->full_cmd[2])
+			return (ft_putstr_fd("exit: too many arguments\n", 2), 1);
 	free_array(*envp);
 	burn_history(hist);
 	lynch_exec(exec);

@@ -6,13 +6,15 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:59:06 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/10 13:12:06 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/15 18:32:15 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include <stdio.h>
 #include <limits.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 size_t	ft_strmcpy(char **dest, const char *src)
 {
@@ -80,4 +82,20 @@ unsigned long	ft_atoul(const char *nptr)
 	if (!(nptr[i] == '\0') && !(nptr[i] == ' '))
 		return (0);
 	return (result);
+}
+
+int	file_is_empty(char *path)
+{
+	int		fd;
+	char	buff[2];
+
+	if (!path)
+		return (1);
+	fd = open(path, O_RDONLY);
+	if (fd < 0)
+		return (1);
+	if (read(fd, buff, 2) == 0)
+		return (close(fd), 1);
+	close(fd);
+	return (0);
 }

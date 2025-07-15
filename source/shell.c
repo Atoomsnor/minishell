@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 17:09:11 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/14 15:07:37 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/15 19:22:08 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,13 +80,16 @@ static int	run(t_input **input, char ***envp, int retval, t_history *hist)
 	exec = NULL;
 	head = *input;
 	exec = tokens_to_exec(input, *envp, &retval);
+	printf("out of tte\n");
 	*input = head;
 	if (input && *input)
 		shank_input(input);
 	if (!exec)
 		return (history(hist), retval);
+	printf("run %s\n", exec[0]->full_cmd[0]);
 	if (!shell_exec(&retval, exec, envp, hist))
 		return (retval);
+	printf("error\n");
 	if (exec)
 		lynch_exec(exec);
 	retval = 0;

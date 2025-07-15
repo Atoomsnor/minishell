@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:22:43 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/10 13:35:10 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/15 19:03:44 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static char	*find_path(char **paths, char *cmd)
 	if (!check_dir(cmd, NULL, 1))
 		return (NULL);
 	if (access(cmd, F_OK | X_OK) == 0)
-		return (cmd);
+		return (ft_strdup(cmd));
 	i = 0;
 	while (paths[i])
 	{

@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 16:16:34 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/10 15:34:07 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/15 18:43:31 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	here_child(char *delimiter, int pipefd,
 	exit(1);
 }
 
-static int	here_parent(char *delimiter, int retval, char **env)
+static int	here_parent(char *delimiter, int *retval, char **env)
 {
 	pid_t	pid;
 	int		status;
@@ -61,13 +61,14 @@ static int	here_parent(char *delimiter, int retval, char **env)
 	if (pid == 0)
 	{
 		close(pipefd[0]);
-		here_child(delimiter, pipefd[1], env, retval);
+		here_child(delimiter, pipefd[1], env, *retval);
 	}
 	signal(SIGINT, SIG_IGN);
 	close(pipefd[1]);
 	wait(&status);
 	if (status == SIGINT)
 	{
+		*retval = 130;
 		ft_putchar_fd('\n', STDOUT_FILENO);
 		return (close(pipefd[0]), -1);
 	}
@@ -77,7 +78,7 @@ static int	here_parent(char *delimiter, int retval, char **env)
 }
 
 static int	run_here_doc(t_input **input,
-							int retval, char **env)
+							int *retval, char **env)
 {
 	char	*delimiter;
 
@@ -89,10 +90,11 @@ static int	run_here_doc(t_input **input,
 	return ((*input)->hd_fd);
 }
 
-int	check_heredoc(t_input *input, int retval, char **env)
+int	check_heredoc(t_input *input, int *retval, char **env)
 {
 	while (input && input != input->head
-		&& input->type != t_pipe && input->prev)
+		&& input->type != t_pipe && input->prev
+		&& input->prev->type != t_pipe)
 		input = input->prev;
 	while (input && input->type != t_pipe)
 	{
