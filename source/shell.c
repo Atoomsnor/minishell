@@ -80,16 +80,13 @@ static int	run(t_input **input, char ***envp, int retval, t_history *hist)
 	exec = NULL;
 	head = *input;
 	exec = tokens_to_exec(input, *envp, &retval);
-	printf("out of tte\n");
 	*input = head;
 	if (input && *input)
 		shank_input(input);
 	if (!exec)
 		return (history(hist), retval);
-	printf("run %s\n", exec[0]->full_cmd[0]);
 	if (!shell_exec(&retval, exec, envp, hist))
 		return (retval);
-	printf("error\n");
 	if (exec)
 		lynch_exec(exec);
 	retval = 0;

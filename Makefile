@@ -15,7 +15,7 @@ OBJ_DIR		= obj
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-MSFLAGS = -lreadline -lhistory
+MSFLAGS = -lreadline
 
 LIBFT_DIR = libft
 LIBFT_LIB = $(LIBFT_DIR)/libft.a

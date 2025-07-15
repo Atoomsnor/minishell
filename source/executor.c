@@ -121,19 +121,17 @@ int	execute(t_exec **exec, char **envp)
 		if (!exec_loop(exec, i, &prev_fd, envp))
 			return (0);
 	while (i--)
-	{
 		wait(&status);
-		if (status == SIGINT)
-		{
-			write(STDOUT_FILENO, "\n", 1);
-			signal(SIGINT, sighandler);
-			return (130);
-		}
-		if (status == 131)
-			return (signal(SIGINT, sighandler), 131);
-		if (status >= 256)
-			return (signal(SIGINT, sighandler), status >> 8);
+	if (status == SIGINT)
+	{
+		write(STDOUT_FILENO, "\n", 1);
+		signal(SIGINT, sighandler);
+		return (130);
 	}
+	if (status == 131)
+		return (signal(SIGINT, sighandler), 131);
+	if (status >= 256)
+		return (signal(SIGINT, sighandler), status >> 8);
 	signal(SIGINT, sighandler);
 	return (0);
 }

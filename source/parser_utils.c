@@ -16,7 +16,7 @@ void	rotate_input(t_input **input)
 {
 	if ((*input)->type == t_pipe)
 		*input = (*input)->next;
-	while (*input)
+	while (*input && (*input)->next && (*input)->next->type != t_pipe)
 	{
 		if ((*input) && (*input)->next && ((*input)->type == t_append
 				|| (*input)->type == t_right || (*input)->type == t_left

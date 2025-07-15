@@ -77,6 +77,11 @@ static int	prepare_input(t_input **input, char **envp, int *retval)
 static int	path_validity(t_exec *cmd, char **error_msg,
 							int *retval, char **envp)
 {
+	if (!cmd->full_cmd[0])
+	{
+		cmd->full_path = NULL;
+		return (1);
+	}
 	if (!check_dir(cmd->full_cmd[0], error_msg, 0)
 		|| !check_access(cmd->full_cmd[0], error_msg))
 		return (set_retval(retval, 126), 0);
@@ -97,7 +102,6 @@ t_exec	**tokens_to_exec(t_input **input, char **envp, int *retval)
 
 	error_msg = NULL;
 	count = count_cmds(*input);
-	printf("count: %i\n", count);
 	cmds = ft_calloc(count + 1, sizeof(t_exec *));
 	if (!cmds)
 		return (malloc_error_free(NULL));
