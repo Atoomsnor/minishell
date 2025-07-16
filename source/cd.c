@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 14:50:13 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/10 15:53:37 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/16 18:06:23 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ static void	change_env_var(char ***env, char *var_name, char *content)
 	int	len;
 
 	i = 0;
+	if (!content)
+		return ;
 	while ((*env)[i])
 	{
 		len = has_char((*env)[i], '=');
@@ -82,8 +84,12 @@ static int	absolute_path(char *path, char ***env, char *cwd)
 		free_and_null(joined_path);
 		return (0);
 	}
+	free_and_null(joined_path);
+	joined_path = getcwd(NULL, 0);
+	if (!joined_path)
+		return (0);
 	change_env_var(env, "PWD", joined_path);
-	free(joined_path);
+	free_and_null(joined_path);
 	return (1);
 }
 
