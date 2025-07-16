@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:59:06 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/15 18:32:15 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/16 13:51:12 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,5 +97,13 @@ int	file_is_empty(char *path)
 	if (read(fd, buff, 2) == 0)
 		return (close(fd), 1);
 	close(fd);
+	return (0);
+}
+
+int	has_redirs(t_input *input)
+{
+	if (input->type == t_left || input->type == t_right
+		|| input->type == t_append || input->type == t_heredoc)
+		return (1);
 	return (0);
 }

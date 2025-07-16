@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 16:16:34 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/15 18:43:31 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/16 13:38:54 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,8 @@ static int	here_parent(char *delimiter, int *retval, char **env)
 	close(pipefd[1]);
 	wait(&status);
 	if (status == SIGINT)
-	{
-		*retval = 130;
-		ft_putchar_fd('\n', STDOUT_FILENO);
-		return (close(pipefd[0]), -1);
-	}
+		return (set_retval(retval, 130),
+			ft_putchar_fd('\n', STDOUT_FILENO), close(pipefd[0]), -1);
 	if (status >> 8 != 1)
 		return (close(pipefd[0]), -1);
 	return (pipefd[0]);
