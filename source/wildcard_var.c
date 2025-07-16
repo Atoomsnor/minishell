@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard_var.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 11:59:31 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/14 12:17:01 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/16 12:10:02 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ static char	*get_var(char *var_name, int retval, char **env)
 char	*set_var_name(char *str, char **env, int retval, int *i)
 {
 	char	*var_name;
+	char	*tmp;
 	int		wc;
 
 	wc = *i;
@@ -83,10 +84,10 @@ char	*set_var_name(char *str, char **env, int retval, int *i)
 	if (!var_name)
 		return (NULL);
 	if (var_name[0] == '\0')
-		return (free_and_null(var_name), NULL);
-	var_name = get_var(var_name, retval, env);
+		return (free_and_null(var_name), (*i)++, NULL);
+	tmp = get_var(var_name, retval, env);
 	if (!var_name)
-		return (NULL);
+		return ((*i)++, NULL);
 	(*i)++;
-	return (var_name);
+	return (tmp);
 }

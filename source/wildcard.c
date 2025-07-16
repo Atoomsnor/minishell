@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 12:48:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/15 17:57:33 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/16 12:36:29 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ static char	*recursive_wildcard(char *str, int pos[3], char **env, int retval)
 	char	*ret;
 
 	ret = NULL;
-	if (!str[pos[1] + 1])
+	if (!str[pos[1] + 1] || str[pos[1] + 1] == '"'
+		|| str[pos[1] + 1] == '\'' || ft_iswhitespace(str[pos[1] + 1]))
 		ret = ft_strjoin_free(ft_substr(str, 0, pos[0]),
 			ft_substr(str, pos[1], ft_strlen(str) - pos[1]), 3);
 	else
@@ -70,31 +71,38 @@ static char	*recursive_wildcard(char *str, int pos[3], char **env, int retval)
 	return (ret);
 }
 
+static char	*varcheck_wildcard(char *str, char **env, int retval, int pos[3])
+{
+	if (has_char(&str[pos[0] + 1], '$') >= 0)
+		return (recursive_wildcard(str, pos, env, retval));
+	if (!pos[2] && pos[0])
+		return (ft_strjoin_free(ft_substr(str, 0, pos[0]),
+				ft_substr(str, pos[0] + 1, ft_strlen(str) - pos[0] - 1), 3));
+	if (!pos[2])
+		return (free_and_null(str));
+	return (str);
+}
+
 char	*handle_wildcard(char *str, char **env, int retval, int recur)
 {
-	char	*var_name;
-	char	*ret;
-	int		pos[3];
+	char *var_name;
+	char *ret;
+	int pos[3];
 
-	ret = NULL;
-	if (!get_positions(pos, str, recur))
+	if (!str || !get_positions(pos, str, recur))
 		return (NULL);
+	ret = NULL;
 	var_name = set_var_name(str, env, retval, &pos[1]);
 	if (!var_name)
 		return (str);
-	if (var_name[0] == '\0' && has_char(&str[pos[0] + 1], '$') >= 0)
-		return (recursive_wildcard(str, pos, env, retval));
-	else if (var_name[0] == '\0' && !pos[2])
-		return (ft_strjoin_free(ft_substr(str, 0, pos[0]),
-				ft_substr(str, pos[1], ft_strlen(str) - pos[1]), 3));
+	if (var_name[0] == '\0')
+		return (varcheck_wildcard(str, env, retval, pos));
 	str = remove_wildcard(str, var_name, pos, recur);
 	if (!str)
 		return (NULL);
-	if (ft_strlen(str) > pos[0] + 1 && has_char(&str[pos[0] + 1], '$') >= 0
-		&& str[has_char(&str[pos[1]], '$') + pos[1] + 1])
-		ret = ft_strjoin_free(ft_substr(str, 0, &str[pos[0] + 1] - str),
-				handle_wildcard(&str[pos[0] + 1], env, retval, recur + 1), 3);
-	if (ret)
+	if (has_char(&str[pos[0]], '$') >= 0)
+		ret = handle_wildcard(str, env, retval, recur + 1);
+	if (ret && ret != str)
 		return (free_and_null(str), ret);
 	return (str);
 }
