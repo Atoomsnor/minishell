@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 12:48:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/16 13:39:31 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/16 17:10:20 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static char	*varcheck_wildcard(char *str, char **env, int retval, int pos[3])
 		return (recursive_wildcard(str, pos, env, retval));
 	if (!pos[2] && pos[0])
 		return (ft_strjoin_free(ft_substr(str, 0, pos[0]),
-				ft_substr(str, pos[0] + 1, ft_strlen(str) - pos[0] - 1), 3));
+				ft_substr_free(str, pos[1], ft_strlen(str) - pos[0] - 1), 3));
 	if (!pos[2])
 		return (free_and_null(str));
 	return (str);
