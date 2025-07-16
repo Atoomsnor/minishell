@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/15 18:02:38 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/16 13:07:30 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int				execute(t_exec **exec, char **envp);
 /* find_fds */
 int				find_in_out(t_input *input, int *in_fd,
 					int *out_fd, char **error_msg);
-int				file_is_empty(char *path);
+t_input			*rotate_backwards(t_input *input);
 
 /* free_utils */
 void			*free_array(char **array);
@@ -80,6 +80,7 @@ void			ft_lstadd_next(t_input **lst, t_input *new_lst);
 void			ft_lstcopy(t_input *input, t_input *next);
 
 /* murder */
+void			close_exec_fds(t_exec *exec);
 void			lynch_exec(t_exec **exec);
 void			*shank_input(t_input **input);
 void			*burn_history(t_history *hist);
@@ -123,6 +124,7 @@ char			**ft_string_split(char const *s, char c);
 size_t			ft_strmcpy(char **dest, const char *src);
 char			**ft_matdup(char **mat);
 unsigned long	ft_atoul(const char *nptr);
+int				file_is_empty(char *path);
 
 /* wildcard */
 char			*handle_wildcard(char *str, char **env, int retval, int recur);

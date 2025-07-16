@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:33:44 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/15 18:39:35 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/16 12:47:57 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,9 @@ void	child(t_exec *exec, int prev_fd, int has_next, char **envp)
 		close(exec->pipe[1]);
 	}
 	if (exec->in_fd != STDIN_FILENO)
-	{
 		dup2(exec->in_fd, STDIN_FILENO);
-		close(exec->in_fd);
-	}
 	if (exec->out_fd != STDOUT_FILENO)
-	{
 		dup2(exec->out_fd, STDOUT_FILENO);
-		close(exec->out_fd);	
-	}
 	if (exec->full_path && exec->full_path[0] != '\0')
 		exit(execve(exec->full_path, exec->full_cmd, envp));
 	else

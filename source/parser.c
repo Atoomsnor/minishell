@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/15 19:41:27 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/16 13:33:44 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,21 +40,24 @@ static t_exec	*fill_exec(t_input **input, char **error_msg)
 	if (!cmd)
 		return (malloc_error_free(NULL));
 	cmd->err_msg = NULL;
-	count = count_till_pipe(*input);
-	cmd->full_cmd = ft_calloc(count + 1, sizeof(char *));
-	if (!cmd->full_cmd)
-		return (malloc_error_free(free_and_null(cmd)));
 	i = find_in_out(*input, &cmd->in_fd, &cmd->out_fd, error_msg);
 	if (i < 0 && i != -2)
 		return (free_and_null(cmd->full_cmd), free_and_null(cmd), NULL);
 	else if (i == -2)
 		return (free_and_null(cmd->full_cmd), free_and_null(cmd),
 			ft_strmcpy(error_msg, " Permission denied\n"), NULL);
+	count = count_till_pipe(*input);
+	if (count == 0)
+		return (close_exec_fds(cmd), free_and_null(cmd));
+	cmd->full_cmd = ft_calloc(count + 1, sizeof(char *));
+	if (!cmd->full_cmd)
+		return (close_exec_fds(cmd), malloc_error_free(free_and_null(cmd)));
 	while ((*input) && (*input)->type != t_pipe && i < count)
 	{
 		fill_full_cmd(input, cmd, &i);
 		*input = (*input)->next;
 	}
+	rotate_past_pipe(input, 1);
 	return (cmd);
 }
 

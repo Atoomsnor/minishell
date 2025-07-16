@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 18:03:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/15 18:35:42 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/16 13:07:08 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static int	find_in(char *path, int *fd)
 	return (*fd);
 }
 
-static t_input	*rotate_backwards(t_input *input)
+t_input	*rotate_backwards(t_input *input)
 {
 	while (input && input->type != t_pipe)
 	{

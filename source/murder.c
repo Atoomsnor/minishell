@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:28:35 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/15 19:04:53 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/16 12:58:19 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-static void	close_exec_fds(t_exec *exec)
+void	close_exec_fds(t_exec *exec)
 {
 	if (!exec)
 		return ;
