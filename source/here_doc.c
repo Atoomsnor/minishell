@@ -23,8 +23,6 @@ static void	here_child(char *delimiter, int pipefd,
 	char	*input;
 	char	quotetype;
 
-	(void)env;
-	(void)retval;
 	signal(SIGINT, SIG_DFL);
 	quotetype = find_first_quote(delimiter);
 	if (quotetype)

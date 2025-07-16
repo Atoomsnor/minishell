@@ -71,7 +71,7 @@ static int	cpy_to_next(t_input *cpy, char *str, int where, int i)
 		if (!cpy->next || !cpy->next->txt)
 			return (malloc_error_free(free_and_null(str)), 0);
 		free_and_null(cpy->txt);
-		cpy->txt = ft_substr(str, 0, i);
+		cpy->txt = ft_substr_free(str, 0, i);
 		if (!cpy->txt)
 			return (malloc_error_free(free_and_null(str)), 0);
 	}
@@ -82,11 +82,10 @@ static int	cpy_to_next(t_input *cpy, char *str, int where, int i)
 		if (!cpy->next || !cpy->next->txt)
 			return (malloc_error_free(free_and_null(str)), 0);
 		free_and_null(cpy->txt);
-		cpy->txt = ft_substr(str, 0, where);
+		cpy->txt = ft_substr_free(str, 0, where);
 		if (!cpy->txt)
 			return (malloc_error_free(free_and_null(str)), 0);
 	}
-	free_and_null(str);
 	cpy->next->type = find_type(cpy->next->txt);
 	cpy->type = find_type(cpy->txt);
 	return (1);

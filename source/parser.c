@@ -29,6 +29,7 @@ static int	fill_full_cmd(t_input **input, t_exec *cmd, int *i)
 					return (malloc_error_free(NULL), 0);
 				(*i)++;
 			}
+			*input = (*input)->next;
 			return (1);
 		}
 		cmd->full_cmd[(*i)] = ft_strdup((*input)->txt);
@@ -36,6 +37,7 @@ static int	fill_full_cmd(t_input **input, t_exec *cmd, int *i)
 			return (malloc_error_free(NULL), 0);
 		(*i)++;
 	}
+	*input = (*input)->next;
 	return (1);
 }
 
@@ -82,7 +84,6 @@ static t_exec	*fill_exec(t_input **input, char **error_msg)
 	{
 		if (!fill_full_cmd(input, cmd, &i))
 			return (free_cmd(cmd));
-		*input = (*input)->next;
 	}
 	return (rotate_past_pipe(input, 1), cmd);
 }
