@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 16:11:18 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/16 13:27:29 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/16 13:51:02 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ void	rotate_input(t_input **input)
 		*input = (*input)->next;
 	while (*input)
 	{
-		if ((*input) && (*input)->next && ((*input)->type == t_append
-				|| (*input)->type == t_right || (*input)->type == t_left
-				|| (*input)->type == t_heredoc) && (!(*input)->next->next || (*input)->next->next->type == t_pipe))
+		if ((*input) && (*input)->next && has_redirs(*input)
+			&& (!(*input)->next->next || (*input)->next->next->type == t_pipe))
 		{
 			if ((*input)->prev)
 				(*input) = (*input)->prev;
-			return ;
+			else
+				return ;
 		}
 		else if (((*input)->type == t_flag || (*input)->type == t_txt)
 			&& (*input)->prev && ((*input)->prev->type == t_left
@@ -88,14 +88,13 @@ int	count_till_pipe(t_input *input)
 	cpy = rotate_backwards(cpy);
 	while (cpy && (cpy->type != t_pipe))
 	{
-		if (cpy->type == t_append || cpy->type == t_right
-				|| cpy->type == t_heredoc || cpy->type == t_left)
+		if (has_redirs(cpy))
 		{
 			if (cpy->next && cpy->next->next)
 				cpy = cpy->next->next;
-			else 
+			else
 				return (count);
-		}	
+		}
 		else if (cpy->type == t_txt || cpy->type == t_flag)
 		{
 			count++;

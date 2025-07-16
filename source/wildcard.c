@@ -6,7 +6,7 @@
 /*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 12:48:53 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/16 12:36:29 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/16 13:39:31 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,11 @@ static char	*recursive_wildcard(char *str, int pos[3], char **env, int retval)
 	if (!str[pos[1] + 1] || str[pos[1] + 1] == '"'
 		|| str[pos[1] + 1] == '\'' || ft_iswhitespace(str[pos[1] + 1]))
 		ret = ft_strjoin_free(ft_substr(str, 0, pos[0]),
-			ft_substr(str, pos[1], ft_strlen(str) - pos[1]), 3);
+				ft_substr(str, pos[1], ft_strlen(str) - pos[1]), 3);
 	else
 		ret = ft_strjoin_free(ft_substr(str, 0, &str[pos[0] + 1] - str - 1),
-			handle_wildcard(&str[pos[0 + 1]], env, retval,
-				pos[2] + 1), 3);
+				handle_wildcard(&str[pos[0 + 1]], env, retval,
+					pos[2] + 1), 3);
 	if (str && !pos[2])
 		free_and_null(str);
 	return (ret);
@@ -85,9 +85,9 @@ static char	*varcheck_wildcard(char *str, char **env, int retval, int pos[3])
 
 char	*handle_wildcard(char *str, char **env, int retval, int recur)
 {
-	char *var_name;
-	char *ret;
-	int pos[3];
+	char	*var_name;
+	char	*ret;
+	int		pos[3];
 
 	if (!str || !get_positions(pos, str, recur))
 		return (NULL);

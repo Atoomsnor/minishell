@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/16 13:07:30 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/16 13:48:38 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ size_t			ft_strmcpy(char **dest, const char *src);
 char			**ft_matdup(char **mat);
 unsigned long	ft_atoul(const char *nptr);
 int				file_is_empty(char *path);
+int				has_redirs(t_input *input);
 
 /* wildcard */
 char			*handle_wildcard(char *str, char **env, int retval, int recur);
