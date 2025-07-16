@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/16 13:33:44 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/16 16:31:59 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ static void	fill_full_cmd(t_input **input, t_exec *cmd, int *i)
 
 static t_exec	*fill_exec(t_input **input, char **error_msg)
 {
-	t_exec	*cmd;
-	int		count;
-	int		i;
+	t_exec		*cmd;
+	const int	count = count_till_pipe(*input);
+	int			i;
 
 	cmd = ft_calloc(1, sizeof(t_exec));
 	if (!cmd)
@@ -46,7 +46,6 @@ static t_exec	*fill_exec(t_input **input, char **error_msg)
 	else if (i == -2)
 		return (free_and_null(cmd->full_cmd), free_and_null(cmd),
 			ft_strmcpy(error_msg, " Permission denied\n"), NULL);
-	count = count_till_pipe(*input);
 	if (count == 0)
 		return (close_exec_fds(cmd), free_and_null(cmd));
 	cmd->full_cmd = ft_calloc(count + 1, sizeof(char *));
@@ -57,8 +56,7 @@ static t_exec	*fill_exec(t_input **input, char **error_msg)
 		fill_full_cmd(input, cmd, &i);
 		*input = (*input)->next;
 	}
-	rotate_past_pipe(input, 1);
-	return (cmd);
+	return (rotate_past_pipe(input, 1), cmd);
 }
 
 static int	prepare_input(t_input **input, char **envp, int *retval)

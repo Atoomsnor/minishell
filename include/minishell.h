@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/16 13:48:38 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/16 16:39:09 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,10 @@ void			history(t_history *hist);
 t_history		*init_hist(void);
 
 /* lex_list */
-t_input			**matrix_to_list(char **matrix);
-int				rotation(int *i, t_input *cpy);
-t_input			*parse_list(t_input *input);
+t_type			find_type(char *in);
+int				rotation(t_input *cpy);
 
 /* lexer */
-char			find_first_quote_len(char *str);
-int				check_txt(t_input *input, int i);
 t_input			**init_list(char *in, int skip);
 
 /* linked list*/
