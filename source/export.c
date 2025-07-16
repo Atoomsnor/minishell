@@ -60,19 +60,20 @@ static char	**make_environment(char ***env, char *str, int len)
 		{
 			new_env[i] = ft_strdup(str);
 			if (!new_env[i++])
-				return (malloc_error_free(free_array(new_env)), *env);
+				return (malloc_error_free(free_and_null(new_env)), *env);
 		}
 		else
 			new_env[i++] = (*env)[j++];
 	}
-	free(*env);
+	free_and_null(*env);
 	return (new_env);
 }
 
 static int	exporting(char *str, char ***env)
 {
-	int		len;
-	int		i;
+	char		*new;
+	int			len;
+	int			i;
 
 	i = export_validity(str);
 	if (!i)
@@ -85,16 +86,15 @@ static int	exporting(char *str, char ***env)
 	{
 		if (!ft_strncmp((*env)[len], str, i) && (*env)[len][i] == '=')
 		{
-			free((*env)[len]);
-			(*env)[len] = ft_strdup(str);
-			if (!(*env)[len])
-				return (0);
+			new = ft_strdup(str);
+			if (!new)
+				return (malloc_error_free(NULL), 1);
+			free_and_null((*env)[len]);
+			(*env)[len] = new;
 			return (1);
 		}
 	}
 	*env = make_environment(env, str, len);
-	if (!*env)
-		return (0);
 	return (1);
 }
 

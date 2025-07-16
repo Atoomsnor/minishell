@@ -68,15 +68,23 @@ static int	cpy_to_next(t_input *cpy, char *str, int where, int i)
 	{
 		ft_lstadd_next(&cpy, ft_lstnew(ft_substr(
 					str, i, ft_strlen(str) - i), 1));
+		if (!cpy->next || !cpy->next->txt)
+			return (malloc_error_free(free_and_null(str)), 0);
 		free_and_null(cpy->txt);
 		cpy->txt = ft_substr(str, 0, i);
+		if (!cpy->txt)
+			return (malloc_error_free(free_and_null(str)), 0);
 	}
 	if (i == 0)
 	{
 		ft_lstadd_next(&cpy, ft_lstnew(ft_substr(
 					str, where, ft_strlen(str) - (i + where)), 1));
+		if (!cpy->next || !cpy->next->txt)
+			return (malloc_error_free(free_and_null(str)), 0);
 		free_and_null(cpy->txt);
 		cpy->txt = ft_substr(str, 0, where);
+		if (!cpy->txt)
+			return (malloc_error_free(free_and_null(str)), 0);
 	}
 	free_and_null(str);
 	cpy->next->type = find_type(cpy->next->txt);
@@ -92,6 +100,8 @@ int	rotation(t_input *cpy)
 	char	quote_type;
 
 	str = ft_strdup(cpy->txt);
+	if (!str)
+		return (malloc_error_free(NULL), 0);
 	i = 0;
 	quote_type = 0;
 	where = 0;

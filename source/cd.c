@@ -15,13 +15,43 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-static void	change_env_var(char ***env, char *var_name, char *content)
+void	free_env(char ***env, int len)
 {
 	int	i;
-	int	len;
+
+	if (!env || !*env)
+		return ;
+	i = 0;
+	while (i < len)
+	{
+		if ((*env)[i])
+			free_and_null((*env)[i]);
+		i++;
+	}
+	free_and_null((*env));
+	(*env) = NULL;
+}
+
+int	mat_len(char **mat)
+{
+	int	i;
+
+	if (!mat)
+		return (0);
+	i = 0;
+	while (mat[i])
+		i++;
+	return (i);
+}
+
+static void	change_env_var(char ***env, char *var_name, char *content)
+{
+	const int	envlen = mat_len(*env);
+	int			len;
+	int			i;
 
 	i = 0;
-	if (!content)
+	if (!content || !env || !*env)
 		return ;
 	while ((*env)[i])
 	{
@@ -32,7 +62,7 @@ static void	change_env_var(char ***env, char *var_name, char *content)
 					content, 1);
 			if (!(*env)[i])
 			{
-				free_array(*env);
+				free_env(env, envlen);
 				return ;
 			}
 		}
@@ -40,32 +70,36 @@ static void	change_env_var(char ***env, char *var_name, char *content)
 	}
 }
 
-static int	home_path(char **env)
+static int	home_path(char ***env, char *cwd)
 {
 	char	*substr;
 	int		i;
 
-	i = 0;
+	i = -1;
 	substr = NULL;
-	while (env[i])
+	if (!cwd)
+		return (malloc_error_free(NULL), 0);
+	while ((*env)[++i])
 	{
-		if (!ft_strncmp("HOME=", env[i], 5))
+		if (!ft_strncmp("HOME=", (*env)[i], 5))
 		{
-			substr = ft_substr(env[i], 5, ft_strlen(env[i]) - 5);
+			substr = ft_substr((*env)[i], 5, ft_strlen((*env)[i]) - 5);
 			if (!substr)
-				return (0);
+				return (malloc_error_free(free_and_null(cwd)), 0);
 			if (chdir(substr) == 0)
-				return (free_and_null(substr), 1);
+				return (change_env_var(env, "OLDPWD", cwd),
+					change_env_var(env, "PWD", substr),
+					free_and_null(cwd), free_and_null(substr), 1);
 			else
 				break ;
 			free_and_null(substr);
 		}
-		i++;
 	}
+	free_and_null(cwd);
 	return (0);
 }
 
-static int	absolute_path(char *path, char ***env, char *cwd)
+static int	relative_path(char *path, char ***env, char *cwd)
 {
 	char	*joined_path;
 
@@ -73,10 +107,10 @@ static int	absolute_path(char *path, char ***env, char *cwd)
 	if (cwd)
 		free_and_null(cwd);
 	if (!joined_path)
-		return (0);
+		return (malloc_error_free(NULL), 0);
 	joined_path = ft_strjoin_free(joined_path, path, 1);
 	if (!joined_path)
-		return (0);
+		return (malloc_error_free(NULL), 0);
 	if (chdir(joined_path) == -1)
 	{
 		ft_putstr_fd(path, 2);
@@ -87,7 +121,7 @@ static int	absolute_path(char *path, char ***env, char *cwd)
 	free_and_null(joined_path);
 	joined_path = getcwd(NULL, 0);
 	if (!joined_path)
-		return (0);
+		return (malloc_error_free(NULL), 0);
 	change_env_var(env, "PWD", joined_path);
 	free_and_null(joined_path);
 	return (1);
@@ -99,23 +133,23 @@ int	cd(char **path, char ***env)
 
 	if (!path || !path[1] || (path[1][0] == '~' && path[1][1] == '\0')
 			|| !ft_strncmp(path[1], "~/", 3))
-		return (home_path(*env));
+		return (home_path(env, getcwd(NULL, 0)));
 	if (path[2])
 		return (ft_putstr_fd("cd: too many arguments\n", 2), 0);
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
-		return (0);
+		return (malloc_error_free(NULL), 0);
 	change_env_var(env, "OLDPWD", cwd);
 	if (!*env)
-		return (free(cwd), 0);
+		return (malloc_error_free(free_and_null(cwd)), 0);
 	if (ft_strncmp(cwd, path[1], ft_strlen(cwd)) && path[1][0] != '/')
-		return (absolute_path(path[1], env, cwd));
+		return (relative_path(path[1], env, cwd));
 	if (chdir(path[1]) == -1)
 		return (ft_putstr_fd(path[1], 2),
 			ft_putstr_fd(": No such file or directory\n", 2), free(cwd), 0);
 	change_env_var(env, "PWD", path[1]);
 	if (!*env)
-		return (free(cwd), 0);
+		return (malloc_error_free(free_and_null(cwd)), 0);
 	free(cwd);
 	return (1);
 }

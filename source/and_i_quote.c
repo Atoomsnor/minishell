@@ -73,10 +73,12 @@ static int	sub_quote(t_input **input, int *len, int retval, char **env)
 	quote_type = find_first_quote(&(*input)->txt[*len]);
 	if (!quote_type)
 		return (0);
+	(void)retval;
+	(void)env;
 	if (has_char((*input)->txt, '$') >= 0 && quote_type == '"')
 		(*input)->txt = handle_wildcard((*input)->txt, env, retval, 0);
 	if (!(*input)->txt)
-		return (0);
+		return (malloc_error_free(NULL), -1);
 	*len = has_char(&(*input)->txt[*len], quote_type) + *len;
 	len2 = has_char(&(*input)->txt[*len + 1], quote_type);
 	if (len2 == -1)
@@ -108,7 +110,11 @@ t_input	**dequote(char **env, int retval, t_input **input)
 		else if (!sub)
 		{
 			if (has_char((*input)->txt, '$') >= 0)
+			{
 				(*input)->txt = handle_wildcard((*input)->txt, env, retval, 0);
+				if (!(*input)->txt)
+					return (malloc_error_free(NULL));
+			}
 			*input = (*input)->next;
 			len = 0;
 		}

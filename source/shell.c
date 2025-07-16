@@ -66,6 +66,8 @@ static int	shell_exec(int *retval, t_exec **exec,
 		else
 			*retval = run_builtin(exec[0], exec[0]->out_fd, envp, 0);
 		check_write_error(exec);
+		if (!*envp)
+			return (die(exec, NULL, NULL, set_retval(retval, -1)), 0);
 		history(hist);
 		return (die(exec, NULL, NULL, NULL), 0);
 	}

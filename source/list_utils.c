@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:13:12 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 17:01:42 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/17 00:54:17 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ void	ft_lstdelone(t_input *lst)
 
 void	ft_lstadd_next(t_input **lst, t_input *new_lst)
 {
+	if (!new_lst)
+		return ;
 	if (new_lst->next && new_lst->prev)
 	{
 		new_lst->next->prev = new_lst->prev;

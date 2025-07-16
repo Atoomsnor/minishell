@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static void	fill_full_cmd(t_input **input, t_exec *cmd, int *i)
+static int	fill_full_cmd(t_input **input, t_exec *cmd, int *i)
 {
 	if ((*input)->type == t_txt || (*input)->type == t_flag)
 	{
@@ -23,11 +23,38 @@ static void	fill_full_cmd(t_input **input, t_exec *cmd, int *i)
 			if ((*input)->prev->type == t_txt
 				|| (*input)->prev->type == t_flag
 				|| (*input)->prev->type == t_pipe)
-				cmd->full_cmd[(*i)++] = ft_strdup((*input)->txt);
+			{
+				cmd->full_cmd[(*i)] = ft_strdup((*input)->txt);
+				if (!cmd->full_cmd[(*i)])
+					return (malloc_error_free(NULL), 0);
+				(*i)++;
+			}
+			return (1);
 		}
-		else
-			cmd->full_cmd[(*i)++] = ft_strdup((*input)->txt);
+		cmd->full_cmd[(*i)] = ft_strdup((*input)->txt);
+		if (!cmd->full_cmd[(*i)])
+			return (malloc_error_free(NULL), 0);
+		(*i)++;
 	}
+	return (1);
+}
+
+static void	*free_cmd(t_exec *cmd)
+{
+	int	i;
+
+	i = 0;
+	if (cmd)
+	{
+		if (cmd->full_cmd)
+		{
+			while (cmd->full_cmd[i])
+				free_and_null(cmd->full_cmd[i]);
+			free_and_null(cmd->full_cmd);
+		}
+		free_and_null(cmd);
+	}
+	return (NULL);
 }
 
 static t_exec	*fill_exec(t_input **input, char **error_msg)
@@ -53,7 +80,8 @@ static t_exec	*fill_exec(t_input **input, char **error_msg)
 		return (close_exec_fds(cmd), malloc_error_free(free_and_null(cmd)));
 	while ((*input) && (*input)->type != t_pipe && i < count)
 	{
-		fill_full_cmd(input, cmd, &i);
+		if (!fill_full_cmd(input, cmd, &i))
+			return (free_cmd(cmd));
 		*input = (*input)->next;
 	}
 	return (rotate_past_pipe(input, 1), cmd);

@@ -15,6 +15,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+static int	double_check_syntax(t_input *input)
+{
+	while (input)
+	{
+		if (input->type != t_txt && input->type != t_flag)
+		{
+			if (!input->next)
+				return (1);
+			else if (input->next->type != t_txt && input->next->type != t_flag
+				&& input->type != t_pipe)
+				return (1);
+			else if (input->type == t_pipe && input->next->type == t_pipe)
+				return (1);
+		}
+		input = input->next;
+	}
+	return (0);
+}
+
 static char	*check_syntax(t_input *input)
 {
 	while (input)
@@ -92,11 +111,14 @@ t_input	**init_list(char *in, int skip)
 		return (free_and_null(in));
 	if (skip)
 		free_and_null(in);
-	parse_list(input[0]);
+	if (!parse_list(input[0]))
+		return (shank_input(input), NULL);
 	err = check_syntax(input[0]);
 	if (err)
 		return (die(NULL, input,
 				ft_strjoin_free("syntax error near unexpected token `",
 					err, 2), NULL));
+	if (!err && double_check_syntax(input[0]))
+		return (malloc_error_free(shank_input(input)));
 	return (input);
 }

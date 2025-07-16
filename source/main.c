@@ -36,6 +36,8 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 		retval = ret;
 	}
-	free_array(environment);
+	if (environment)
+		free_array(environment);
 	burn_history(hist);
+	return (retval);
 }

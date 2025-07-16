@@ -23,6 +23,8 @@ static void	here_child(char *delimiter, int pipefd,
 	char	*input;
 	char	quotetype;
 
+	(void)env;
+	(void)retval;
 	signal(SIGINT, SIG_DFL);
 	quotetype = find_first_quote(delimiter);
 	if (quotetype)
@@ -42,7 +44,7 @@ static void	here_child(char *delimiter, int pipefd,
 			input = handle_wildcard(input, env, retval, 0);
 		write(pipefd, input, ft_strlen(input));
 		write(pipefd, "\n", 1);
-		free(input);
+		free_and_null(input);
 	}
 	exit(1);
 }

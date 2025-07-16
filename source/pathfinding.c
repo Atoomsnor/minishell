@@ -52,7 +52,7 @@ static char	**split_paths(char **envp)
 	{
 		tmp = ft_strjoin(paths[i], "/");
 		if (!tmp)
-			return (free_array(paths), NULL);
+			return (malloc_error_free(free_array(paths)));
 		free(paths[i]);
 		paths[i] = tmp;
 		i++;

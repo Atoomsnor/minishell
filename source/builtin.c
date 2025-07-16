@@ -23,7 +23,7 @@ int	pwd(int fd)
 
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
-		return (0);
+		return (malloc_error_free(NULL), 0);
 	else if (fd < 0)
 		return (free(cwd), 0);
 	else
@@ -39,9 +39,11 @@ static int	check_flag(char **to_write, int *i)
 	int	ret;
 
 	ret = 0;
+	if (!to_write)
+		return (0);
 	while (to_write[*i])
 	{
-		if (to_write[*i][0] != '-')
+		if (to_write[*i][0] != '-' || to_write[*i][1] == '\0')
 			break ;
 		j = 1;
 		while (to_write[*i][j])
@@ -73,13 +75,13 @@ int	echo(int fd, char **to_write)
 		if (out && to_write[i + 1])
 			out = ft_strjoin_free(out, " ", 1);
 		if (!out)
-			return (0);
+			return (malloc_error_free(NULL), 0);
 		i++;
 	}
 	if (!cmp)
 		out = ft_strjoin_free(out, "\n", 1);
 	if (!out)
-		return (0);
+		return (malloc_error_free(NULL), 0);
 	ft_putstr_fd(out, fd);
 	free_and_null(out);
 	return (1);

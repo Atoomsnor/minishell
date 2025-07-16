@@ -50,6 +50,7 @@ char			*ft_strjoin_free(char *s1, char *s2, int liberate);
 char			*ft_substr_free(char *s, unsigned int start, size_t len);
 void			*free_and_null(void *ptr);
 void			*malloc_error_free(void *f);
+void			free_env(char ***env, int len);
 
 /* here_doc */
 int				check_heredoc(t_input *input, int *retval, char **env);
@@ -123,6 +124,7 @@ char			**ft_matdup(char **mat);
 unsigned long	ft_atoul(const char *nptr);
 int				file_is_empty(char *path);
 int				has_redirs(t_input *input);
+int				mat_len(char **mat);
 
 /* wildcard */
 char			*handle_wildcard(char *str, char **env, int retval, int recur);
