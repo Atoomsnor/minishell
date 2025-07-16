@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lex_list.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 16:47:59 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/08 16:59:41 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/16 16:00:20 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,35 +54,124 @@ static t_type	find_type(char *in)
 
 int	rotation(int *i, t_input *cpy)
 {
-	int	len;
+	int		tot_len;
+	int		prev_len;
+	int		len;
+	char	quote_type;
 
+	tot_len = 0;
+	prev_len = 0;
+	quote_type = 0;
 	if ((cpy->type == t_txt || cpy->type == t_flag))
 	{
-		len = find_first_quote_len(cpy->txt);
-		if (len == -1)
-			len = ft_strlen(cpy->txt);
-		while (len-- > 0 && *i == -1)
-			*i = check_txt(cpy, len);
-		if (*i == 0)
-			(*i)++;
-		if (*i != -1)
+		while (cpy->txt[tot_len])
 		{
-			ft_lstadd_next(&cpy, ft_lstnew(ft_substr(cpy->txt,
-						*i, ft_strlen(cpy->txt) - *i), 1));
-			cpy->txt = ft_substr_free(cpy->txt, 0, *i);
-			if (!cpy->txt)
-				return (ft_lstdelone(cpy), 0);
-			cpy->next->type = find_type(cpy->next->txt);
-			cpy->type = find_type(cpy->txt);
+			len = find_first_quote_len(&cpy->txt[tot_len], &quote_type);
+			tot_len += len;
+			if (len == -1)
+				len = ft_strlen(&cpy->txt[tot_len]);
+			while (len-- > prev_len && *i == -1)
+				*i = check_txt(cpy, len);
+			if (*i == 0)
+				(*i)++;
+			if (*i != -1)
+			{
+				ft_lstadd_next(&cpy, ft_lstnew(ft_substr(&cpy->txt[prev_len],
+							*i, ft_strlen(&cpy->txt[prev_len]) - *i), 1));
+				cpy->txt = ft_strjoin_free(ft_substr(cpy->txt, 0, prev_len), ft_substr_free(&cpy->txt[prev_len], prev_len, *i), 3);
+				if (!cpy->txt)
+					return (ft_lstdelone(cpy), 0);
+				cpy->next->type = find_type(cpy->next->txt);
+				cpy->type = find_type(cpy->txt);
+			}
+			// while ()
+			prev_len = tot_len;
 		}
 	}
+	return (1);
+}
+
+int	types(char *str)
+{
+	if (str[0] == '>' && str[1] && str[1] == '>')
+		return (2);
+	else if (str[0] == '<' && str[1] && str[1] == '<')
+		return (2);
+	else if (str[0] == '<')
+		return (1);
+	else if (str[0] == '|')
+		return (1);
+	else if (str[0] == '>')
+		return (1);
+	else
+		return (0);
+}
+
+int type(char c)
+{
+	if (c == '<')
+		return (1);
+	else if (c == '>')
+		return (1);
+	else if (c == '|')
+		return (1);
+	else
+	 	return (0);
+}
+
+int rot(t_input *cpy)
+{
+	char	*str;
+	int		where;
+	int		i;
+	char	quote_type;
+
+	str = ft_strdup(cpy->txt);
+	i = 0;
+	quote_type = 0;
+	where = 0;
+	while (str[i])
+	{
+		if (!quote_type && str[i + 1])
+			where = types(&str[i]);
+		else if (!quote_type)
+			where = type(str[i]);
+		if (!quote_type && str[i] == '\'')
+			quote_type = '\'';
+		else if (!quote_type && str[i] == '"')
+			quote_type = '"';
+		else if (quote_type == '\'' && str[i] == '\'')
+			quote_type = 0;
+		else if (quote_type == '"' && str[i] == '"')
+			quote_type = 0;
+		if (where)
+		{
+			if (i != 0)
+			{
+				ft_lstadd_next(&cpy, ft_lstnew(ft_substr(str, i, ft_strlen(str) - i), 1));
+				free_and_null(cpy->txt);
+				cpy->txt = ft_substr(str, 0, i);
+			}
+			if (i == 0)
+			{
+				ft_lstadd_next(&cpy, ft_lstnew(ft_substr(str, where, ft_strlen(str) - (i + where)), 1));
+				free_and_null(cpy->txt);
+				cpy->txt = ft_substr(str, 0, where);
+			}
+			free_and_null(str);
+			cpy->next->type = find_type(cpy->next->txt);
+			cpy->type = find_type(cpy->txt);
+			return (1);
+		}
+		i++;
+	}
+	free_and_null(str);
 	return (1);
 }
 
 t_input	*parse_list(t_input *input)
 {
 	t_input	*cpy;
-	int		i;
 
 	cpy = input;
 	while (cpy)
@@ -94,9 +183,9 @@ t_input	*parse_list(t_input *input)
 	cpy = input;
 	while (cpy)
 	{
-		i = -1;
-		if (!rotation(&i, cpy))
-			return (NULL);
+		if (cpy->type == t_txt || cpy->type == t_flag)
+			if (!rot(cpy))
+				return (NULL);
 		cpy = cpy->next;
 	}
 	return (input);

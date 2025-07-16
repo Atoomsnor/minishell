@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:29:22 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/14 11:03:51 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/16 13:53:51 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,13 +73,11 @@ static int	sub_quote(t_input **input, int *len, int retval, char **env)
 	quote_type = find_first_quote(&(*input)->txt[*len]);
 	if (!quote_type)
 		return (0);
-	if (quote_type == '"' && (*input)->txt[*len] == '$')
-		(*input)->txt = handle_wildcard((*input)->txt, env, retval, 0);
-	*len = has_char(&(*input)->txt[*len], quote_type) + *len;
 	if (has_char((*input)->txt, '$') >= 0 && quote_type == '"')
 		(*input)->txt = handle_wildcard((*input)->txt, env, retval, 0);
 	if (!(*input)->txt)
 		return (0);
+	*len = has_char(&(*input)->txt[*len], quote_type) + *len;
 	len2 = has_char(&(*input)->txt[*len + 1], quote_type);
 	if (len2 == -1)
 		return (ft_putstr_fd("Invalid input, unclosed quote\n", 2), -1);
