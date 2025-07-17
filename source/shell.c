@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 17:09:11 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/17 11:19:06 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/18 01:45:44 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,14 @@ static void	check_write_error(t_exec **exec)
 static int	shell_exec(int *retval, t_exec **exec,
 						char ***envp, t_history *hist)
 {
-	if (exec[1] || exec[0]->full_path[0] != '\0')
+	if (exec[1] || (exec[0] && exec[0]->full_path && exec[0]->full_path[0] != '\0'))
 	{
 		*retval = execute(exec, *envp);
 		check_write_error(exec);
 		history(hist);
 		return (die(exec, NULL, NULL, NULL), 0);
 	}
-	else
+	else if (exec[0] && exec[0]->full_cmd && exec[0]->full_cmd[0])
 	{
 		if (!ft_strncmp(exec[0]->full_cmd[0], "exit", 5))
 			*retval = bi_exit(exec, envp, hist);
