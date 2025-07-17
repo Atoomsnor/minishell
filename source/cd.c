@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 14:50:13 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/16 18:06:23 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/17 12:21:30 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
-
-void	free_env(char ***env, int len)
-{
-	int	i;
-
-	if (!env || !*env)
-		return ;
-	i = 0;
-	while (i < len)
-	{
-		if ((*env)[i])
-			free_and_null((*env)[i]);
-		i++;
-	}
-	free_and_null((*env));
-	(*env) = NULL;
-}
 
 int	mat_len(char **mat)
 {

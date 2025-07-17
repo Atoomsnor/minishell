@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:27 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/16 16:39:09 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/17 12:25:24 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ int				check_access(char *path, char **error_msg);
 
 /* parser_error */
 void			*adjust_error(char **error_msg, char *err1, char *err2);
+void			*free_cmd(t_exec *cmd);
 void			*set_retval(int *retval, int val);
 
 /* parser_utils */

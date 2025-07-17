@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:44:41 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/14 15:06:07 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/17 12:23:00 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_history	*hist;
 	char		**environment;
-	int			retval;
+	static int	retval = 0;
 	int			ret;
 
 	(void)argc;
@@ -24,7 +24,6 @@ int	main(int argc, char **argv, char **envp)
 	environment = ft_matdup(envp);
 	if (!environment)
 		return (malloc_error_free(NULL), 0);
-	retval = 0;
 	hist = init_hist();
 	if (!hist)
 		return (malloc_error_free(free_array(environment)), 0);

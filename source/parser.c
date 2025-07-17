@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:10:12 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/17 11:19:38 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/17 12:25:04 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,24 +39,6 @@ static int	fill_full_cmd(t_input **input, t_exec *cmd, int *i)
 	}
 	*input = (*input)->next;
 	return (1);
-}
-
-static void	*free_cmd(t_exec *cmd)
-{
-	int	i;
-
-	i = 0;
-	if (cmd)
-	{
-		if (cmd->full_cmd)
-		{
-			while (cmd->full_cmd[i])
-				free_and_null(cmd->full_cmd[i]);
-			free_and_null(cmd->full_cmd);
-		}
-		free_and_null(cmd);
-	}
-	return (NULL);
 }
 
 static t_exec	*fill_exec(t_input **input, char **error_msg)

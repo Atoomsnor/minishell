@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_builtin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:23:46 by roversch          #+#    #+#             */
-/*   Updated: 2025/07/14 10:26:44 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/17 12:21:24 by roversch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,21 @@ void	env(char **envp, int fd)
 		ft_putendl_fd(envp[i], fd);
 		i++;
 	}
+}
+
+void	free_env(char ***env, int len)
+{
+	int	i;
+
+	if (!env || !*env)
+		return ;
+	i = 0;
+	while (i < len)
+	{
+		if ((*env)[i])
+			free_and_null((*env)[i]);
+		i++;
+	}
+	free_and_null((*env));
+	(*env) = NULL;
 }
