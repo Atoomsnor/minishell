@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:28:39 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/10 16:00:02 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/17 10:53:47 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int	check_access(char *path, char **error_msg)
 				free(error_msg);
 				error_msg = NULL;
 			}
-			*error_msg = ft_strdup(" Permission denied");
+			*error_msg = ft_strjoin(path, " Permission denied\n");
 			return (0);
 		}
 		else

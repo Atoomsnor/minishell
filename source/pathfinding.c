@@ -6,7 +6,7 @@
 /*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:22:43 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/15 19:03:44 by nhendrik         ###   ########.fr       */
+/*   Updated: 2025/07/17 11:01:16 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,8 @@ char	*cmd_to_path(t_exec *cmd, char **error_msg, char **envp)
 	if (cmd->full_cmd[0][0] == '/' || !ft_strncmp(cmd->full_cmd[0], "./", 2)
 		|| !ft_strncmp(cmd->full_cmd[0], "../", 3))
 	{
-		if (access(cmd->full_cmd[0], F_OK | X_OK) == 0)
+		if (access(cmd->full_cmd[0], F_OK | X_OK) == 0
+			&& is_executable_script(cmd->full_cmd[0]))
 			return (ft_strdup(cmd->full_cmd[0]));
 		else
 			return (adjust_error(error_msg, cmd->full_cmd[0],
@@ -109,7 +110,7 @@ char	*cmd_to_path(t_exec *cmd, char **error_msg, char **envp)
 	ret = find_path(paths, cmd->full_cmd[0]);
 	free_array(paths);
 	if (!ret || !is_executable_script(ret))
-		return (adjust_error(error_msg, cmd->full_cmd[0],
+		return (free_and_null(ret), adjust_error(error_msg, cmd->full_cmd[0],
 				": command not found\n"));
 	return (ret);
 }

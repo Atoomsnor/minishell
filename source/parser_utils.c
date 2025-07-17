@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roversch <roversch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhendrik <nhendrik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 16:11:18 by nhendrik          #+#    #+#             */
-/*   Updated: 2025/07/16 13:51:02 by roversch         ###   ########.fr       */
+/*   Updated: 2025/07/17 11:18:49 by nhendrik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ void	rotate_input(t_input **input)
 		{
 			if ((*input)->prev)
 				(*input) = (*input)->prev;
-			else
-				return ;
+			return ;
 		}
 		else if (((*input)->type == t_flag || (*input)->type == t_txt)
 			&& (*input)->prev && ((*input)->prev->type == t_left
